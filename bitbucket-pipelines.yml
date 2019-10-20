@@ -1,0 +1,31 @@
+# This is a sample build configuration for Java (Maven).
+# Check our guides at https://confluence.atlassian.com/x/zd-5Mw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: maven:3.6.1
+
+pipelines:
+  default:
+    - step:
+        name: Build and Test
+        image: maven:3
+        caches: 
+          - maven
+        script:
+          - mvn -B clean verify
+    - step:
+        name: Create Artifact
+        script:
+          - tar czfv application.tgz pom.xml src/
+        artifacts:
+          - application.tgz
+    - step:
+        name: Deploy to Staging
+        deployment: staging
+        script:
+          - pipe: atlassian/heroku-deploy:0.1.1
+            variables:
+              HEROKU_API_KEY: $HEROKU_API_KEY
+              HEROKU_APP_NAME: $HEROKU_APP_NAME
+              ZIP_FILE: "application.tgz"
