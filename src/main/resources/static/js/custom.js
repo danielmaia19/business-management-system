@@ -5001,8 +5001,8 @@ if (typeof NProgress != 'undefined') {
 	   
 			}
 	   
-		}  
-	   
+		}
+
 	   
 	$(document).ready(function() {
 				
