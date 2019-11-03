@@ -12,15 +12,8 @@ public class IndexController {
 
     @GetMapping("/index")
     public void greeting() {
-    public void index() {
 
     }
-
-    @GetMapping("/test")
-    public void test() {
-
-    }
-
     @GetMapping("/dashboard")
     public void dashboard() {
 
