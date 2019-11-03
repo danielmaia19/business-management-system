@@ -15,4 +15,9 @@ public class IndexController {
 
     }
 
+    @GetMapping("/dashboard")
+    public void dashboard() {
+
+    }
+
 }
