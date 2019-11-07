@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Business Management System</title>
+
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/webjars/nprogress/0.2.0/nprogress.css" rel="stylesheet">
+    <link href="/webjars/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+    <link href="css/custom.min.css" rel="stylesheet">
+</head>
+<body class="login">
+
+    <div>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+                    <form>
+                        <h1>Create Account</h1>
+                        <div>
+                            <input type="email" placeholder="Email *" id="email" name="email" required="" class="form-control" />
+                        </div>
+                        <div>
+                            <input id="reg-password" type="password" class="form-control" placeholder="Password *" required="" />
+                        </div>
+                        <div>
+                            <input id="reg-confirmPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 12px;">
+                            <button type="submit" class="btn btn-link">Sign up</button>
+                        </div>
+
+<!--                        <div>-->
+<!--                            <a id="send" type="submit" href="/dashboard" class="btn btn-success">Submit</a>-->
+<!--                        </div>-->
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <p class="change_link">Already a member ?
+                                <a id="already-member" href="/#signin" class="to_register"> Log in </a>
+                            </p>
+
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div>
+                                <h1>Business Management System</h1>
+                                <p>©2019 All Rights Reserved. Business Management System. Privacy and Terms</p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/jquery/2.2.3/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="/webjars/fastclick/1.0.6/fastclick.js"></script>
+    <script src="/webjars/nprogress/0.2.0/nprogress.js"></script>
+    <script src="/webjars/parsleyjs/2.9.1/parsley.min.js"></script>
+    <script src="js/validator.js"></script>
+
+</body>
+</html>
