@@ -26,17 +26,17 @@
                         <h1>Create Account</h1>
 
                         <div>
-                            <input id="username" type="text" class="form-control" placeholder="Username *" required="" />
+                            <input id="username" type="text" name="username" class="form-control" placeholder="Username *" required="" />
                             <!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
                         </div>
 
                         <div>
-                            <input id="firstName" type="text" class="form-control" placeholder="First Name *" required="" />
+                            <input id="first_name" type="text" name="first_name" class="form-control" placeholder="First Name *" required="" />
 <!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
                         </div>
 
                         <div>
-                            <input id="lastName" type="text" class="form-control" placeholder="Last Name *" required="" />
+                            <input id="last_name" name="last_name" type="text" class="form-control" placeholder="Last Name *" required="" />
 <!--                            <p th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Validation error</p>-->
                         </div>
 
@@ -46,11 +46,11 @@
                         </div>
 
                         <div>
-                            <input id="reg-password" type="password" class="form-control" placeholder="Password *" required="" />
+                            <input id="password" name="password" type="password" class="form-control" placeholder="Password *" required="" />
 <!--                            <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>-->
                         </div>
                         <div>
-                            <input id="reg-matchingPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
+                            <input id="matchingPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
                         </div>
 
                         <div class="form-actions" style="margin-top: 12px;">
