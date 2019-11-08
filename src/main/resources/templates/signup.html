@@ -22,25 +22,40 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form>
+                    <form action="/signup" th:object="${user}" method="POST" enctype="UTF8">
                         <h1>Create Account</h1>
+
+                        <div>
+                            <input id="username" type="text" class="form-control" placeholder="Username *" required="" />
+                            <!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
+                        </div>
+
+                        <div>
+                            <input id="firstName" type="text" class="form-control" placeholder="First Name *" required="" />
+<!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
+                        </div>
+
+                        <div>
+                            <input id="lastName" type="text" class="form-control" placeholder="Last Name *" required="" />
+<!--                            <p th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Validation error</p>-->
+                        </div>
+
                         <div>
                             <input type="email" placeholder="Email *" id="email" name="email" required="" class="form-control" />
+<!--                            <p th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation error</p>-->
                         </div>
+
                         <div>
                             <input id="reg-password" type="password" class="form-control" placeholder="Password *" required="" />
+<!--                            <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>-->
                         </div>
                         <div>
-                            <input id="reg-confirmPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
+                            <input id="reg-matchingPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
                         </div>
 
                         <div class="form-actions" style="margin-top: 12px;">
-                            <button type="submit" class="btn btn-link">Sign up</button>
+                            <button type="submit" class="btn btn-light">Sign up</button>
                         </div>
-
-<!--                        <div>-->
-<!--                            <a id="send" type="submit" href="/dashboard" class="btn btn-success">Submit</a>-->
-<!--                        </div>-->
 
                         <div class="clearfix"></div>
 
