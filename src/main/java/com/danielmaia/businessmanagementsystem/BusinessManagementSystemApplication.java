@@ -1,11 +1,9 @@
 package com.danielmaia.businessmanagementsystem;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication()
 public class BusinessManagementSystemApplication {
 
     public static void main(String[] args) {
@@ -13,3 +11,5 @@ public class BusinessManagementSystemApplication {
     }
 
 }
+
+//exclude={DataSourceAutoConfiguration.class}

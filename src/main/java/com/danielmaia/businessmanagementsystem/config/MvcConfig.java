@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.config;
+package com.danielmaia.businessmanagementsystem.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
