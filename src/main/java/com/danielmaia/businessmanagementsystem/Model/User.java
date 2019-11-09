@@ -60,6 +60,10 @@ public class User implements UserDetails {
         return last_name;
     }
 
+    public String getFullName() {
+        return getFirst_name() + " " + getLast_name();
+    }
+
     public void setLast_name(String last_name) {
         this.last_name = last_name;
     }

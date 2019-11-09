@@ -14,6 +14,9 @@
     <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
     <link href="/webjars/nprogress/0.2.0/nprogress.css" rel="stylesheet">
     <link href="/webjars/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+    <link href="/webjars/icheck/1.0.2/skins/flat/green.css" rel="stylesheet">
+    <link href="/webjars/select2/4.0.2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="/webjars/switchery/0.8.1/dist/switchery.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
 </head>
 <body class="login">
@@ -24,33 +27,41 @@
                 <section class="login_content">
                     <form action="/signup" th:object="${user}" method="POST"  modelAttribute="user" enctype="UTF8">
                         <h1>Create Account</h1>
-                        <div>
-                            <input id="username" type="text" name="username" class="form-control" placeholder="Username *" required="" />
-                            <!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
+
+
+                        <div class="col-md-6 col-sm-6  form-group has-feedback">
+                            <input id="first_name" name="first_name" required="" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
-                        <div>
-                            <input id="first_name" type="text" name="first_name" class="form-control" placeholder="First Name *" required="" />
-<!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->
+                        <div class="col-md-6 col-sm-6  form-group has-feedback">
+                            <input id="last_name" required="" name="last_name" type="text" class="form-control" placeholder="Last Name">
+                            <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
                         </div>
 
-                        <div>
-                            <input id="last_name" name="last_name" type="text" class="form-control" placeholder="Last Name *" required="" />
-<!--                            <p th:each="error : ${#fields.errors('lastName')}" th:text="${error}">Validation error</p>-->
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input type="text" name="username" class="form-control has-feedback-left" id="username" required="" placeholder="Username">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
-                        <div>
-                            <input type="email" placeholder="Email *" id="email" name="email" required="" class="form-control" />
-<!--                            <p th:each="error : ${#fields.errors('email')}" th:text="${error}">Validation error</p>-->
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input type="text" class="form-control has-feedback-left" id="email" name="email" required="" placeholder="Email">
+                            <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
-                        <div>
-                            <input id="password" name="password" type="password" class="form-control" placeholder="Password *" required="" />
-<!--                            <p th:each="error : ${#fields.errors('password')}" th:text="${error}">Validation error</p>-->
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input id="password" required="" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                         </div>
-                        <div>
-                            <input id="matchingPassword" type="password" class="form-control" placeholder="Confirm Password *" required="" />
+
+
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input id="matchingPassword" class="form-control has-feedback-left" placeholder="Confirm Password" type="password" required="">
+                            <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                         </div>
+
+                            <label style="padding: 10px" class="radio-inline"><input type="radio" name="optradio" checked> Admin</label>
+                            <label style="padding: 10px" class="radio-inline"><input type="radio" name="optradio"> User</label>
 
                         <div class="form-actions" style="margin-top: 12px;">
                             <button type="submit" class="btn btn-light">Sign up</button>

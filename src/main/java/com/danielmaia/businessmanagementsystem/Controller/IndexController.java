@@ -1,25 +1,23 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
+import com.danielmaia.businessmanagementsystem.Model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class LoginController {
+public class IndexController {
 
-
-    @GetMapping("/login")
-    public String index() {
-        return "login";
-    }
-
-    // When the form is submitted this will be actioned.
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String loginAnother() {
+    // Checks if the user is logged in already
+    // If so, they are redirected to the dashboard, otherwise they are redirected to the login page.
+    @RequestMapping(path = "/")
+    public String login(Model model, HttpServletRequest request) {
+        model.addAttribute("user", new User());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getPrincipal() instanceof UserDetails) {
             return "redirect:/dashboard";

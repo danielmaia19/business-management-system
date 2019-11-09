@@ -11,7 +11,12 @@
     </div>
     <div class="profile_info">
         <span>Welcome,</span>
-        <h2>Daniel Maia</h2>
+
+        <h2>
+            <span src="images/img.jpg" alt="" th:text ="${#authentication.getPrincipal().getFullName()}" th:remove="tag"></span>
+        </h2>
+
+
     </div>
     <div class="clearfix"></div>
 </div>

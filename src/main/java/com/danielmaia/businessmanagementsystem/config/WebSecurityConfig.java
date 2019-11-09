@@ -44,9 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
 
                 .authorizeRequests()
-                .antMatchers("/login.html", "/signup", "/", "/forgot-password").permitAll()
+                .antMatchers("/login.html", "/", "/forgot-password").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/profile/**").authenticated()
                 .antMatchers("/dashboard").authenticated()
+                .antMatchers("/signup").hasRole("ADMIN")
 
                 .and()
 
@@ -58,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                 .and()
                 .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
