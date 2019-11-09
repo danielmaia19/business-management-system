@@ -10,29 +10,22 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    @Column(name = "user_id", unique = true)
-    private int user_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
+    private Long user_id;
 
-    @Column(name = "username", unique = true)
+    @Column(unique = true)
     private String username;
-
-    @Column(name = "first_name")
     private String first_name;
-
-    @Column(name = "last_name")
     private String last_name;
 
-    @Column(name = "email", unique = true)
+    @Column(unique = true)
     private String email;
-
-    @Column(name = "enabled")
     private boolean enabled;
-
-    @Column(name = "password")
     private String password;
 
     @OneToOne
@@ -51,12 +44,8 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public int getUser_id() {
+    public Long getUser_id() {
         return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
     }
 
     public String getFirst_name() {

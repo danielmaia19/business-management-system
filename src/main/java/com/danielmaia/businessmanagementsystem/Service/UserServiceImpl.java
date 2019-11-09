@@ -5,20 +5,36 @@ import com.danielmaia.businessmanagementsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private UserDao userDao;
-
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Override
+    public User registerNewUser(User user) {
+
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setFirst_name(user.getFirst_name());
+        newUser.setLast_name(user.getLast_name());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setEnabled(true);
+
+        return userDao.save(newUser);
     }
 
     @Override
@@ -32,5 +48,4 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
-
 }

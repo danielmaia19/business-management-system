@@ -1,15 +1,13 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "roles", schema = "public")
 public class Role {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id", unique = true)
     private int role_id;
 

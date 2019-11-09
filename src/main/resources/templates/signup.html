@@ -22,9 +22,8 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form action="/signup" th:object="${user}" method="POST" enctype="UTF8">
+                    <form action="/signup" th:object="${user}" method="POST"  modelAttribute="user" enctype="UTF8">
                         <h1>Create Account</h1>
-
                         <div>
                             <input id="username" type="text" name="username" class="form-control" placeholder="Username *" required="" />
                             <!--                            <p th:each="error: ${#fields.errors('firstName')}" th:text="${error}">Validation error</p>-->

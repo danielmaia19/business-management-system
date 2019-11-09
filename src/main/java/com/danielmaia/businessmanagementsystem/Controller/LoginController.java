@@ -15,15 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
-    // No reason for this to be here, can be deleted later on, if not required.
-    //@RequestMapping("/")
-    //public String index() {
-    //    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    //    if (auth.getPrincipal() instanceof UserDetails) {
-    //        return "redirect:/dashboard";
-    //    } else return "login";
-    //}
-
     @GetMapping("login")
     public String index() {
         return "login";
@@ -31,10 +22,7 @@ public class LoginController {
 
     @RequestMapping(path = "/login")
     public String login(Model model, HttpServletRequest request) {
-
         model.addAttribute("user", new User());
-
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getPrincipal() instanceof UserDetails) {
             return "redirect:/dashboard";

@@ -24,19 +24,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    public WebSecurityConfig(UserServiceImpl userServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-    }
+    //public WebSecurityConfig(UserServiceImpl userServiceImpl) {
+    //    this.userServiceImpl = userServiceImpl;
+    //}
 
     @Autowired
     public void configuredGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(authenticationProvider()).userDetailsService(userService);
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
+    //@Override
+    //protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    //    auth.authenticationProvider(authenticationProvider());
+    //}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -67,29 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/assets/**");
     }
-
-    //public AuthenticationSuccessHandler loginSuccessHandler() {
-    //    return (request, response, authentication) -> response.sendRedirect("/dashboard");
-    //}
-    //
-    //public AuthenticationFailureHandler loginFailureHandler() {
-    //    return (request, response, authentication) -> {
-    //        request.getSession().setAttribute("flash", "Error");
-    //        response.sendRedirect("/");
-    //    };
-    //}
-
-
-    //@Bean
-    //public UserDetailsService userDetailsService() {
-    //
-    //    User.UserBuilder users = User.withDefaultPasswordEncoder();
-    //    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    //    manager.createUser(users.username("user").password("password").roles("USER").build());
-    //    manager.createUser(users.username("admin").password("password").roles("USER", "ADMIN").build());
-    //    return manager;
-    //
-    //}
 
     @Bean
     DaoAuthenticationProvider authenticationProvider() {
