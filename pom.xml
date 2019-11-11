@@ -181,6 +181,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>fastclick</artifactId>
+            <version>0.6.11</version>
+        </dependency>
+
     </dependencies>
 
 
