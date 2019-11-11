@@ -2723,8 +2723,6 @@ if (typeof NProgress != 'undefined') {
 			}
 			
 		};
-	   
-		
 		
 		/* ECHRTS */
 	

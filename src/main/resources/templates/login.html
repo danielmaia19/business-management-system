@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BMS | Login</title>
+
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/webjars/nprogress/0.2.0/nprogress.css" rel="stylesheet">
+    <link href="/webjars/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+    <link href="css/custom.min.css" rel="stylesheet">
+</head>
+<body class="login">
+    <div>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+
+                    <form name="login-form" th:action="@{/login}" method="post">
+                        <h1>Login Form</h1>
+
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Invalid username and password.
+                        </div>
+
+                        <div th:if="${param.logout}" class="alert alert-success">
+                            You have been logged out.
+                        </div>
+
+                        <div>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username *" autofocus="autofocus" required="" />
+                        </div>
+
+                        <div>
+                            <input type="password" class="form-control" placeholder="Password" id="password" name="password" required="" />
+                        </div>
+
+                        <div class="form-check">
+                            <input id="remember-me" type="checkbox" class="form-check-input" name="remember-me">
+                            <label  class="form-check-label" for="remember-me">Remember me?</label>
+                        </div>
+
+                        <div class="form-actions" style="margin-top: 12px;">
+                            <button name="login-btn" type="submit" class="btn btn-light">Log in</button>
+                        </div>
+
+                        <div class="form-check" style="margin-top: 12px;">
+                            <a class="form-check-label" name="lost-your-password" href="/lost_password">Lost your password?</a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div>
+                                <h1>Business Management System</h1>
+                                <p>©2019 All Rights Reserved. Privacy and Terms</p>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </section>
+            </div>
+    </div>
+    </div>
+
+<script src="/webjars/jquery/2.2.3/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="/webjars/fastclick/1.0.6/fastclick.js"></script>
+<script src="/webjars/nprogress/0.2.0/nprogress.js"></script>
+<script src="/webjars/parsleyjs/2.9.1/parsley.min.js"></script>
+<script src="js/validator.js"></script>
+
+</body>
+</html>

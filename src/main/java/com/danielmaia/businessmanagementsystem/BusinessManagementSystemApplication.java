@@ -3,7 +3,7 @@ package com.danielmaia.businessmanagementsystem;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class BusinessManagementSystemApplication {
 
     public static void main(String[] args) {
@@ -11,3 +11,5 @@ public class BusinessManagementSystemApplication {
     }
 
 }
+
+//exclude={DataSourceAutoConfiguration.class}
