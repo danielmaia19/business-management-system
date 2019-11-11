@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Business Management System</title>
+    <title>BMS | Create User</title>
 
     <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
@@ -25,9 +25,8 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form action="/signup" th:object="${user}" method="POST"  modelAttribute="user" enctype="UTF8">
-                        <h1>Create Account</h1>
-
+                    <form name="signup" action="/signup" th:object="${user}" method="POST"  modelAttribute="user" enctype="UTF8">
+                        <h1>Create User</h1>
 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
                             <input id="first_name" name="first_name" required="" type="text" class="form-control has-feedback-left" placeholder="First Name">
@@ -56,7 +55,7 @@
 
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input id="matchingPassword" class="form-control has-feedback-left" placeholder="Confirm Password" type="password" required="">
+                            <input id="confirm_Password" name="confirm_password" class="form-control has-feedback-left" placeholder="Confirm Password" type="password" required="">
                             <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
@@ -64,7 +63,7 @@
                             <label style="padding: 10px" class="radio-inline"><input type="radio" name="optradio"> User</label>
 
                         <div class="form-actions" style="margin-top: 12px;">
-                            <button type="submit" class="btn btn-light">Sign up</button>
+                            <button type="submit" class="btn btn-light">Add user</button>
                         </div>
 
                         <div class="clearfix"></div>

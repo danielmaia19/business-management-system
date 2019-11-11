@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Business Management System</title>
+    <title>BMS | Login</title>
 
     <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
             <div class="animate form login_form">
                 <section class="login_content">
 
-                    <form name="f" th:action="@{/login}" method="post">
+                    <form name="login-form" th:action="@{/login}" method="post">
                         <h1>Login Form</h1>
 
                         <div th:if="${param.error}" class="alert alert-danger">
@@ -34,23 +34,24 @@
                         </div>
 
                         <div>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="autofocus" required="" />
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username *" autofocus="autofocus" required="" />
                         </div>
+
                         <div>
                             <input type="password" class="form-control" placeholder="Password" id="password" name="password" required="" />
                         </div>
 
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
-                            <label class="form-check-label" for="remember-me">Remember me?</label>
+                            <input id="remember-me" type="checkbox" class="form-check-input" name="remember-me">
+                            <label  class="form-check-label" for="remember-me">Remember me?</label>
                         </div>
 
                         <div class="form-actions" style="margin-top: 12px;">
-                            <button type="submit" class="btn btn-light">Log in</button>
+                            <button name="login-btn" type="submit" class="btn btn-light">Log in</button>
                         </div>
 
                         <div class="form-check" style="margin-top: 12px;">
-                            <a class="form-check-label" href="/lost_password">Lost your password?</a>
+                            <a class="form-check-label" name="lost-your-password" href="/lost_password">Lost your password?</a>
                         </div>
 
                         <div class="clearfix"></div>

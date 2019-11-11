@@ -49,17 +49,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile/**").authenticated()
                 .antMatchers("/dashboard").authenticated()
                 .antMatchers("/signup").hasRole("ADMIN")
-
                 .and()
-
                 .formLogin()
                 .loginProcessingUrl("/login")
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/dashboard")
                 .failureUrl("/login?error=true")
-
                 .and()
-
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                 .and()
                 .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
