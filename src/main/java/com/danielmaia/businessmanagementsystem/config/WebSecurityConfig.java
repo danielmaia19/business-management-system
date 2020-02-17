@@ -1,7 +1,7 @@
-package com.danielmaia.businessmanagementsystem.Config;
+package com.danielmaia.businessmanagementsystem.config;
 
 import com.danielmaia.businessmanagementsystem.Service.UserService;
-import com.danielmaia.businessmanagementsystem.Service.UserServiceImpl;
+import com.danielmaia.businessmanagementsystem.ServiceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,19 +24,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    //public WebSecurityConfig(UserServiceImpl userServiceImpl) {
-    //    this.userServiceImpl = userServiceImpl;
-    //}
-
     @Autowired
     public void configuredGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider()).userDetailsService(userService);
     }
-
-    //@Override
-    //protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    //    auth.authenticationProvider(authenticationProvider());
-    //}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -48,15 +39,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/profile/**").authenticated()
                 .antMatchers("/dashboard").authenticated()
-                .antMatchers("/signup").hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
                 .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/dashboard")
+                .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
                 .and()
                 .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
