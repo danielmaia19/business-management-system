@@ -12,4 +12,3 @@ public class BusinessManagementSystemApplication {
 
 }
 
-//exclude={DataSourceAutoConfiguration.class}
