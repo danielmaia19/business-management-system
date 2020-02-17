@@ -3,7 +3,7 @@ package com.danielmaia.businessmanagementsystem.Model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles", schema = "public")
+@Table(name = "roles")
 public class Role {
 
     @Id

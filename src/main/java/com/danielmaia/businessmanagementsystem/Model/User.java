@@ -20,11 +20,15 @@ public class User implements UserDetails {
 
     @Column(unique = true)
     private String username;
+
+    @Column
     private String first_name;
     private String last_name;
 
     @Column(unique = true)
     private String email;
+
+    @Column
     private boolean enabled;
     private String password;
 
