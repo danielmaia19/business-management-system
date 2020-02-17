@@ -6,7 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardController {
 
+    // If navigated to the /dashboard URI
+    // Then the user will see the dashboard page
     @GetMapping("/dashboard")
-    public void dashboard() {}
+    public String dashboard() {
+        return "dashboard";
+    }
 
 }
