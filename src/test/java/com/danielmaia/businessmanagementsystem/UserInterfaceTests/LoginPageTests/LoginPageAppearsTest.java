@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.LoginPageTests;
+package com.danielmaia.businessmanagementsystem.UserInterfaceTests.LoginPageTests;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;

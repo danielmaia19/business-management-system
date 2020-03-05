@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.LoginPageTests;
+package com.danielmaia.businessmanagementsystem.UserInterfaceTests.LoginPageTests;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -15,7 +15,6 @@ import java.io.IOException;
 
 @SpringBootTest
 public class LoginFieldsAppearTest {
-
 
     @Test
     public void testUsernameAppears() throws Exception {

@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.RegisterUserPageTests;
+package com.danielmaia.businessmanagementsystem.UserInterfaceTests.RegisterUserPageTests;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
