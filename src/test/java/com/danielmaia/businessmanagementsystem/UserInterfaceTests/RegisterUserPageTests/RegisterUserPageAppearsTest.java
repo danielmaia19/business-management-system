@@ -1,29 +1,26 @@
 package com.danielmaia.businessmanagementsystem.UserInterfaceTests.RegisterUserPageTests;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.danielmaia.businessmanagementsystem.UserInterfaceTests.MockHtttpAndWebClient;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 80")
 public class RegisterUserPageAppearsTest {
+
+    @LocalServerPort
+    private int port;
 
     @Test
     public void testRegisterPageLoads() throws IOException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-
-        WebClient webClient = new WebClient();
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUri().toURL().toString();
-        final HtmlPage localPage = webClient.getPage(baseUrl + "/signup");
-        Assert.assertEquals("BMS | Create User", localPage.getTitleText());
+        MockHtttpAndWebClient mock = new MockHtttpAndWebClient();
+        Assert.assertEquals("BMS | Create User", mock.htmlPage("/signup", port).getPage().getTitleText());
     }
 
 }
