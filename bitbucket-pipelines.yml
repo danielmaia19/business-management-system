@@ -3,19 +3,21 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: maven:3.6.1
+image: dmaia/spring-boot-docker:v1
 
 pipelines:
   default:
     - step:
         name: Build and Test
         image: maven:3
-        caches: 
+        caches:
           - maven
         script:
+          - echo "Tests started"
           - mvn -B clean verify
+          - echo "Tests Completed"
     - step:
-        name: Create Artifact
+        name: Create artifact
         script:
           - tar czfv application.tgz pom.xml src/
         artifacts:
@@ -29,3 +31,4 @@ pipelines:
               HEROKU_API_KEY: $HEROKU_API_KEY
               HEROKU_APP_NAME: $HEROKU_APP_NAME
               ZIP_FILE: "application.tgz"
+          - echo "DONE!"
