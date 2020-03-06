@@ -28,10 +28,11 @@ public class LoginController {
     }
 
 
+
     // This will check if the user is already logged in.
     // If they are, then they get redirected to the '/dashboard' page.
     // Otherwise they will be redirected to the 'login'
-    @RequestMapping(value = "login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String logUserIn() {
         if (!AuthenticationSystem.isLogged())  return "redirect:/dashboard";
         return "login";
