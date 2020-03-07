@@ -1,7 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.User;
-import com.danielmaia.businessmanagementsystem.ServiceImpl.UserServiceImpl;
+import com.danielmaia.businessmanagementsystem.Service.ServiceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

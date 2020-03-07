@@ -1,7 +1,7 @@
 package com.danielmaia.businessmanagementsystem.config;
 
+import com.danielmaia.businessmanagementsystem.Service.ServiceImpl.UserServiceImpl;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
-import com.danielmaia.businessmanagementsystem.ServiceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,9 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .csrf().disable()
-
                 .authorizeRequests()
                 .antMatchers("/login.html", "/", "/forgot-password").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")

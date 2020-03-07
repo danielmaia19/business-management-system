@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UserInterfaceTests;
+package com.danielmaia.businessmanagementsystem;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;

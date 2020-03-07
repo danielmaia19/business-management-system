@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.ServiceImpl;
+package com.danielmaia.businessmanagementsystem.Service.ServiceImpl;
 
 import com.danielmaia.businessmanagementsystem.DAO.UserDao;
 import com.danielmaia.businessmanagementsystem.Model.User;
