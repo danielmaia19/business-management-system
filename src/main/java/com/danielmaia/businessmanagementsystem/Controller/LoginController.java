@@ -9,28 +9,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
 
-    /* This is the root page.
+    /** This is the root page.
      * At the moment the homepage gets redirected to the login page
      * This prevents the user from going back to the login page if the
      * user is already logged in.
-    */
+     */
     @GetMapping("/")
     public String index() {
         return "redirect:/login";
     }
 
-    /* The login page will be where users login.
+    /** The login page will be where users login.
      * It first checks if the user is already logged in.
      * If they are then they are redirected to their dashboard
      * If not then to the login screen.
-    */
+     */
     @GetMapping("login")
     public String login() {
         if (!AuthenticationSystem.isLogged()) return "login"; // or some logic
         return "redirect:/dashboard";
     }
 
-    /* This will check if the user is already logged in.
+    /** This will check if the user is already logged in.
      * If they are, then they get redirected to the '/dashboard' page.
      * Otherwise they will be redirected to the 'login'
      */
@@ -39,6 +39,5 @@ public class LoginController {
         if (!AuthenticationSystem.isLogged())  return "redirect:/dashboard";
         return "login";
     }
-
 
 }
