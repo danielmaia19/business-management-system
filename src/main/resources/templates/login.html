@@ -34,7 +34,7 @@
                         </div>
 
                         <div>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username *" autofocus="autofocus" required="" />
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="autofocus" required="" />
                         </div>
 
                         <div>
@@ -62,12 +62,16 @@
 
                             <div>
                                 <h1>Business Management System</h1>
-                                <p>©2019 All Rights Reserved. Privacy and Terms</p>
+
+                                <p th:inline="text" >
+                                    <span>©</span>
+                                    <span th:text="${#dates.format(#dates.createNow(),'yyyy')}"></span>
+                                    <span>| All Rights Reserved. Privacy and Terms</span>
+                                </p>
+
                             </div>
                         </div>
                     </form>
-
-
 
                 </section>
             </div>
