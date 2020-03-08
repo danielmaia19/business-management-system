@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class SignupController {
+public class RegisterUserController {
 
     @Autowired
     UserServiceImpl userServiceImpl;
 
-    @GetMapping("/signup")
+    @GetMapping("/register-user")
     public String index() {
-        return "signup";
+        return "register-user";
     }
 
-    @RequestMapping(path = "/signup", method = RequestMethod.POST)
+    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
     public String create(@ModelAttribute("user") User user) {
-        userServiceImpl.registerNewUser(user);
-        return "/dashboard";
+        userServiceImpl.saveNewRegisteredUser(user);
+        return "dashboard";
     }
 
 }
