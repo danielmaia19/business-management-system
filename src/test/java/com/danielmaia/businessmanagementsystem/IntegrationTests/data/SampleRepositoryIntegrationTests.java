@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@RunWith(SpringRunner.class)
 //@DataJpaTest
+@DisplayName("Sample Repository Integration Tests")
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 public class SampleRepositoryIntegrationTests {
 
