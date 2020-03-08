@@ -27,7 +27,7 @@ pipelines:
         name: Deploy to Staging
         deployment: staging
         script:
-          - pipe: ehsaniara/bitbucket-util:latest
+          - pipe: azul/zulu-openjdk-alpine:11
             variables:
               HEROKU_API_KEY: $HEROKU_API_KEY
               HEROKU_APP_NAME: $HEROKU_APP_NAME
