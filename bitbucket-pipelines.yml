@@ -18,19 +18,13 @@ pipelines:
           - mvn -B clean verify
           - echo "Tests Completed"
     - step:
-        name: Create artifact
-        script:
-          - tar czfv application.tgz pom.xml src/
-        artifacts:
-          - application.tgz
-    - step:
-        name: Deploy to Staging
-        deployment: staging
-        image: azul/zulu-openjdk-alpine:11
-        script:
-          - pipe: atlassian/heroku-deploy:0.1.1
-            variables:
-              HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: "application.tgz"
-          - echo "DONE!"
+          name: Push docker image to the Heroku
+          deployment: Staging
+          services:
+            - docker
+          script:
+            - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+            - heroku container:login
+            - heroku container:push web -a $HEROKU_APP_NAME
+            - heroku container:release web -a $HEROKU_APP_NAME
+            - echo "DONE!"
