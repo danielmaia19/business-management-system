@@ -26,8 +26,9 @@ pipelines:
     - step:
         name: Deploy to Staging
         deployment: staging
+        image: azul/zulu-openjdk-alpine:11
         script:
-          - pipe: azul/zulu-openjdk-alpine:11
+          - pipe: atlassian/heroku-deploy:0.1.1
             variables:
               HEROKU_API_KEY: $HEROKU_API_KEY
               HEROKU_APP_NAME: $HEROKU_APP_NAME
