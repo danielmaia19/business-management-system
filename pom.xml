@@ -282,6 +282,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+            <scope>test</scope>
+        </dependency>
+
         <!--   REDUNDANT REMOVE THEM AFTER 60 DAYS (7/03/2020)     -->
 
         <!--        &lt;!&ndash; JUnit - v4.12 &ndash;&gt;-->
