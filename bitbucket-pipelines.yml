@@ -7,7 +7,7 @@ image: dmaia/spring-boot-docker:v1
 
 pipelines:
  branches:
-'{master}':
+  master:
     - step:
         name: Build and Test
         image: maven:3
