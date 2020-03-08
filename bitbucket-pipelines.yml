@@ -3,7 +3,7 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: azul/zulu-openjdk-alpine:11
+image: dmaia/spring-boot-docker:v1.1
 
 pipelines:
  branches:
@@ -27,7 +27,7 @@ pipelines:
         name: Deploy to Staging
         deployment: staging
         script:
-          - pipe: atlassian/heroku-deploy:0.1.1
+          - pipe: ehsaniara/bitbucket-util:latest
             variables:
               HEROKU_API_KEY: $HEROKU_API_KEY
               HEROKU_APP_NAME: $HEROKU_APP_NAME
