@@ -14,185 +14,226 @@
     <name>business-management-system</name>
     <description>Business Management System Spring Boot Project</description>
 
-
     <properties>
         <java.version>1.8</java.version>
+        <junit.jupiter.version>5.6.0</junit.jupiter.version>
+        <junit.vintage.version>5.6.0</junit.vintage.version>
+        <junit.platform.version>1.6.0</junit.platform.version>
     </properties>
 
     <dependencies>
 
-        <!-- Spring Boot Thymeleaf Dependencies -->
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-runner -->
+        <!--    JUnit Platform Runner    -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <!--    JUnit Jupiter API    -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <!--    JUnit Jupiter Engine    -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite-api -->
+        <!--    JUnit Platform Suite API    -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher -->
+        <!--    JUnit Platform Launcher    -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-engine -->
+        <!--    JUnit Platform Engine    -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--    Spring Boot Starter Thymeleaf    -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!--    Thymeleaf Extras SpringSecurity 5   -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        </dependency>
+
+        <!--    Thymeleaf Spring 5   -->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+        </dependency>
+
+        <!--    Spring Boot Devtools     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>3.1.0</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!--    Spring Boot Starter Security     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>4.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>font-awsome</artifactId>
-            <version>4.6.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>nprogress</artifactId>
-            <version>0.2.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>animate.css</artifactId>
-            <version>3.5.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>fastclick</artifactId>
-            <version>1.0.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>icheck</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
-            <artifactId>htmlunit</artifactId>
-            <version>2.36.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>parsleyjs</artifactId>
-            <version>2.9.1</version>
-        </dependency>
-
-        <!-- jpa, crud repository -->
+        <!--    Spring Boot Starter Data JPA     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!--    Spring Boot Starter Web     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>prettify</artifactId>
-            <version>4-Mar-2013-1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>select2</artifactId>
-            <version>4.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>switchery</artifactId>
-            <version>0.8.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
+        <!--    Spring Security Test    -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
+        <!--    Spring Boot Starter Test    -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <!--            <exclusions>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>org.junit.vintage</groupId>-->
+            <!--                    <artifactId>junit-vintage-engine</artifactId>-->
+            <!--                </exclusion>-->
+            <!--            </exclusions>-->
         </dependency>
 
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>fastclick</artifactId>
-            <version>0.6.11</version>
-        </dependency>
-
+        <!--    Spring Boot Starter Webflux     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
+
+        <!--    Start: Web Jars      -->
+        <!--    Bootstrap Web Jar - v4.3.1   -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <!--    Font Awesome Web Jar - v4.6.1    -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>font-awsome</artifactId>
+            <version>4.6.1</version>
+        </dependency>
+
+        <!--    Nprogress Web Jar - v0.2.0      -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>nprogress</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+
+        <!-- A  nimate Web Jar - v3.5.1    -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>animate.css</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+
+        <!--    JQuery Web Jar - v2.2.3      -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+        <!--    Fast Click Web Jar - v1.0.6   -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>fastclick</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+        <!--    Icheck Web Jar - v1.0.2   -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>icheck</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <!--    ParsleyJS Web Jar - v2.9.1      -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>parsleyjs</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+
+        <!--    Prettify Web Jar - v4.Mar-2012-1      -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>prettify</artifactId>
+            <version>4-Mar-2013-1</version>
+        </dependency>
+
+        <!--    Select2 Web Jar - v4.0.2     -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>select2</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+
+        <!--    Fast Click Web Jar - v0.6.11     -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>fastclick</artifactId>
+            <version>0.6.11</version>
+        </dependency>
+        <!-- End: Web Jars -->
+
+        <!--    PostgreSQL    -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--    Reactor Spring - v1.0.1      -->
         <dependency>
             <groupId>org.projectreactor</groupId>
             <artifactId>reactor-spring</artifactId>
@@ -200,8 +241,43 @@
         </dependency>
 
 
-    </dependencies>
+        <!--    Others      -->
 
+
+        <!-- Mockito - v3.1.0 -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- HTMLUnit - v1.36.0 -->
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.36.0</version>
+        </dependency>
+
+
+        <!--   REDUNDANT REMOVE THEM AFTER 60 DAYS (7/03/2020)     -->
+
+        <!--        &lt;!&ndash; JUnit - v4.12 &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>junit</groupId>-->
+        <!--            <artifactId>junit</artifactId>-->
+        <!--            <version>4.12</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+
+        <!-- Switchery Web Jar - v0.8.1 -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.webjars.bower</groupId>-->
+        <!--            <artifactId>switchery</artifactId>-->
+        <!--            <version>0.8.1</version>-->
+        <!--        </dependency>-->
+
+    </dependencies>
 
     <build>
         <plugins>
@@ -209,6 +285,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.21.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

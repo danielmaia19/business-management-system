@@ -1,18 +1,21 @@
 package com.danielmaia.businessmanagementsystem.IntegrationTests.data;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@RunWith(SpringRunner.class)
-@DataJpaTest
+//@DataJpaTest
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 public class SampleRepositoryIntegrationTests {
 
     @Test
+    @DisplayName("My Test")
     public void myTest() {
-        Assert.assertTrue(true);
+        assertTrue(true);
     }
 
 }

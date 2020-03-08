@@ -1,17 +1,20 @@
 package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
-//@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@DisplayName("Sample Controller Integration Test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SampleControllerIntegrationTest {
 
     @Test
+    @DisplayName("Just a Test")
     public void myTest() {
-        Assert.assertTrue(true);
+
+        assertTrue(true);
     }
 
 }
