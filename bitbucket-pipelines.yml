@@ -5,6 +5,9 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: dmaia/spring-boot-docker:v1.1
 
+clone:
+ depth: full
+
 pipelines:
  branches:
   master:
@@ -27,9 +30,6 @@ pipelines:
         name: Deploy to Staging
         deployment: staging
         script:
-          - pipe: scottyengineering/java11
-            variables:
-              HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: "application.tgz"
+          - pip install -r requirements.txt
+          - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD
           - echo "DONE!"
