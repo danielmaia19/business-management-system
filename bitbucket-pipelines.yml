@@ -20,7 +20,7 @@ pipelines:
     - step:
         name: Create artifact
         script:
-          - tar czfv application.tgz pom.xml system.properties src/
+          - tar czfv application.tgz pom.xml src/
         artifacts:
           - application.tgz
     - step:
