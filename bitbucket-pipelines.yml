@@ -3,27 +3,30 @@
 # Only use spaces to indent your .yml configuration.
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
-image: maven:3.6.1
+image: dmaia/spring-boot-docker:v1.1
 
 pipelines:
-  branches:
-    master:
-      - step: #Its working
-          name: Create Artifact
-          caches:
-            - maven
-          script: # Modify the commands below to build your repository.
-            - mvn -B package # -B batch mode makes Maven less verbose
-          artifacts: # defining the artifacts to be passed to each future step.
-            - target/**
-      - step:
-            name: Push docker image to the Heroku
-            deployment: Staging
-            services:
-              - docker
-            script:
-              - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-              - heroku container:login
-              - heroku container:push web -a $HEROKU_APP_NAME
-              - heroku container:release web -a $HEROKU_APP_NAME
-              - echo "DONE!"
+ branches:
+  master:
+    - step:
+        name: Build and Test
+        image: maven:3
+        caches:
+          - maven
+        script:
+          - echo "Tests started"
+          - mvn -B clean verify
+          - echo "Tests Completed"
+    - step:
+        name: Create artifact
+        script:
+          - tar czfv application.tgz pom.xml src/
+        artifacts:
+          - application.tgz
+    - step:
+        caches:
+          - maven
+        script: # Modify the commands below to build your repository.
+            - mvn clean install  
+            - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:master 
+            - echo "DONE!"
