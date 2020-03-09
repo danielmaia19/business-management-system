@@ -6,30 +6,30 @@
 image: dmaia/spring-boot-docker:v1.1
 
 pipelines:
- branches:
-  master:
-    - step:
-        name: Build and Test
-        image: maven:3
-        caches:
-          - maven
-        script:
-          - echo "Tests started"
-          - mvn -B clean verify
-          - echo "Tests Completed"
-    - step:
-        name: Create artifact
-        script:
-          - tar czfv application.tgz pom.xml system.properties src/
-        artifacts:
-          - application.tgz
-    - step:
-        name: Deploy to Staging
-        deployment: staging
-        script:
-          - pipe: atlassian/heroku-deploy:0.1.1
-            variables:
-              HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: "application.tgz"
-          - echo "DONE!"
+  branches:
+    master:
+      - step:
+          name: Build and Test
+          image: maven:3
+          caches:
+            - maven
+          script:
+            - echo "Tests started"
+            - mvn -B clean verify
+            - echo "Tests Completed"
+      - step:
+          name: Create artifact
+          script:
+            - tar czfv application.tgz pom.xml src/
+          artifacts:
+            - application.tgz
+      - step:
+          name: Deploy to Staging
+          deployment: staging
+          script:
+            - pipe: atlassian/heroku-deploy:0.1.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: "application.tgz"
+            - echo "DONE!"
