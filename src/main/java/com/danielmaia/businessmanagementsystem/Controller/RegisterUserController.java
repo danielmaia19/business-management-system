@@ -15,12 +15,12 @@ public class RegisterUserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
-    @GetMapping("/register-user")
+    @GetMapping("/signup")
     public String index() {
-        return "register-user";
+        return "signup";
     }
 
-    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public String create(@ModelAttribute("user") User user) {
         userServiceImpl.saveNewRegisteredUser(user);
         return "dashboard";

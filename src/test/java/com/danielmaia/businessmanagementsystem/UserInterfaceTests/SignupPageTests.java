@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Register New User Page Tests")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 80")
-public class RegisterUserPageTests {
+public class SignupPageTests {
 
     @LocalServerPort
     private int port;
-    private String path = "/register-user";
+    private String path = "/signup";
     private MockHttpAndWebClient mock = new MockHttpAndWebClient();
 
     @Test
