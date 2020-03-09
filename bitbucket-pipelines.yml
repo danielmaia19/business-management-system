@@ -27,9 +27,6 @@ pipelines:
         name: Deploy to Staging
         deployment: staging
         script:
-          - pipe: atlassian/heroku-deploy:0.1.1
-            variables:
-              HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: "application.tgz"
+          - git remote add heroku git@heroku.com:staging-bm-system.git
+          - mvn heroku:deploy
           - echo "DONE!"
