@@ -5,9 +5,6 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 image: dmaia/spring-boot-docker:v1.1
 
-clone:
- depth: full
-
 pipelines:
  branches:
   master:
@@ -23,13 +20,16 @@ pipelines:
     - step:
         name: Create artifact
         script:
-          - tar czfv application.tgz pom.xml src/
+          - tar czfv application.tgz pom.xml system.properties src/ lib/
         artifacts:
           - application.tgz
     - step:
         name: Deploy to Staging
         deployment: staging
         script:
-          - pip install -r requirements.txt
-          - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD
+          - pipe: atlassian/heroku-deploy:0.1.1
+            variables:
+              HEROKU_API_KEY: $HEROKU_API_KEY
+              HEROKU_APP_NAME: $HEROKU_APP_NAME
+              ZIP_FILE: "application.tgz"
           - echo "DONE!"
