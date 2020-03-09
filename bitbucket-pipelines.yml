@@ -16,17 +16,6 @@ pipelines:
         script:
           - echo "Tests started"
           - mvn -B clean verify
-          - echo "Tests Completed"
-    - step:
-        name: Create artifact
-        script:
-          - tar czfv application.tgz pom.xml src/
-        artifacts:
-          - application.tgz
-    - step:
-        name: Deploy to Staging
-        deployment: staging
-        script:
           - git remote add heroku git@heroku.com:staging-bm-system.git
           - mvn heroku:deploy
-          - echo "DONE!"
+          - echo "Tests Completed"
