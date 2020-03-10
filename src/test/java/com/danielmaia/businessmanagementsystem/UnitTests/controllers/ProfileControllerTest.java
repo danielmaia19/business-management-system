@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ProfileController;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("Profile Controller - Unit Test")
 class ProfileControllerTest {
 
     @Autowired
@@ -25,6 +27,7 @@ class ProfileControllerTest {
 
     @Test
     @WithMockUser
+    @DisplayName("Profile Page View OK?")
     void index() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/profile"))
                 .andExpect(status().isOk())

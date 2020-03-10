@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@DataJpaTest
-@DisplayName("Login Repository Integration Tests")
+@DisplayName("Login Repository - Integration Tests")
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 public class LoginRepositoryIntegrationTests {
 

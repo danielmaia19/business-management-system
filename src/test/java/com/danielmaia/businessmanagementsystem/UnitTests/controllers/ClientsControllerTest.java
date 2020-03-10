@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("Clients Controller Unit Test")
 class ClientsControllerTest {
 
     @Autowired
@@ -23,6 +25,7 @@ class ClientsControllerTest {
     MockMvc mvc;
 
     @Test
+    @DisplayName("Client Page View OK?")
     void index() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/clients"))
                 .andExpect(status().isOk())

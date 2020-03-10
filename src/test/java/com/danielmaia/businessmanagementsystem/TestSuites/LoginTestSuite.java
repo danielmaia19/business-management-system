@@ -16,5 +16,6 @@ import org.junit.runner.RunWith;
 @SelectClasses({
         LoginPageTests.class,
         LoginServiceIntegrationTest.class,
-        LoginRepositoryIntegrationTests.class,})
+        LoginRepositoryIntegrationTests.class,
+        LoginControllerTest.class})
 class LoginTestSuite {}

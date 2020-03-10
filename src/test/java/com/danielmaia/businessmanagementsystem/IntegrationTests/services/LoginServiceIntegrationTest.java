@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("Login Service Integration Test")
+@DisplayName("Login Service - Integration Test")
 public class LoginServiceIntegrationTest {
 
     @Test
