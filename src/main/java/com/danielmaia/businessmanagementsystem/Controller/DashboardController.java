@@ -23,6 +23,7 @@ public class DashboardController {
     // Then the user will see the dashboard page
     @GetMapping("/dashboard")
     public String index(ModelMap model) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
