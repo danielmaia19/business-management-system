@@ -7,7 +7,7 @@ import java.security.Principal;
 @Controller
 public class LoginController {
 
-    @RequestMapping(value = "/login")
+    @RequestMapping({"/", "/login"})
     public String index(Principal principal) {
         return principal == null ?  "login" : "redirect:/dashboard";
     }

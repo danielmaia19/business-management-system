@@ -1,13 +1,13 @@
-package com.danielmaia.businessmanagementsystem.Controller;
+package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.danielmaia.businessmanagementsystem.Controller.ProfileController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,18 +15,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class InvoicesControllerTest {
+class ProfileControllerTest {
 
     @Autowired
-    private InvoicesController controller;
+    private ProfileController controller;
 
     @Autowired
     MockMvc mvc;
 
     @Test
+    @WithMockUser
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/invoices"))
+        mvc.perform(MockMvcRequestBuilders.get("/profile"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("invoices"));
+                .andExpect(view().name("profile"));
     }
 }

@@ -1,5 +1,6 @@
-package com.danielmaia.businessmanagementsystem.Controller;
+package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
+import com.danielmaia.businessmanagementsystem.Controller.SettingsController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,18 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ReportsControllerTest {
+class SettingsControllerTest {
 
     @Autowired
-    private ReportsController controller;
+    private SettingsController controller;
 
     @Autowired
     MockMvc mvc;
 
     @Test
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/reports"))
+        mvc.perform(MockMvcRequestBuilders.get("/settings"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("reports"));
+                .andExpect(view().name("settings"));
     }
 }
