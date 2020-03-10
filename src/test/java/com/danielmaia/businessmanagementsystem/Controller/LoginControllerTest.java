@@ -7,24 +7,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.swing.*;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SignupControllerTest {
+class LoginControllerTest {
 
     @Autowired
-    private ClientsController controller;
+    private LoginController controller;
 
     @Autowired
     MockMvc mvc;
 
     @Test
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/settings"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("settings"));
+        mvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(view().name("login"));
     }
 }
