@@ -9,7 +9,7 @@ public class LoginController {
 
     @RequestMapping({"/", "/login"})
     public String index(Principal principal) {
-        return principal == null ?  "login" : "redirect:/dashboard";
+        return principal == null ?  "login" : "/dashboard";
     }
 
 }
