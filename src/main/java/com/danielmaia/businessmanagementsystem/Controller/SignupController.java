@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,10 +45,17 @@ public class SignupController {
     }
 
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
-    public String create(@ModelAttribute("user") @Valid User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userService.saveUser(user);
-        return "dashboard";
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, ModelAndView modelAndView) {
+
+
+        if(bindingResult.hasErrors()) {
+            return "signup";
+        } else {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userService.saveUser(user);
+            return "dashboard";
+        }
+
     }
 
 }

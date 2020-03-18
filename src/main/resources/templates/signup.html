@@ -31,37 +31,37 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form name="signup" th:action="@{/signup}" method="POST"  modelAttribute="user" enctype="UTF8">
+                    <form name="signup" th:action="@{/signup}" th:object="${user}" method="POST" modelAttribute="user" enctype="UTF8">
                         <h1>Create User</h1>
 
+                        <div th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></div>
+                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger"></div>
+
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
-                            <input id="first_name" name="first_name" required="" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <input th:field="*{first_name}" id="first_name" name="first_name" type="text" class="form-control has-feedback-left" placeholder="First Name">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
-                            <input id="last_name" required="" name="last_name" type="text" class="form-control" placeholder="Last Name">
+                            <input th:field="*{last_name} id="last_name" name="last_name" type="text" class="form-control" placeholder="Last Name">
                             <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input type="text" name="username" class="form-control has-feedback-left" id="username" required="" placeholder="Username">
+                            <input th:field="*{username}" type="text" name="username" class="form-control has-feedback-left" id="username" placeholder="Username">
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input type="text" class="form-control has-feedback-left" id="email" name="email" required="" placeholder="Email">
+                            <input th:field="*{email}"  type="text" class="form-control has-feedback-left" id="email" name="email" placeholder="Email">
                             <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input id="password" required="" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
-                            <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
-                        </div>
-
-
-                        <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input id="confirm_password" name="confirm_password" class="form-control has-feedback-left" placeholder="Confirm Password" type="password" required="">
+                            <input th:field="*{password}"  id="password" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
                             <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                         </div>
 

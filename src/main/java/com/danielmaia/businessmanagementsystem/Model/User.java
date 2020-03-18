@@ -5,8 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +25,7 @@ public class User implements UserDetails {
 
     @Column
     @NotEmpty(message = "Please enter your first name")
+    @Size(min = 2, max = 20)
     private String first_name;
 
     @Column
@@ -33,14 +33,17 @@ public class User implements UserDetails {
     private String last_name;
 
     @Column(unique = true)
-    @NotEmpty(message = "Please enter your email address")
+    @Email(message = "Please enter a valid email")
+    @NotEmpty(message = "Please enter an email address")
     private String email;
 
     @Column
     @NotEmpty(message = "Please enter a password")
-    @Min(value = 8, message = "Please enter a minimum of 8 characters")
-    private boolean enabled;
+    @Size(min = 5, message = "Password length needs to be greater than 8")
     private String password;
+
+    @Column
+    private boolean enabled;
 
     @OneToOne
     @JoinColumn(name = "role_id")
