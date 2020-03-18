@@ -1,6 +1,6 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.DAO.UserDao;
+import com.danielmaia.businessmanagementsystem.DAO.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class InvoicesController {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @GetMapping("/invoices")
     public String index(ModelMap model) {
@@ -22,7 +22,7 @@ public class InvoicesController {
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
 
-        User currentUser = userDao.findByUsername(username);
+        User currentUser = userRepository.findByUsername(username);
 
         model.addAttribute("name", currentUser.getFullName());
 

@@ -31,7 +31,7 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form name="signup" action="/signup" th:object="${user}" method="POST"  modelAttribute="user" enctype="UTF8">
+                    <form name="signup" th:action="@{/signup}" method="POST"  modelAttribute="user" enctype="UTF8">
                         <h1>Create User</h1>
 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">

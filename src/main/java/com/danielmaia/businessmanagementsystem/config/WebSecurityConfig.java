@@ -1,6 +1,6 @@
 package com.danielmaia.businessmanagementsystem.config;
 
-import com.danielmaia.businessmanagementsystem.Service.ServiceImpl.UserServiceImpl;
+import com.danielmaia.businessmanagementsystem.DAO.UserRepository;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserRepository userRepository;
 
     @Autowired
     public void configuredGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,8 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
-                //.and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
+                .and()
                 .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
 
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.userServiceImpl);
+        daoAuthenticationProvider.setUserDetailsService(this.userService);
         return daoAuthenticationProvider;
     }
 

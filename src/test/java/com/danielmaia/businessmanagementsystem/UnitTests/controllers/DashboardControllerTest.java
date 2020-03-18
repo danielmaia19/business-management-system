@@ -1,8 +1,6 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.DashboardController;
-import com.danielmaia.businessmanagementsystem.DAO.UserDao;
-import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest

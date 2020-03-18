@@ -5,6 +5,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,22 +21,40 @@ public class User implements UserDetails {
     private Long user_id;
 
     @Column(unique = true)
+    @NotEmpty(message = "Please enter your username")
     private String username;
 
     @Column
+    @NotEmpty(message = "Please enter your first name")
     private String first_name;
+
+    @Column
+    @NotEmpty(message = "Please enter your last name")
     private String last_name;
 
     @Column(unique = true)
+    @NotEmpty(message = "Please enter your email address")
     private String email;
 
     @Column
+    @NotEmpty(message = "Please enter a password")
+    @Min(value = 8, message = "Please enter a minimum of 8 characters")
     private boolean enabled;
     private String password;
 
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public User() {
+        this.user_id = getUser_id();
+        this.username = getUsername();
+        this.email = getEmail();
+        this.first_name = getFirst_name();
+        this.last_name = getLast_name();
+        this.password = getPassword();
+        this.enabled = true;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -80,18 +100,10 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority(role.getName()));
+        //authorityList.add(new SimpleGrantedAuthority(role.getName()));
         return authorityList;
     }
 
@@ -116,6 +128,11 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
         return true;
     }
 
