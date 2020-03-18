@@ -1,6 +1,6 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.DAO.UserRepository;
+import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

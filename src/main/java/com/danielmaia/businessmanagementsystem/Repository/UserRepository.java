@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.DAO;
+package com.danielmaia.businessmanagementsystem.Repository;
 
 import com.danielmaia.businessmanagementsystem.Model.User;
 import org.springframework.data.repository.CrudRepository;

@@ -1,6 +1,6 @@
 package com.danielmaia.businessmanagementsystem.config;
 
-import com.danielmaia.businessmanagementsystem.DAO.UserRepository;
+import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

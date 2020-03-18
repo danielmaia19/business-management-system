@@ -28,7 +28,6 @@ public class LoginController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public String create(@ModelAttribute("user") User user) {
-        System.out.println(user.getEmail());
         userService.findByUsername(user.getUsername());
         return "dashboard";
     }

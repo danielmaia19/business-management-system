@@ -42,22 +42,19 @@ public class User implements UserDetails {
     @Size(min = 5, message = "Password length needs to be greater than 8")
     private String password;
 
-    @Column
-    private boolean enabled;
-
     @OneToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public User() {
-        this.user_id = getUser_id();
-        this.username = getUsername();
-        this.email = getEmail();
-        this.first_name = getFirst_name();
-        this.last_name = getLast_name();
-        this.password = getPassword();
-        this.enabled = true;
+    public User(String first_name, String last_name, String username, String password, String email) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
+
+    public User(){}
 
     public void setUsername(String username) {
         this.username = username;
