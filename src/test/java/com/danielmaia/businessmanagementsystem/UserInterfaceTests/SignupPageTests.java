@@ -60,12 +60,5 @@ public class SignupPageTests {
         assertThat(mock.getElemById(port, path, "password")).isEqualTo("input");
     }
 
-    @Test
-    @DisplayName("Password Confirmation Label and Field Appears")
-    public void testConfirmPasswordFieldAppears() throws Exception {
-        assertThat(mock.getElemAndAttri(port, path, "confirm_password", "name")).contains("confirm_password");
-        assertThat(mock.getElemById(port, path, "confirm_password")).isEqualTo("input");
-    }
-
 }
 

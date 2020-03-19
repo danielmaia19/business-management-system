@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ProfileController;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -23,13 +25,16 @@ class ProfileControllerTest {
     private ProfileController controller;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     MockMvc mvc;
 
     @Test
     @WithMockUser
     @DisplayName("Profile Page View OK?")
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/profile"))
+        mvc.perform(MockMvcRequestBuilders.get("/profile").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("profile"));
     }

@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.DashboardController;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -21,6 +23,10 @@ class DashboardControllerTest {
     @Autowired
     DashboardController controller;
 
+
+    @Autowired
+    private UserService userService;
+
     @Autowired
     MockMvc mvc;
 
@@ -28,9 +34,9 @@ class DashboardControllerTest {
     @WithMockUser
     @DisplayName("Dashboard Page View OK?")
     void dashboard() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/dashboard"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(model().attribute("name", nullValue()))
-                .andExpect(redirectedUrl("/dashboard"));
+        mvc.perform(MockMvcRequestBuilders.get("/dashboard").with(user(userService.loadUserByUsername("admin"))))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attribute("name", "Admin" + " Admin"))
+                .andExpect(view().name("dashboard"));
     }
 }

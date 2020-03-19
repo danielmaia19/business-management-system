@@ -27,8 +27,8 @@ class SignupControllerTest {
     @Test
     @DisplayName("Signup Page View OK?")
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/settings"))
+        mvc.perform(MockMvcRequestBuilders.get("/signup"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("settings"));
+                .andExpect(view().name("signup"));
     }
 }
