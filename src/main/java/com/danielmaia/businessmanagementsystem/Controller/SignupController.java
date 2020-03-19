@@ -5,6 +5,7 @@ import com.danielmaia.businessmanagementsystem.Repository.RoleRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
+import org.omg.CORBA.Object;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,9 +51,22 @@ public class SignupController {
     @RequestMapping(path = "/signup", method = RequestMethod.POST)
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
 
+        User usernameExists = userService.findByUsername(user.getUsername());
+        User emailExists = userService.findByEmail(user.getEmail());
 
-        if(bindingResult.hasErrors()) {
+        if(usernameExists != null) {
+            bindingResult.addError(new FieldError("username","username", "Username already exists"));
             return "signup";
+        }
+
+        if(emailExists != null) {
+            bindingResult.addError(new FieldError("email","email", "Email already exists"));
+            return "signup";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "signup";
+
         } else {
 
             String password = user.getPassword();
@@ -60,6 +76,7 @@ public class SignupController {
             userService.saveUser(user);
 
             authWithHttpServletRequest(request, user.getUsername(), password);
+
 
             return "redirect:/dashboard";
         }
