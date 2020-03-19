@@ -40,9 +40,6 @@ public class SignupController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    protected AuthenticationManager authenticationManager;
-
-
     @RequestMapping("/signup")
     public String index(ModelAndView modelAndView, User user) {
         return "signup";
@@ -68,28 +65,21 @@ public class SignupController {
             return "signup";
 
         } else {
-
             String password = user.getPassword();
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setEnabled(true);
             user.setRole(roleRepository.findByName("ROLE_ADMIN"));
             userService.saveUser(user);
 
-            authWithHttpServletRequest(request, user.getUsername(), password);
-
+            try {
+                request.login(user.getUsername(), password);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
 
             return "redirect:/dashboard";
         }
 
     }
-
-    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
-        try {
-            request.login(username, password);
-        } catch (ServletException e) {
-            System.out.println(e);
-        }
-    }
-
 }
 

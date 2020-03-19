@@ -41,7 +41,6 @@ public class User implements UserDetails {
     private boolean enabled;
 
     @Column
-    @NotEmpty(message = "Please enter a password")
     @Size(min = 5, message = "Password length needs to be greater than 8")
     private String password;
 
