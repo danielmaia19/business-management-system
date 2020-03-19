@@ -44,24 +44,28 @@
                     <div class="col-md-12 col-sm-12  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Plain Page</h2>
                                 <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
+                                        Create Client
+                                    </button>
                                 </ul>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                Add content to the page ...
+                                <div class="col-md-55">
+                                    <div class="thumbnail client-item">
+                                        <a href="#">
+                                            <div class="image view view-first">
+                                                <img style="width: 100%; display: block;" src="images/media.jpg"
+                                                     alt="image"/>
+                                            </div>
+                                        </a>
+                                        <div class="caption">
+                                            <h4>Client Name</h4>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,6 +73,64 @@
             </div>
         </div>
         <!-- /page content -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Client</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form-horizontal">
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input type="text" class="form-control" placeholder="Client Name">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess2" placeholder="Address Line 1">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess3" placeholder="Address Line 2">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess4" placeholder="City / Town">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess5" placeholder="State/Province/Region">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess6" placeholder="Zip / Postal Code">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input type="text" class="form-control" id="inputSuccess7" placeholder="Country">
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div th:insert="Components/footer"></div>
     </div>
@@ -102,7 +164,8 @@
             }
         }
     }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
+
+    document.getElementById('linkFullscreen').addEventListener('click', function () {
         toggleFullscreen();
     });
 </script>
