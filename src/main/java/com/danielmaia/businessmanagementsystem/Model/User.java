@@ -38,6 +38,9 @@ public class User implements UserDetails {
     private String email;
 
     @Column
+    private boolean enabled;
+
+    @Column
     @NotEmpty(message = "Please enter a password")
     @Size(min = 5, message = "Password length needs to be greater than 8")
     private String password;
@@ -100,10 +103,14 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        //authorityList.add(new SimpleGrantedAuthority(role.getName()));
+        authorityList.add(new SimpleGrantedAuthority(role.getName()));
         return authorityList;
     }
 
@@ -133,7 +140,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public void setPassword(String password) {

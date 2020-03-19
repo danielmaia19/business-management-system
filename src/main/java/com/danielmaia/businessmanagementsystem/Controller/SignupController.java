@@ -1,5 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
+import com.danielmaia.businessmanagementsystem.Model.Role;
+import com.danielmaia.businessmanagementsystem.Repository.RoleRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 public class SignupController {
@@ -22,6 +25,9 @@ public class SignupController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -39,6 +45,8 @@ public class SignupController {
             return "signup";
         } else {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setEnabled(true);
+            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
             userService.saveUser(user);
             return "dashboard";
         }
