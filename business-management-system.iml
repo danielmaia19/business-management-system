@@ -174,7 +174,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.2.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars.bower:echarts:3.1.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.10.8" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.10.8" level="project" />

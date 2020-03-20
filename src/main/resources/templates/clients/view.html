@@ -34,19 +34,6 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2 th:text="${name}"></h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
                                 <div class="clearfix"></div>
                             </div>
 
@@ -54,35 +41,26 @@
 
                                 <div class="col-md-9 col-sm-9  ">
 
-                                    <ul class="stats-overview">
-                                        <li>
-                                            <span class="name"> Estimated budget </span>
-                                            <span class="value text-success"> 2300 </span>
-                                        </li>
-                                        <li>
-                                            <span class="name"> Total amount spent </span>
-                                            <span class="value text-success"> 2000 </span>
-                                        </li>
-                                        <li class="hidden-phone">
-                                            <span class="name"> Estimated project duration </span>
-                                            <span class="value text-success"> 20 </span>
-                                        </li>
-                                    </ul>
-                                    <br />
-
-
+<!--                                    <ul class="stats-overview">-->
+<!--                                        <li>-->
+<!--                                            <span class="name"> Estimated budget </span>-->
+<!--                                            <span class="value text-success"> £2300 </span>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <span class="name"> Total amount spent </span>-->
+<!--                                            <span class="value text-success"> £2000 </span>-->
+<!--                                        </li>-->
+<!--                                        <li class="hidden-phone">-->
+<!--                                            <span class="name"> Estimated project duration </span>-->
+<!--                                            <span class="value text-success"> £20 </span>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                    <br />-->
 
                                     <div id="mainb"></div>
-                                    <figure class="highcharts-figure">
-                                        <div id="container"></div>
-                                        <p class="highcharts-description">
-                                            A basic column chart compares rainfall values between four cities.
-                                            Tokyo has the overall highest amount of rainfall, followed by New York.
-                                            The chart is making use of the axis crosshair feature, to highlight
-                                            months as they are hovered over.
-                                        </p>
-                                    </figure>
+
                                     <div>
+
 
                                         <h4>Recent Activity</h4>
 
@@ -147,7 +125,7 @@
                                     <section class="panel">
 
                                         <div class="x_title">
-                                            <h2>Project Description</h2>
+                                            <h2>Client Description</h2>
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
@@ -157,15 +135,12 @@
                                             <br />
 
                                             <div class="project_detail">
-
-                                                <p class="title">Client Company</p>
-                                                <p>Deveint Inc</p>
-                                                <p class="title">Project Leader</p>
+                                                <p class="title">Contact Person</p>
                                                 <p>Tony Chicken</p>
                                             </div>
 
                                             <br />
-                                            <h5>Project files</h5>
+                                            <h5>Client files</h5>
                                             <ul class="list-unstyled project_files">
                                                 <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
                                                 </li>
@@ -180,7 +155,7 @@
                                             </ul>
                                             <br />
 
-                                            <div class="text-center mtop20">
+                                            <div class="text-left mtop20">
                                                 <a href="#" class="btn btn-sm btn-primary">Add files</a>
                                                 <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                                             </div>
@@ -239,80 +214,5 @@
         toggleFullscreen();
     });
 </script>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-<script>
-    Highcharts.chart('container', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Monthly Average Rainfall'
-        },
-        subtitle: {
-            text: 'Source: WorldClimate.com'
-        },
-        xAxis: {
-            categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-            ],
-            crosshair: true
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Rainfall (mm)'
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        series: [{
-            name: 'Tokyo',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-
-        }, {
-            name: 'New York',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-
-        }, {
-            name: 'London',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-        }, {
-            name: 'Berlin',
-            data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-
-        }]
-    });
-</script>
-
-
 </body>
 </html>
