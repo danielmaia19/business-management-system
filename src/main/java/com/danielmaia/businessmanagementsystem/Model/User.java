@@ -3,6 +3,7 @@ package com.danielmaia.businessmanagementsystem.Model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Transactional
 public class User implements UserDetails {
 
     @Id
@@ -48,7 +50,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Client> clients;
 
     public User(String first_name, String last_name, String username, String password, String email) {
@@ -107,6 +109,14 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
     }
 
     @Override

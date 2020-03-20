@@ -16,15 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ClientsController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
 
     @Autowired
     private ClientService clientService;
@@ -46,7 +45,14 @@ public class ClientsController {
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public String createClient(@ModelAttribute("client") Client client) {
 
-        clientService.saveClient(client);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)authentication.getPrincipal();
+        String username = user.getUsername();
+
+        User currentUser = userRepository.findByUsername(username);
+
+        clientService.saveClient(new Client("testing another", currentUser));
+
         return "clients";
     }
 

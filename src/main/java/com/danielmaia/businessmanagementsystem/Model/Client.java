@@ -1,9 +1,12 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "clients")
+@Transactional
 public class Client {
 
     @Id
@@ -20,9 +23,16 @@ public class Client {
     private String postCode;
     private String country;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
+
+    public Client(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
+
+    public Client() {}
 
     public String getAddressLineOne() {
         return addressLineOne;
