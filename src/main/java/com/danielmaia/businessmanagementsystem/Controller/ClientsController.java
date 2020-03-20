@@ -1,13 +1,21 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
+import com.danielmaia.businessmanagementsystem.Model.Client;
+import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 public class ClientsController {
@@ -15,8 +23,14 @@ public class ClientsController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ClientService clientService;
+
     @GetMapping("/clients")
-    public String index(ModelMap model) {
+    public String index(ModelMap model, Client client) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
@@ -28,4 +42,12 @@ public class ClientsController {
 
         return "clients";
     }
+
+    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    public String createClient(@ModelAttribute("client") Client client) {
+
+        clientService.saveClient(client);
+        return "clients";
+    }
+
 }

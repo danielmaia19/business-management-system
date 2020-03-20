@@ -48,6 +48,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<Client> clients;
+
     public User(String first_name, String last_name, String username, String password, String email) {
         this.first_name = first_name;
         this.last_name = last_name;
