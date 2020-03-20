@@ -13,7 +13,7 @@
         <span>Welcome,</span>
 
         <h2>
-            <span src="/images/img.jpg" alt="" th:text ="${name}" th:remove="tag"></span>
+            <span src="/images/img.jpg" alt="" th:text="${#authentication.getPrincipal().getFullName()}" th:remove="tag"></span>
         </h2>
 
 
