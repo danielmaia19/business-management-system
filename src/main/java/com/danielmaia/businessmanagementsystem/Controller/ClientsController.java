@@ -28,32 +28,37 @@ public class ClientsController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     @GetMapping("/clients")
-    public String index(ModelMap model, Client client) {
+    public String index(ModelMap model, Client client, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        User currentUser = userRepository.findByUsername(user.getUsername());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        String username = user.getUsername();
-
-        User currentUser = userRepository.findByUsername(username);
-
+        model.addAttribute("clients", clientRepository.findClientByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());
 
         return "clients";
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public String createClient(@ModelAttribute("client") Client client) {
+    public String createClient(@ModelAttribute("client") @Valid Client client, BindingResult bindingResult, Authentication authentication) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        String username = user.getUsername();
+        //TODO: Handle errors to show in modal
+        if (bindingResult.hasErrors()) {
+            return "clients";
+        } else {
+            User user = (User) authentication.getPrincipal();
+            User currentUser = userRepository.findByUsername(user.getUsername());
 
-        User currentUser = userRepository.findByUsername(username);
+            client.setUser(currentUser);
+            clientService.saveClient(client);
 
-        clientService.saveClient(new Client("testing another", currentUser));
+            return "redirect:/clients";
+        }
 
-        return "clients";
+
     }
 
 }

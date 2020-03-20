@@ -3,6 +3,7 @@ package com.danielmaia.businessmanagementsystem.Model;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "clients")
@@ -15,11 +16,22 @@ public class Client {
     private Long client_id;
 
     @Column
+    @NotEmpty(message = "Please enter a Client name")
     private String name;
+
+    @Column
     private String addressLineOne;
+
+    @Column
     private String addressLineTwo;
+
+    @Column
     private String city;
+
+    @Column
     private String region;
+
+    @Column
     private String postCode;
     private String country;
 
