@@ -28,15 +28,12 @@ public class ClientsController {
     @Autowired
     private ClientService clientService;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
     @GetMapping("/clients")
     public String index(ModelMap model, Client client, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         User currentUser = userRepository.findByUsername(user.getUsername());
 
-        model.addAttribute("clients", clientRepository.findClientByUser(currentUser));
+        model.addAttribute("clients", clientService.findClientsByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());
 
         return "clients";

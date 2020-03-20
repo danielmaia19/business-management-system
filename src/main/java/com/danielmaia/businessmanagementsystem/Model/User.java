@@ -53,6 +53,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Client> clients;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Project> projects;
+
     public User(String first_name, String last_name, String username, String password, String email) {
         this.first_name = first_name;
         this.last_name = last_name;

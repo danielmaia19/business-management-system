@@ -27,4 +27,8 @@ public class ClientService {
         clientRepository.save(client);
     }
 
+    public List<Client> findClientsByUser(User user) {
+        return clientRepository.findClientsByUser(user);
+    }
+
 }
