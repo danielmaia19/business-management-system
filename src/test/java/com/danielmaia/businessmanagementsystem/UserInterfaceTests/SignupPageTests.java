@@ -1,6 +1,8 @@
 package com.danielmaia.businessmanagementsystem.UserInterfaceTests;
 
 import com.danielmaia.businessmanagementsystem.MockHttpAndWebClient;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +12,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @DisplayName("Signup Page - UI Test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 8080")
 public class SignupPageTests {
