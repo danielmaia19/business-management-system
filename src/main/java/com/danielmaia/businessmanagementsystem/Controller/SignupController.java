@@ -60,7 +60,7 @@ public class SignupController {
             String password = user.getPassword();
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setEnabled(true);
-            user.setRole(roleService.findByName("ROLE_ADMIN"));
+            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
             userService.saveUser(user);
 
             try {
