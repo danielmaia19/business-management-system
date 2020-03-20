@@ -1,5 +1,4 @@
-package com.danielmaia.businessmanagementsystem.IntegrationTests.data;
-
+package com.danielmaia.businessmanagementsystem.IntegrationTests.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,14 +6,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@RunWith(SpringRunner.class)
 //@DataJpaTest
-@DisplayName("Sample Repository Integration Tests")
+@DisplayName("Login Repository - Integration Tests")
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public class SampleRepositoryIntegrationTests {
+public class LoginRepositoryIntegrationTests {
 
     @Test
-    @DisplayName("My Test")
+    @DisplayName("😁 -> This is pretty cool" )
     public void myTest() {
         assertTrue(true);
     }

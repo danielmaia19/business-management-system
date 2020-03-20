@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Business Management System</title>
-
-    <div th:insert="Components/header"></div>
-</head>
+<div th:insert="components/header"></div>
 
 <body class="nav-md">
 <div class="container body">
     <div class="main_container">
         <div class="col-md-3 left_col menu_fixed">
             <div class="left_col scroll-view">
-                <div th:insert="Components/menu-profile"></div>
-                <div th:insert="Components/sidebar-navigation"></div>
+                <div th:insert="components/menu-profile"></div>
+                <div th:insert="components/sidebar-navigation"></div>
             </div>
         </div>
 
-        <div th:insert="Components/top-navigation"></div>
+        <div th:insert="components/top-navigation"></div>
 
         <!-- page content -->
         <div class="right_col" role="main">
@@ -66,14 +58,11 @@
         </div>
         <!-- /page content -->
 
-        <div th:insert="Components/footer"></div>
+        <div th:insert="components/footer"></div>
     </div>
 </div>
 
-<script src="/webjars/jquery/2.2.3/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-<script src="/webjars/fastclick/1.0.6/fastclick.js"></script>
-<script src="/webjars/nprogress/0.2.0/nprogress.js"></script>
+
 <script src="js/custom.min.js"></script>
 <script>
     function toggleFullscreen(elem) {

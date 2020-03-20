@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("New User Signup Page Tests")
+@DisplayName("Signup Page - UI Test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 8080")
 public class SignupPageTests {
 
@@ -58,13 +58,6 @@ public class SignupPageTests {
     public void testPasswordAppears() throws Exception {
         assertThat(mock.getElemAndAttri(port, path, "password", "name")).contains("password");
         assertThat(mock.getElemById(port, path, "password")).isEqualTo("input");
-    }
-
-    @Test
-    @DisplayName("Password Confirmation Label and Field Appears")
-    public void testConfirmPasswordFieldAppears() throws Exception {
-        assertThat(mock.getElemAndAttri(port, path, "confirm_password", "name")).contains("confirm_password");
-        assertThat(mock.getElemById(port, path, "confirm_password")).isEqualTo("input");
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("Login Page Tests")
+@DisplayName("Login Page - UI Test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 8080")
 public class LoginPageTests {
 

@@ -7,13 +7,13 @@
 <!-- menu profile quick info -->
 <div class="profile clearfix">
     <div class="profile_pic">
-        <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+        <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
     </div>
     <div class="profile_info" xmlns:th="http://www.w3.org/1999/xhtml">
         <span>Welcome,</span>
 
         <h2>
-            <span src="images/img.jpg" alt="" th:text ="${name}" th:remove="tag"></span>
+            <span src="/images/img.jpg" alt="" th:text="${#authentication.getPrincipal().getFullName()}" th:remove="tag"></span>
         </h2>
 
 

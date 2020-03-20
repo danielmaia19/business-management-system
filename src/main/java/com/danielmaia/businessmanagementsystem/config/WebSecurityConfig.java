@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.config;
 
-import com.danielmaia.businessmanagementsystem.Service.ServiceImpl.UserServiceImpl;
+import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserRepository userRepository;
 
     @Autowired
     public void configuredGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,8 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                //.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
-                //.and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
+                .and()
                 .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
 
@@ -59,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(this.userServiceImpl);
+        daoAuthenticationProvider.setUserDetailsService(this.userService);
         return daoAuthenticationProvider;
     }
 

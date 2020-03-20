@@ -1,7 +1,6 @@
 package com.danielmaia.businessmanagementsystem.TestSuites;
 
-import com.danielmaia.businessmanagementsystem.Controller.LoginController;
-import com.danielmaia.businessmanagementsystem.IntegrationTests.data.LoginRepositoryIntegrationTests;
+import com.danielmaia.businessmanagementsystem.IntegrationTests.repository.LoginRepositoryIntegrationTests;
 import com.danielmaia.businessmanagementsystem.IntegrationTests.services.LoginServiceIntegrationTest;
 import com.danielmaia.businessmanagementsystem.UserInterfaceTests.LoginPageTests;
 import com.danielmaia.businessmanagementsystem.UnitTests.controllers.*;
@@ -16,5 +15,6 @@ import org.junit.runner.RunWith;
 @SelectClasses({
         LoginPageTests.class,
         LoginServiceIntegrationTest.class,
-        LoginRepositoryIntegrationTests.class,})
+        LoginRepositoryIntegrationTests.class,
+        LoginControllerTest.class})
 class LoginTestSuite {}
