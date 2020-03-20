@@ -4,6 +4,7 @@ import com.danielmaia.businessmanagementsystem.Model.Role;
 import com.danielmaia.businessmanagementsystem.Repository.RoleRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Service.RoleService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.omg.CORBA.Object;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ import java.util.Arrays;
 public class SignupController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -68,7 +69,7 @@ public class SignupController {
             String password = user.getPassword();
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setEnabled(true);
-            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+            user.setRole(roleService.findByName("ROLE_ADMIN"));
             userService.saveUser(user);
 
             try {

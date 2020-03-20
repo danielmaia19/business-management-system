@@ -2,6 +2,7 @@ package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ReportsController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/reports")
     public String index(ModelMap model) {
@@ -22,7 +23,7 @@ public class ReportsController {
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
 
-        User currentUser = userRepository.findByUsername(username);
+        User currentUser = userService.findByUsername(username);
 
         model.addAttribute("name", currentUser.getFullName());
 

@@ -5,6 +5,7 @@ import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,7 @@ import java.util.List;
 public class ClientsController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ClientService clientService;
@@ -31,7 +32,7 @@ public class ClientsController {
     @GetMapping("/clients")
     public String index(ModelMap model, Client client, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(user.getUsername());
+        User currentUser = userService.findByUsername(user.getUsername());
 
         model.addAttribute("clients", clientService.findClientsByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());
@@ -47,7 +48,7 @@ public class ClientsController {
             return "clients";
         } else {
             User user = (User) authentication.getPrincipal();
-            User currentUser = userRepository.findByUsername(user.getUsername());
+            User currentUser = userService.findByUsername(user.getUsername());
 
             client.setUser(currentUser);
             clientService.saveClient(client);

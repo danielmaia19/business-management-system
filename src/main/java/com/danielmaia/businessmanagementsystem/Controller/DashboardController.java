@@ -2,6 +2,7 @@ package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DashboardController {
-    
+
     @Autowired
-    UserRepository userRepository;
+    private UserService userService;
 
     // If navigated to the /dashboard URI
     // Then the user will see the dashboard page
@@ -24,7 +25,7 @@ public class DashboardController {
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
 
-        User currentUser = userRepository.findByUsername(username);
+        User currentUser = userService.findByUsername(username);
 
         model.addAttribute("name", currentUser.getFullName());
 

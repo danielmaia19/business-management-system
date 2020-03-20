@@ -7,6 +7,7 @@ import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ProjectService;
+import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,18 +25,15 @@ import javax.validation.Valid;
 public class ProjectsController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ProjectService projectService;
 
-    @Autowired
-    private ClientService clientService;
-
     @GetMapping("/projects")
     public String index(ModelMap model, Project project, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
-        User currentUser = userRepository.findByUsername(user.getUsername());
+        User currentUser = userService.findByUsername(user.getUsername());
 
         model.addAttribute("name", currentUser.getFullName());
         model.addAttribute("projects", projectService.findProjectsByUser(currentUser));
@@ -51,7 +49,7 @@ public class ProjectsController {
             return "projects";
         } else {
             User user = (User) authentication.getPrincipal();
-            User currentUser = userRepository.findByUsername(user.getUsername());
+            User currentUser = userService.findByUsername(user.getUsername());
 
             project.setUser(currentUser);
             projectService.saveProject(project);

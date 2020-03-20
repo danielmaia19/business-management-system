@@ -14,11 +14,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LogoutController {
 
-
     @RequestMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) { new SecurityContextLogoutHandler().logout(request, response, auth); }
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        if (authentication != null) { new SecurityContextLogoutHandler().logout(request, response, authentication); }
         SecurityContextHolder.clearContext();
         return "redirect:/login?logout";
     }
