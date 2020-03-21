@@ -3,6 +3,9 @@ package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,11 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @DisplayName("Signup Controller - Unit Test")
 class SignupControllerTest {
 
-    @Autowired
+    @Mock
     private ClientsController controller;
 
     @Autowired
@@ -31,4 +35,12 @@ class SignupControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("signup"));
     }
+
+    @Test
+    public void userCanRegisterAnAccount() {
+
+
+    }
+
+
 }
