@@ -24,9 +24,6 @@ public class SignupController {
     private UserService userService;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -60,7 +57,7 @@ public class SignupController {
             String password = user.getPassword();
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setEnabled(true);
-            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+            user.setRole(roleService.findByName("ROLE_ADMIN"));
             userService.saveUser(user);
 
             try {
