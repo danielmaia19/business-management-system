@@ -14,6 +14,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    // Not being used anywhere not sure why it is here
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

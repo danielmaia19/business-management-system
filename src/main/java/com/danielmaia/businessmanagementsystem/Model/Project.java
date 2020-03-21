@@ -23,6 +23,10 @@ public class Project {
     public Project() {
     }
 
+    public Project(String projectName) {
+        this.name = projectName;
+    }
+
     public String getName() {
         return name;
     }

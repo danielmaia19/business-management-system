@@ -2,6 +2,7 @@ package com.danielmaia.businessmanagementsystem.IntegrationTests.repository;
 
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,21 +20,28 @@ public class UserRepositoryIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = new User("Daniel", "Maia", "dmaia", "arsenal", "dmaia@gmail.com");
+    }
+
     @Test
     @DisplayName("Find User By Username")
     public void testFindByUsername() {
-        User user = new User("Daniel", "Maia", "dmaia", "arsenal", "dmaia@gmail.com");
         userRepository.save(user);
         User foundUser = userRepository.findByUsername("dmaia");
+        assertThat(foundUser).isNotNull();
         assertThat("dmaia").isEqualTo(foundUser.getUsername());
     }
 
     @Test
     @DisplayName("Find User By Email")
     public void testFindByEmail() {
-        User user = new User("Daniel", "Maia", "dmaia", "arsenal", "dmaia@gmail.com");
         userRepository.save(user);
         User userFound = userRepository.findByEmail("dmaia@gmail.com");
+        assertThat(userFound).isNotNull();
         assertThat("dmaia@gmail.com").isEqualTo(userFound.getEmail());
     }
 
