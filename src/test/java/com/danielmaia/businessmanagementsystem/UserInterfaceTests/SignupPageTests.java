@@ -12,9 +12,8 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 @DisplayName("Signup Page - UI Test")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 8080")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server_port = 8080")
 public class SignupPageTests {
 
     @LocalServerPort
