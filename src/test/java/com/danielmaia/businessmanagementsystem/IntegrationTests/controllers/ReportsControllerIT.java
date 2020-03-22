@@ -1,13 +1,12 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
+package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
-import com.danielmaia.businessmanagementsystem.Controller.ProfileController;
+import com.danielmaia.businessmanagementsystem.Controller.ReportsController;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -18,11 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Profile Controller - Unit Test")
-class ProfileControllerTest {
+@DisplayName("Reports Controller - Integration Test")
+class ReportsControllerIT {
 
     @Autowired
-    private ProfileController controller;
+    private ReportsController controller;
 
     @Autowired
     private UserService userService;
@@ -31,11 +30,10 @@ class ProfileControllerTest {
     MockMvc mvc;
 
     @Test
-    @WithMockUser
-    @DisplayName("Profile Page View OK?")
+    @DisplayName("Reports Page View OK?")
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/profile").with(user(userService.loadUserByUsername("admin"))))
+        mvc.perform(MockMvcRequestBuilders.get("/reports").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("profile"));
+                .andExpect(view().name("reports"));
     }
 }

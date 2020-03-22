@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.IntegrationTests.services;
+package com.danielmaia.businessmanagementsystem.UnitTests.services;
 
 import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;

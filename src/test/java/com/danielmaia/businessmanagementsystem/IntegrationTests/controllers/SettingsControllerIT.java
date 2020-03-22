@@ -1,6 +1,6 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
+package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
-import com.danielmaia.businessmanagementsystem.Controller.TimesheetsController;
+import com.danielmaia.businessmanagementsystem.Controller.SettingsController;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Timesheets Controller - Unit Test")
-class TimesheetsControllerTest {
+@DisplayName("Settings Controller - Integration Test")
+class SettingsControllerIT {
 
     @Autowired
-    private TimesheetsController controller;
+    private SettingsController controller;
 
     @Autowired
     private UserService userService;
@@ -30,10 +30,10 @@ class TimesheetsControllerTest {
     MockMvc mvc;
 
     @Test
-    @DisplayName("Timesheets Page View OK?")
+    @DisplayName("Settings Page View OK?")
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/timesheets").with(user(userService.loadUserByUsername("admin"))))
+        mvc.perform(MockMvcRequestBuilders.get("/settings").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("timesheets"));
+                .andExpect(view().name("settings"));
     }
 }

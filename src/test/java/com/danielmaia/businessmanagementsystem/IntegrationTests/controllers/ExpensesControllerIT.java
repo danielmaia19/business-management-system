@@ -1,6 +1,6 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
+package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
-import com.danielmaia.businessmanagementsystem.Controller.CalendarController;
+import com.danielmaia.businessmanagementsystem.Controller.ExpensesController;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Calendar Controller - Unit Test")
-class CalendarControllerTest {
+@DisplayName("Expenses Controller - Integration Test")
+class ExpensesControllerIT {
 
     @Autowired
-    private CalendarController controller;
+    private ExpensesController controller;
 
     @Autowired
     private UserService userService;
@@ -30,10 +30,10 @@ class CalendarControllerTest {
     MockMvc mvc;
 
     @Test
-    @DisplayName("Calendar Page View OK?")
+    @DisplayName("Expenses Page View OK?")
     void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/calendar").with(user(userService.loadUserByUsername("admin"))))
+        mvc.perform(MockMvcRequestBuilders.get("/expenses").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(view().name("calendar"));
+                .andExpect(view().name("expenses"));
     }
 }

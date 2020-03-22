@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
+package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.LoginController;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Home/Login Controller - Unit Test")
-public class LoginControllerTest {
+@DisplayName("Login Controller - Integration Test")
+public class LoginControllerIT {
 
     @Autowired
     private LoginController controller;
@@ -27,9 +27,9 @@ public class LoginControllerTest {
     @Test
     @DisplayName("Home/Login Page View OK?")
     public void index() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/"))
+        mvc.perform(MockMvcRequestBuilders.get("/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("login"));
+                .andExpect(view().name("/login"));
     }
 
     @Test

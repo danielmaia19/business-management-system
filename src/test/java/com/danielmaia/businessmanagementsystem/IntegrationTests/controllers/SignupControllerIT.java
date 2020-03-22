@@ -1,4 +1,4 @@
-package com.danielmaia.businessmanagementsystem.UnitTests.controllers;
+package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
 import com.danielmaia.businessmanagementsystem.Controller.SignupController;
@@ -21,12 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@DisplayName("Signup Controller - Unit Test")
-class SignupControllerTest {
+@DisplayName("Signup Controller - Integration Test")
+class SignupControllerIT {
 
     @Autowired
     MockMvc mvc;
-
 
     @AfterEach
     void tearDown() {
@@ -53,6 +52,5 @@ class SignupControllerTest {
         .andExpect(model().errorCount(0))
         .andExpect(status().is3xxRedirection());
     }
-
 
 }

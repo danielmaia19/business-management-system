@@ -1,30 +1,22 @@
 package com.danielmaia.businessmanagementsystem.IntegrationTests.repository;
 
-import com.danielmaia.businessmanagementsystem.Model.Role;
 import com.danielmaia.businessmanagementsystem.Model.User;
-import com.danielmaia.businessmanagementsystem.Repository.RoleRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 @DisplayName("User Repository - Integration Test")
-public class UserRepositoryTest {
+public class UserRepositoryIT {
 
-    @Mock
+    @Autowired
     private UserRepository repository;
 
     private User user;
@@ -36,23 +28,19 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByUsername() {
-        when(repository.findByUsername("dmaia")).thenReturn(user);
+        repository.save(user);
+        repository.findByUsername("dmaia");
         User foundUser = repository.findByUsername("dmaia");
-
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser).isEqualTo(user);
-
-        verify(repository).findByUsername(anyString());
+        assertThat("dmaia").isEqualTo(foundUser.getUsername());
     }
 
     @Test
     public void testFindByEmail() {
-        when(repository.findByEmail("dmaia@gmail.com")).thenReturn(user);
-        User userFound = repository.findByEmail("dmaia@gmail.com");
-
-        assertThat(userFound).isNotNull();
-        assertThat(userFound).isEqualTo(user);
-
-        verify(repository).findByEmail(anyString());
+        repository.save(user);
+        repository.findByEmail("dmaia@gmail.com");
+        User foundUser = repository.findByEmail("dmaia@gmail.com");
+        assertThat(foundUser).isNotNull();
+        assertThat("dmaia@gmail.com").isEqualTo(foundUser.getEmail());
     }
 }

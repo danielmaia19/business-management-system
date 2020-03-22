@@ -7,63 +7,53 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 @DisplayName("Client Repository - Integration Test")
-public class ClientRepositoryTest {
+public class ClientRepositoryIT {
 
-    @Mock
+    @Autowired
     private ClientRepository repository;
 
     private Client client;
-    private List<Client> clients;
+    private List<Client> clients = new ArrayList<>();
     private User user;
 
     @BeforeEach
     void setUp() {
-
         user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
 
-        client = new Client("Name");
+        client = new Client("Name", user);
 
-        clients = new ArrayList<>();
-        clients.add(new Client("Client 1"));
-        clients.add(new Client("Client 2"));
+        clients.add(new Client("Client 1", user));
+        clients.add(new Client("Client 2", user));
     }
 
     @Test
     public void testFindByName() {
-        when(repository.findByName("Name")).thenReturn(client);
+        repository.save(client);
+
         Client foundClient = repository.findByName("Name");
 
         assertThat(foundClient).isNotNull();
-        assertThat(foundClient).isEqualTo(client);
+        assertThat(foundClient.getName()).isEqualTo("Name");
     }
 
     @Test
     void testFindClientsByUser() {
-        when(repository.findClientsByUser(user)).thenReturn(clients);
-        List<Client> clientsFoundByUser = repository.findClientsByUser(user);
+        repository.save(clients.get(0));
+        repository.save(clients.get(1));
 
-        assertThat(clientsFoundByUser).isNotNull();
-        assertThat(clientsFoundByUser).containsAll(clients);
+        List<Client> foundClients = repository.findClientsByUser(user);
 
-        verify(repository, atMostOnce()).findClientsByUser(any(User.class));
+        assertThat(foundClients).isNotNull();
+        assertThat(foundClients).isEqualTo(clients);
     }
 }

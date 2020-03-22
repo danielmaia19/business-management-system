@@ -7,48 +7,43 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@ExtendWith(MockitoExtension.class)
+
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 @DisplayName("Project Repository - Integration Test")
-public class ProjectRepositoryTest {
+public class ProjectRepositoryIT {
 
-    @Mock
+    @Autowired
     private ProjectRepository repository;
 
     private User user;
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
 
-        projects = new ArrayList<>();
-        projects.add(new Project("Project 1"));
-        projects.add(new Project("Project 2"));
-
+        projects.add(new Project("Project 1", user));
+        projects.add(new Project("Project 2", user));
     }
 
 
     @Test
     public void testFindProjectsByUser() {
-        when(repository.findProjectsByUser(user)).thenReturn(projects);
-        List<Project> projectsFoundByUser = repository.findProjectsByUser(user);
+        repository.save(projects.get(0));
+        repository.save(projects.get(1));
 
-        assertThat(projectsFoundByUser).isNotNull();
-        assertThat(projectsFoundByUser).containsAll(projects);
+        repository.findProjectsByUser(user);
+        List<Project> foundProjects = repository.findProjectsByUser(user);
 
-        verify(repository, atMostOnce()).findProjectsByUser(user);
+        assertThat(foundProjects).isNotNull();
+        assertThat(projects).isEqualTo(foundProjects);
     }
 }
