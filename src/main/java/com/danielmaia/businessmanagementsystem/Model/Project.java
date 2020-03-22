@@ -27,6 +27,11 @@ public class Project {
         this.name = projectName;
     }
 
+    public Project(String projectName, User user) {
+        this.name = projectName;
+        this.user = user;
+    }
+
     public String getName() {
         return name;
     }
