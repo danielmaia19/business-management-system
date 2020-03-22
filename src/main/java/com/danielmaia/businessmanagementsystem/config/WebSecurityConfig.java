@@ -41,19 +41,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login.html", "/", "/forgot-password").permitAll()
+                .antMatchers("/login", "/", "/forgot-password").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/profile/**", "/dashboard").fullyAuthenticated()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .loginPage("/login").permitAll()
+                .loginPage("/login")
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
-                .and()
-                .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
+                //.and()
+                //.rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
 
     @Override

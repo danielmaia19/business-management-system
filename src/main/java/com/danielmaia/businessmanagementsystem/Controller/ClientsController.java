@@ -57,7 +57,7 @@ public class ClientsController {
 
         model.addAttribute("client", client);
 
-        return "clients/view";
+        return "client/view";
     }
 
 }
