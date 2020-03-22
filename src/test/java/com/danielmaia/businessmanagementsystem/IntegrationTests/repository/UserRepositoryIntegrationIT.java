@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @DisplayName("User Repository - Integration Test")
-public class UserRepositoryIntegrationTest {
+public class UserRepositoryIntegrationIT {
 
     @Autowired
     private UserRepository userRepository;
