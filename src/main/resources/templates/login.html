@@ -1,28 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-    <title>BMS | Login</title>
+<div th:insert="components/header"></div>
 
-    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/webjars/font-awsome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/webjars/nprogress/0.2.0/nprogress.css" rel="stylesheet">
-    <link href="/webjars/animate.css/3.5.1/animate.min.css" rel="stylesheet">
-    <link href="css/custom.min.css" rel="stylesheet">
-</head>
 <body class="login">
     <div>
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
 
-                    <form name="login-form" th:action="@{/login}" method="post">
+                    <form name="login-form" th:action="@{/login}" th:object="${user}" method="post">
                         <h1>Login Form</h1>
 
                         <div th:if="${param.error}" class="alert alert-danger">
@@ -33,15 +21,18 @@
                             You have been logged out.
                         </div>
 
-                        <div>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" autofocus="autofocus" required="" />
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input id="username" required="" name="username"  type="username" class="form-control has-feedback-left" placeholder="Username" autofocus="autofocus">
+                            <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
-                        <div>
-                            <input type="password" class="form-control" placeholder="Password" id="password" name="password" required="" />
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input id="password" required="" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span class="fa fa-key form-control-feedback left"></span>
                         </div>
 
-                        <div class="form-check">
+
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
                             <input id="remember-me" type="checkbox" class="form-check-input" name="remember-me">
                             <label  class="form-check-label" for="remember-me">Remember me?</label>
                         </div>

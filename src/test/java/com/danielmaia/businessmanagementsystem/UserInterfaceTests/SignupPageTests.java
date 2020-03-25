@@ -1,6 +1,8 @@
 package com.danielmaia.businessmanagementsystem.UserInterfaceTests;
 
 import com.danielmaia.businessmanagementsystem.MockHttpAndWebClient;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +12,8 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("New User Signup Page Tests")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "server_port = 80")
+@DisplayName("Signup Page - UI Test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server_port = 8080")
 public class SignupPageTests {
 
     @LocalServerPort
@@ -58,13 +60,6 @@ public class SignupPageTests {
     public void testPasswordAppears() throws Exception {
         assertThat(mock.getElemAndAttri(port, path, "password", "name")).contains("password");
         assertThat(mock.getElemById(port, path, "password")).isEqualTo("input");
-    }
-
-    @Test
-    @DisplayName("Password Confirmation Label and Field Appears")
-    public void testConfirmPasswordFieldAppears() throws Exception {
-        assertThat(mock.getElemAndAttri(port, path, "confirm_password", "name")).contains("confirm_password");
-        assertThat(mock.getElemById(port, path, "confirm_password")).isEqualTo("input");
     }
 
 }

@@ -16,13 +16,8 @@ public class IndexController {
     // Checks if the user is logged in already
     // If so, they are redirected to the dashboard, otherwise they are redirected to the login page.
     @RequestMapping(path = "/")
-    public String login(Model model, HttpServletRequest request) {
-        model.addAttribute("user", new User());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getPrincipal() instanceof UserDetails) {
-            return "redirect:/dashboard";
-        } else return "login";
+    public String index() {
+        return "welcome";
     }
-
 
 }

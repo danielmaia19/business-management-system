@@ -1,0 +1,25 @@
+<div class="navbar nav_title" style="border: 0;" xmlns:th="http://www.w3.org/1999/xhtml">
+    <a href="/dashboard" class="site_title"><span>Business MS</span></a>
+</div>
+
+<div class="clearfix"></div>
+
+<!-- menu profile quick info -->
+<div class="profile clearfix">
+    <div class="profile_pic">
+        <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
+    </div>
+    <div class="profile_info" xmlns:th="http://www.w3.org/1999/xhtml">
+        <span>Welcome,</span>
+
+        <h2>
+            <span src="/images/img.jpg" alt="" th:text="${#authentication.getPrincipal().getFullName()}" th:remove="tag"></span>
+        </h2>
+
+
+    </div>
+    <div class="clearfix"></div>
+</div>
+<!-- /menu profile quick info -->
+
+<br />

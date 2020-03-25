@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Business Management System</title>
-
-    <div th:insert="Components/header"></div>
-</head>
+<div th:insert="components/header"></div>
 
 <body class="nav-md">
 <div class="container body">
     <div class="main_container">
         <div class="col-md-3 left_col menu_fixed">
             <div class="left_col scroll-view">
-                <div th:insert="Components/menu-profile"></div>
-                <div th:insert="Components/sidebar-navigation"></div>
+                <div th:insert="components/menu-profile"></div>
+                <div th:insert="components/sidebar-navigation"></div>
             </div>
         </div>
 
-        <div th:insert="Components/top-navigation"></div>
+        <div th:insert="components/top-navigation"></div>
 
         <!-- page content -->
         <div class="right_col" role="main">
@@ -40,25 +32,36 @@
                     <div class="col-md-12 col-sm-12  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Plain Page</h2>
                                 <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModalCenter">
+                                        Create Client
+                                    </button>
                                 </ul>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
-                                Add content to the page ...
+
+                            <div th:if="${#lists.isEmpty(clients)}">
+                                There are no clients!
                             </div>
+
+                            <div class="x_content">
+                                <div class="col-md-55" th:each = "client : ${clients}">
+                                    <div class="thumbnail client-item">
+                                        <a href="/clients/{name}" th:href="@{/clients/{name}(name = ${client.getName()})}">
+                                            <div class="image view view-first">
+                                                <img style="width: 100%; display: block;" src="images/media.jpg" alt="image"/>
+                                            </div>
+                                        </a>
+                                        <div class="caption">
+                                            <h4 th:text="${client.getName()}"></h4>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -66,45 +69,101 @@
         </div>
         <!-- /page content -->
 
-        <div th:insert="Components/footer"></div>
-    </div>
-</div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Client</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-<script src="/webjars/jquery/2.2.3/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-<script src="/webjars/fastclick/1.0.6/fastclick.js"></script>
-<script src="/webjars/nprogress/0.2.0/nprogress.js"></script>
-<script src="js/custom.min.js"></script>
-<script>
-    function toggleFullscreen(elem) {
-        elem = elem || document.documentElement;
-        if (!document.fullscreenElement && !document.mozFullScreenElement &&
-            !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
+                        <form class="form-horizontal" name="signup" th:action="@{/clients}" th:object="${client}"
+                              method="POST" modelAttribute="client" enctype="UTF8">
+
+<!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" type="text" class="form-control" placeholder="Address Line 1">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo" type="text" class="form-control" placeholder="Address Line 2">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{city}" id="city" name="city" type="text" class="form-control" placeholder="City / Town">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{region}" id="region" name="region" type="text" class="form-control" placeholder="State/Province/Region">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{postCode}" id="postCode" name="postCode" type="text" class="form-control" placeholder="Zip / Postal Code">
+                            </div>
+
+                            <div class="col-md-6 col-sm-6  form-group">
+                                <input th:field="*{country}" id="country" name="country" type="text" class="form-control" placeholder="Country">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div th:insert="components/footer"></div>
+        </div>
+    </div>
+
+</div>
+    <script src="js/custom.min.js"></script>
+    <script>
+        function toggleFullscreen(elem) {
+            elem = elem || document.documentElement;
+            if (!document.fullscreenElement && !document.mozFullScreenElement &&
+                !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
             }
         }
-    }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
-        toggleFullscreen();
-    });
-</script>
+
+        document.getElementById('linkFullscreen').addEventListener('click', function () {
+            toggleFullscreen();
+        });
+    </script>
 
 </body>
 </html>
