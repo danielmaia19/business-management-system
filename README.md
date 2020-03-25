@@ -12,4 +12,4 @@ Current maintainers:
 
 ## Development
 
-If you would like to contribute to this module, please check out [CONTRIBUTING.md](CONTRIBUTING.md).
+If you would like to contribute to this application, please check out [CONTRIBUTING.md](CONTRIBUTING.md).
