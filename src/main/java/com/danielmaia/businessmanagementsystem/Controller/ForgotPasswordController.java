@@ -1,30 +1,19 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.Model.Email;
+import com.danielmaia.businessmanagementsystem.Model.Mail;
 import com.danielmaia.businessmanagementsystem.Model.PasswordResetToken;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.EmailService;
 import com.danielmaia.businessmanagementsystem.Service.PasswordResetTokenService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -67,7 +56,7 @@ public class ForgotPasswordController {
             String appUrl = request.getScheme() + "://" + request.getServerName();
 
             // Email message
-            Email passwordResetEmail = new Email();
+            Mail passwordResetEmail = new Mail();
             passwordResetEmail.setFrom("support@demo.com");
             passwordResetEmail.setTo(user.getEmail());
             passwordResetEmail.setSubject("Password Reset Request");
