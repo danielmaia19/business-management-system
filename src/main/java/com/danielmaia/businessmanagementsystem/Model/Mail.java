@@ -1,16 +1,16 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
-public class Email {
+public class Mail {
 
     private String from;
     private String to;
     private String subject;
     private String content;
 
-    public Email() {
+    public Mail() {
     }
 
-    public Email(String from, String to, String subject, String content) {
+    public Mail(String from, String to, String subject, String content) {
         this.from = from;
         this.to = to;
         this.subject = subject;

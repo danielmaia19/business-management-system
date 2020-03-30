@@ -1,6 +1,6 @@
 package com.danielmaia.businessmanagementsystem.Service;
 
-import com.danielmaia.businessmanagementsystem.Model.Email;
+import com.danielmaia.businessmanagementsystem.Model.Mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendSimpleMessage(Email mail){
+    public void sendSimpleMessage(Mail mail){
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(mail.getSubject());

@@ -5,9 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Forgot Password Page - UI Test")
@@ -25,6 +22,5 @@ public class ResetPasswordTest {
         assertThat(mock.getElemAndAttri(port, path, "email", "name")).contains("email");
         assertThat(mock.getElemById(port, path,"email")).isEqualTo("input");
     }
-
 
 }
