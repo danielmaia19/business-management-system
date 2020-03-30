@@ -28,6 +28,7 @@ public class PasswordResetToken {
         this.user= user;
     }
 
+
     public static int getEXPIRATION() {
         return EXPIRATION;
     }
