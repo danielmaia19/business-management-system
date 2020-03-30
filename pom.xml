@@ -296,6 +296,11 @@
             <version>2.2.5.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
 
         <!--   REDUNDANT REMOVE THEM AFTER 60 DAYS (7/03/2020)     -->
 
