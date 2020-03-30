@@ -17,6 +17,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,7 +52,7 @@ public class ForgotPasswordController {
 
     // Process form submission from forgotPassword page
     @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
-    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes) throws ParseException {
+    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes) throws ParseException, MessagingException {
 
         // Lookup user in database by e-mail
         User user = userService.findByEmail(userEmail);
@@ -79,9 +82,9 @@ public class ForgotPasswordController {
             passwordResetEmail.setFrom("support@bms.com");
             passwordResetEmail.setTo(user.getEmail());
             passwordResetEmail.setSubject("Password Reset Request");
-            passwordResetEmail.setContent("To reset your password, click the link below:\n" + appUrl + ":8080/reset?token=" + token);
+            passwordResetEmail.setContent("Hi, <br/> Thank you for you email <br/> To reset your password, click the link below: <br/>" + "<a href='" + appUrl + ":8080/reset?token=" + token + "'>" + "Click here</a>");
 
-            emailService.sendSimpleMessage(passwordResetEmail);
+            emailService.sendHtmlMessage(passwordResetEmail);
 
             // Add success message to view
             redirectAttributes.addFlashAttribute("message", "A password reset link has been sent to " + userEmail);
