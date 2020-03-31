@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,7 +54,7 @@ public class ForgotPasswordController {
 
     // Process form submission from forgotPassword page
     @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
-    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes) throws ParseException, MessagingException {
+    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes) throws ParseException, MessagingException, IOException {
 
         // Lookup user in database by e-mail
         User user = userService.findByEmail(userEmail);
@@ -75,16 +77,16 @@ public class ForgotPasswordController {
 
             passwordResetTokenService.saveToken(theToken);
 
-            String appUrl = request.getScheme() + "://" + request.getServerName();
-
-            // Email message
-            Mail passwordResetEmail = new Mail();
-            passwordResetEmail.setFrom("support@bms.com");
-            passwordResetEmail.setTo(user.getEmail());
-            passwordResetEmail.setSubject("Password Reset Request");
-            passwordResetEmail.setContent("Hi, <br/> Thank you for you email <br/> To reset your password, click the link below: <br/>" + "<a href='" + appUrl + ":8080/reset?token=" + token + "'>" + "Click here</a>");
-
-            emailService.sendHtmlMessage(passwordResetEmail);
+            String url = request.getScheme() + "://" + request.getServerName() + ":8080/reset?token=" + token;
+            Mail mail = new Mail();
+            mail.setFrom("yourmailid@email.com");
+            mail.setTo(user.getEmail());
+            mail.setSubject("Email with Spring boot and thymeleaf template!");
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("name", user.getFullName());
+            model.put("url", url);
+            mail.setProps(model);
+            emailService.sendEmail(mail);
 
             // Add success message to view
             redirectAttributes.addFlashAttribute("message", "A password reset link has been sent to " + userEmail);
@@ -141,7 +143,6 @@ public class ForgotPasswordController {
             passwordResetTokenService.delete(passwordResetTokenService.findByToken(requestParams.get("token")));
 
             // In order to set a model attribute on a redirect, we must use
-            // RedirectAttributes
             redir.addFlashAttribute("message", "You have successfully reset your password.");
 
             modelAndView.setViewName("redirect:/login");
@@ -155,10 +156,10 @@ public class ForgotPasswordController {
         return modelAndView;
     }
 
-    // Going to reset page without a token redirects to login page
-    //@ExceptionHandler(MissingServletRequestParameterException.class)
-    //public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-    //    return new ModelAndView("redirect:/login");
-    //}
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
+        return new ModelAndView("redirect:/login");
+    }
 
 }
