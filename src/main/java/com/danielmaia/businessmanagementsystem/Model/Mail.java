@@ -1,11 +1,14 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
+import java.util.Map;
+
 public class Mail {
 
     private String from;
     private String to;
     private String subject;
     private String content;
+    private Map<String, Object> props;
 
     public Mail() {
     }
@@ -47,6 +50,14 @@ public class Mail {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Map<String, Object> getProps() {
+        return props;
+    }
+
+    public void setProps(Map<String, Object> props) {
+        this.props = props;
     }
 
     @Override
