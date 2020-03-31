@@ -51,9 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
-                //.and()
-                //.rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
+                .and()
+                .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
 
     @Override

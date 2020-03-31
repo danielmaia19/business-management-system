@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class LoginController {
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(path = "login", method = RequestMethod.GET)
     public String index() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getPrincipal() instanceof UserDetails) {
             return "redirect:/dashboard";
-        } else return "/login";
+        } else return "login";
     }
 
 }
