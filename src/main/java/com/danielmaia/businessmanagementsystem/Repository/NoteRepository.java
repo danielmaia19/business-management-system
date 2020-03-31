@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface NoteRepository extends CrudRepository<Note, Long> {
     List<Note> findAllByClient(Client client);
+    List<Note> findAllByClientOrderBySubmittedDateDesc(Client client);
+    Note findNoteById(Long id);
 }

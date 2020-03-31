@@ -37,6 +37,7 @@ public class Client {
     private String country;
     private String description;
     private String contactPerson;
+    private String contactPersonEmail;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
@@ -150,5 +151,13 @@ public class Client {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public String getContactPersonEmail() {
+        return contactPersonEmail;
+    }
+
+    public void setContactPersonEmail(String contactPersonEmail) {
+        this.contactPersonEmail = contactPersonEmail;
     }
 }
