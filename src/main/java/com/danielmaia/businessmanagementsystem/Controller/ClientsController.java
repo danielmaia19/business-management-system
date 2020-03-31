@@ -98,7 +98,7 @@ public class ClientsController {
 
             clientService.saveClient(updatedClient);
 
-            return "redirect:/clients/{name}";
+            return "redirect:/clients/"+updatedClient.getName();
         }
 
     }
