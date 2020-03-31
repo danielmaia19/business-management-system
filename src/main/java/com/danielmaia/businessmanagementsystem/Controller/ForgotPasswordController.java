@@ -77,7 +77,7 @@ public class ForgotPasswordController {
 
             passwordResetTokenService.saveToken(theToken);
 
-            String url = request.getScheme() + "://" + request.getServerName() + ":8080/reset?token=" + token;
+            String url = request.getScheme() + "://" + request.getServerName() + ":/reset?token=" + token;
             Mail mail = new Mail();
             mail.setFrom("yourmailid@email.com");
             mail.setTo(user.getEmail());
