@@ -31,4 +31,7 @@ public class ClientService {
         return clientRepository.findClientsByUser(user);
     }
 
+    public void deleteClient(Client client) {
+        clientRepository.delete(client);
+    }
 }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div th:insert="components/header"></div>
 
@@ -55,65 +54,55 @@
 <!--                                            <span class="value text-success"> £20 </span>-->
 <!--                                        </li>-->
 <!--                                    </ul>-->
-<!--                                    <br />-->
+
+                                    <br />
 
                                     <div id="mainb"></div>
+                                    <h4>Notes:</h4>
+                                    <div th:if="${param.error}" class="alert alert-danger">
+                                        Notes cannot be empty
+                                    </div>
+                                    <form class="form-horizontal" th:action="@{/clients/{name}/add(name = ${client.getName()})}" th:object="${note}" method="POST" enctype="UTF8">
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <textarea th:field="*{user_note}" id="user_note" name="user_note" class="resizable_textarea form-control" placeholder="Enter a note...."></textarea>
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary btn-sm">Save Note</button>
+                                            </div>
+                                        </div>
+
+                                    </form>
                                     <div>
 
+                                        <br />
 
                                         <h4>Recent Activity</h4>
 
                                         <!-- end of user messages -->
                                         <ul class="messages">
-                                            <li>
+                                            <li  th:each = "note : ${notes}">
                                                 <img src="/images/img.jpg" class="avatar" alt="Avatar">
                                                 <div class="message_date">
-                                                    <h3 class="date text-info">24</h3>
-                                                    <p class="month">May</p>
+                                                    <h3 class="date text-info" th:text="${note.getSubmittedDate().getDayOfMonth()}"></h3>
+                                                    <p class="month" th:text="${note.getSubmittedDate().getMonth()}"></p>
                                                 </div>
+
                                                 <div class="message_wrapper">
-                                                    <h4 class="heading">Desmond Davison</h4>
-                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                                    <h4 class="heading" th:text="${note.getClient().getUser().getFullName()}"></h4>
+                                                    <blockquote class="message" th:text="${note.getUser_note()}"></blockquote>
                                                     <br />
                                                     <p class="url">
                                                         <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
                                                         <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
                                                     </p>
+
                                                 </div>
                                             </li>
-                                            <li>
-                                                <img src="/images/img.jpg" class="avatar" alt="Avatar">
-                                                <div class="message_date">
-                                                    <h3 class="date text-error">21</h3>
-                                                    <p class="month">May</p>
-                                                </div>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Brian Michaels</h4>
-                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                                                    <br />
-                                                    <p class="url">
-                                                        <span class="fs1" aria-hidden="true" data-icon=""></span>
-                                                        <a href="#" data-original-title="">Download</a>
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <img src="/images/img.jpg" class="avatar" alt="Avatar">
-                                                <div class="message_date">
-                                                    <h3 class="date text-info">24</h3>
-                                                    <p class="month">May</p>
-                                                </div>
-                                                <div class="message_wrapper">
-                                                    <h4 class="heading">Desmond Davison</h4>
-                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                                                    <br />
-                                                    <p class="url">
-                                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                                        <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                                                    </p>
-                                                </div>
-                                            </li>
+
                                         </ul>
                                         <!-- end of user messages -->
                                     </div>
@@ -131,12 +120,12 @@
                                         <div class="panel-body">
                                             <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>
 
-                                            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
+                                            <p th:text="${client.description}"></p>
                                             <br />
 
                                             <div class="project_detail">
                                                 <p class="title">Contact Person</p>
-                                                <p>Tony Chicken</p>
+                                                <p th:text="${client.contactPerson}"></p>
                                             </div>
 
                                             <br />
@@ -156,8 +145,10 @@
                                             <br />
 
                                             <div class="text-left mtop20">
-                                                <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                                                <a href="#" class="btn btn-sm btn-warning">Report contact</a>
+
+                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter">Edit Client</button>
+                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target=".bd-example-modal-sm">Delete Client</button>
+
                                             </div>
                                         </div>
 
@@ -172,11 +163,119 @@
                 </div>
 
 
-
-
             </div>
         </div>
         <!-- /page content -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Client</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form-horizontal" name="signup" th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}" method="POST" modelAttribute="client" enctype="UTF8">
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" type="text" class="form-control" placeholder="Address Line 1">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo" type="text" class="form-control" placeholder="Address Line 2">
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{city}" id="city" name="city" type="text" class="form-control" placeholder="City / Town">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{region}" id="region" name="region" type="text" class="form-control" placeholder="State/Province/Region">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text" class="form-control" placeholder="Zip / Postal Code">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{country}" id="country" name="country" type="text" class="form-control" placeholder="Country">
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson" type="text" class="form-control" placeholder="Contact Person">
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <textarea th:field="*{description}" id="description" required="required" class="form-control" name="description" data-parsley-trigger="keyup" data-parsley-minlength="20"
+                                              data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." data-parsley-validation-threshold="10"
+                                              placeholder="Description">
+                                    </textarea>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete: <span style="font-weight: bold" th:text=" ${client.getName()}"></span></p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <form class="form-horizontal" th:action="@{/clients/{name}/delete(name = ${client.getName()})}" th:object="${client}" method="POST" modelAttribute="client" enctype="UTF8">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Delete Client</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         <div th:insert="components/footer"></div>
     </div>

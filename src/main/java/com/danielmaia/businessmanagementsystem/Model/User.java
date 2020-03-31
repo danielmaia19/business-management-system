@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -96,7 +97,7 @@ public class User implements UserDetails {
     }
 
     public String getFullName() {
-        return getFirst_name() + " " + getLast_name();
+        return StringUtils.capitalize(getFirst_name()) + " " + StringUtils.capitalize(getLast_name());
     }
 
     public void setLast_name(String last_name) {
