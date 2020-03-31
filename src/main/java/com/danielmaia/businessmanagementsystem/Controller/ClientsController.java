@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ClientsController {
@@ -63,7 +65,6 @@ public class ClientsController {
 
         Client client = clientService.findByName(name);
         List<Note> notes = noteService.findAllByClientOrderBySubmittedDateDesc(client);
-
 
         model.addAttribute("client", client);
         model.addAttribute("notes", notes);
