@@ -29,7 +29,7 @@ public class LoginControllerIT {
     public void index() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/login"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/login"));
+                .andExpect(view().name("login"));
     }
 
     @Test
