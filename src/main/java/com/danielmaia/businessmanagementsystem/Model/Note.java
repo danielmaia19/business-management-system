@@ -13,7 +13,7 @@ public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
-    private Long note_id;
+    private Long id;
 
     @Column
     @NotNull
@@ -21,9 +21,17 @@ public class Note {
     private String user_note;
     private LocalDate submittedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUser_note() {
         return user_note;

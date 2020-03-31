@@ -18,6 +18,18 @@ public class NoteService {
         return noteRepository.findAllByClient(client);
     }
 
+    public List<Note> findAllByClientOrderBySubmittedDateDesc(Client client) {
+        return noteRepository.findAllByClientOrderBySubmittedDateDesc(client);
+    }
+
+    public Note findNoteById(Long id) {
+        return noteRepository.findNoteById(id);
+    }
+
+    public void deleteNote(Note note) {
+        noteRepository.delete(note);
+    }
+
     public void saveNote(Note note) {
         noteRepository.save(note);
     }

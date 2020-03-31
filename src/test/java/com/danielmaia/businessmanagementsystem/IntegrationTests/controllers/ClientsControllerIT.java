@@ -102,15 +102,15 @@ class ClientsControllerIT {
                 .andExpect(view().name("redirect:/clients"));
     }
 
-    @Test
-    @DisplayName("User Can View Client Page")
-    public void testViewClient() {
-        String viewClient = controller.viewClient(clients.get(0).getName(), model);
-
-        then(model).should().addAttribute(anyString(), any());
-        assertThat(viewClient).isNotNull();
-        assertThat("client/view").isEqualToIgnoringCase(viewClient);
-    }
+    //@Test
+    //@DisplayName("User Can View Client Page")
+    //public void testViewClient() {
+    //    String viewClient = controller.viewClient(clients.get(0).getName(), model);
+    //
+    //    then(model).should().addAttribute(anyString(), any());
+    //    assertThat(viewClient).isNotNull();
+    //    assertThat("client/view").isEqualToIgnoringCase(viewClient);
+    //}
 
 
 

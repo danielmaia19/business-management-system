@@ -62,7 +62,8 @@ public class ClientsController {
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") Note note, Model model) {
 
         Client client = clientService.findByName(name);
-        List<Note> notes = noteService.findAllByClient(client);
+        List<Note> notes = noteService.findAllByClientOrderBySubmittedDateDesc(client);
+
 
         model.addAttribute("client", client);
         model.addAttribute("notes", notes);
@@ -82,14 +83,15 @@ public class ClientsController {
             Client updatedClient = clientService.findByName(name);
 
             updatedClient.setName(client.getName());
-            updatedClient.setAddressLineOne(client.getAddressLineOne());
-            updatedClient.setAddressLineTwo(client.getAddressLineTwo());
             updatedClient.setCity(client.getCity());
             updatedClient.setRegion(client.getRegion());
             updatedClient.setPostCode(client.getPostCode());
             updatedClient.setCountry(client.getCountry());
             updatedClient.setDescription(client.getDescription());
             updatedClient.setContactPerson(client.getContactPerson());
+            updatedClient.setAddressLineOne(client.getAddressLineOne());
+            updatedClient.setAddressLineTwo(client.getAddressLineTwo());
+            updatedClient.setContactPersonEmail(client.getContactPersonEmail());
 
             updatedClient.setUser(currentUser);
 

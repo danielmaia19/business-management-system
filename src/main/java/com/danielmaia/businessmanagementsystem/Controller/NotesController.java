@@ -48,4 +48,18 @@ public class NotesController {
         return "redirect:/clients/{name}";
     }
 
+    @RequestMapping(path = "/clients/{name}/note/{id}/delete", method = RequestMethod.POST)
+    public String deleteNote(Model model, @ModelAttribute("note") Note note, @PathVariable("name") String name, @PathVariable("id") Long id) {
+        noteService.deleteNote(noteService.findNoteById(id));
+
+        return "redirect:/clients/{name}";
+    }
+
+    @RequestMapping(path = "/clients/{name}/note/{id}/edit", method = RequestMethod.POST)
+    public String editNote(Model model, @ModelAttribute("note") Note note, @PathVariable("name") String name, @PathVariable("id") Long id) {
+        System.out.println("executed");
+
+        return "redirect:/clients/{name}";
+    }
+
 }
