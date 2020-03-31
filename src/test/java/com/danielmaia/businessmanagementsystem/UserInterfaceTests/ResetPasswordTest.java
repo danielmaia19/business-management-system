@@ -17,10 +17,10 @@ public class ResetPasswordTest {
     private MockHttpAndWebClient mock = new MockHttpAndWebClient();
 
     @Test
-    @DisplayName("Email Field Appears Test")
+    @DisplayName("Password Field Appears Test")
     public void testUsernameAppears() throws Exception {
-        assertThat(mock.getElemAndAttri(port, path, "email", "name")).contains("email");
-        assertThat(mock.getElemById(port, path,"email")).isEqualTo("input");
+        assertThat(mock.getElemAndAttri(port, path, "password", "name")).contains("password");
+        assertThat(mock.getElemById(port, path,"password")).isEqualTo("input");
     }
 
 }
