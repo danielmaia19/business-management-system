@@ -104,9 +104,9 @@ public class ForgotPasswordController {
         Date date = passwordResetTokenService.findByToken(token).getExpiryDate();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        if (new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(date)).before(new Date())) {
+        if(new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(date)).before(new Date())) {
             passwordResetTokenService.delete(passwordResetTokenService.findByToken(token));
-            modelAndView.addObject("invalidToken","Token is now Invalid, create a new Token");
+            modelAndView.addObject("invalidToken", "Token is now Invalid, create a new Token");
             modelAndView.setViewName("redirect:/login");
             return modelAndView;
         }
