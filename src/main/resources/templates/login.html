@@ -13,6 +13,12 @@
                     <form name="login-form" th:action="@{/login}" th:object="${user}" method="post">
                         <h1>Login Form</h1>
 
+                        <div th:if="${message}" th:text="${message}" class="alert alert-success"></div>
+
+                        <div th:if="${param.invalidToken}" class="alert alert-danger">
+                            Password Reset token has expired
+                        </div>
+
                         <div th:if="${param.error}" class="alert alert-danger">
                             Invalid username and password.
                         </div>
@@ -42,12 +48,12 @@
                         </div>
 
                         <div class="form-check" style="margin-top: 12px;">
-                            <a class="form-check-label" name="lost-your-password" href="/lost_password">Lost your password?</a>
+                            <a class="form-check-label" name="lost-your-password" href="/forgot-password">Lost your password?</a>
                         </div>
 
                         <div class="form-check" style="margin-top: 12px;">
                             Do not have an account?
-                            <a class="form-check-label" name="lost-your-password" href="/signup">Sign up here</a>
+                            <a class="form-check-label" name="signup" href="/signup">Sign up here</a>
                         </div>
 
                         <div class="clearfix"></div>

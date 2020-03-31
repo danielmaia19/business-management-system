@@ -93,28 +93,56 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" type="text" class="form-control" placeholder="Address Line 1">
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" type="text" class="form-control" placeholder="Address Line 1">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo" type="text" class="form-control" placeholder="Address Line 2">
+                                </div>
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo" type="text" class="form-control" placeholder="Address Line 2">
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{city}" id="city" name="city" type="text" class="form-control" placeholder="City / Town">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{region}" id="region" name="region" type="text" class="form-control" placeholder="State/Province/Region">
+                                </div>
+
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{city}" id="city" name="city" type="text" class="form-control" placeholder="City / Town">
+                            <div class="form-group row ">
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text" class="form-control" placeholder="Zip / Postal Code">
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  form-group">
+                                    <input th:field="*{country}" id="country" name="country" type="text" class="form-control" placeholder="Country">
+                                </div>
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{region}" id="region" name="region" type="text" class="form-control" placeholder="State/Province/Region">
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson" type="text" class="form-control" placeholder="Contact Person">
+                                </div>
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{postCode}" id="postCode" name="postCode" type="text" class="form-control" placeholder="Zip / Postal Code">
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <input th:field="*{contactPersonEmail}" id="contactPersonEmail" name="contactPersonEmail" type="text" class="form-control" placeholder="Contact Person Email">
+                                </div>
                             </div>
 
-                            <div class="col-md-6 col-sm-6  form-group">
-                                <input th:field="*{country}" id="country" name="country" type="text" class="form-control" placeholder="Country">
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <textarea th:field="*{description}" id="description" required="required" class="form-control" name="description" data-parsley-trigger="keyup" data-parsley-minlength="20"
+                                              data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." data-parsley-validation-threshold="10"
+                                              placeholder="Description">
+                                    </textarea>
+                                </div>
                             </div>
 
                             <div class="modal-footer">

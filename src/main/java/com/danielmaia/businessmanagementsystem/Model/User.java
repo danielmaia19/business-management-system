@@ -4,11 +4,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -82,6 +84,10 @@ public class User implements UserDetails {
         return user_id;
     }
 
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
     public String getFirst_name() {
         return first_name;
     }
@@ -95,7 +101,7 @@ public class User implements UserDetails {
     }
 
     public String getFullName() {
-        return getFirst_name() + " " + getLast_name();
+        return StringUtils.capitalize(getFirst_name()) + " " + StringUtils.capitalize(getLast_name());
     }
 
     public void setLast_name(String last_name) {
@@ -121,6 +127,8 @@ public class User implements UserDetails {
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
+
+    //
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Signup Page - UI Test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = "server_port = 8080")
-public class SignupPageTests {
+public class SignupPageTest {
 
     @LocalServerPort
     private int port;

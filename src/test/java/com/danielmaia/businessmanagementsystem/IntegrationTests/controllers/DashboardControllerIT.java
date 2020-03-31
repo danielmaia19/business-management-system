@@ -35,7 +35,7 @@ class DashboardControllerIT {
     void dashboard() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/dashboard").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attribute("name", "admin" + " admin"))
+                .andExpect(model().attribute("name", "Admin" + " Admin"))
                 .andExpect(view().name("dashboard"));
     }
 }

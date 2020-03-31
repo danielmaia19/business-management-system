@@ -2,10 +2,12 @@ package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
 import com.danielmaia.businessmanagementsystem.Model.Client;
+import com.danielmaia.businessmanagementsystem.Model.Note;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,7 +86,7 @@ class ClientsControllerIT {
     void index() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attribute("name", "admin admin"))
+                .andExpect(MockMvcResultMatchers.model().attribute("name", "Admin Admin"))
                 .andExpect(view().name("clients"));
     }
 
@@ -104,15 +108,14 @@ class ClientsControllerIT {
 
     @Test
     @DisplayName("User Can View Client Page")
-    public void testViewClient() {
-        String viewClient = controller.viewClient(clients.get(0).getName(), model);
+    @Disabled
+    public void testViewClientsAndNotes() {
+        String viewClient = controller.viewClientsAndNotes(clients.get(0).getName(), new Note(), model);
 
+        then(model).should().addAttribute(anyString(), any());
         then(model).should().addAttribute(anyString(), any());
         assertThat(viewClient).isNotNull();
         assertThat("client/view").isEqualToIgnoringCase(viewClient);
     }
-
-
-
 
 }

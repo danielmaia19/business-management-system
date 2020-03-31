@@ -4,6 +4,7 @@ import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,7 @@ public class ClientRepositoryIT {
     }
 
     @Test
+    @Disabled
     public void testFindByName() {
         repository.save(client);
 
@@ -47,6 +49,7 @@ public class ClientRepositoryIT {
     }
 
     @Test
+    @Disabled
     void testFindClientsByUser() {
         repository.save(clients.get(0));
         repository.save(clients.get(1));
