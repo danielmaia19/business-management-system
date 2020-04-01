@@ -41,11 +41,12 @@
                                 <div class="clearfix"></div>
                             </div>
 
-                            <div th:if="${#lists.isEmpty(clients)}">
-                                There are no clients!
-                            </div>
+
 
                             <div class="x_content">
+                                <div th:if="${#lists.isEmpty(clients)}">
+                                    There are no clients!
+                                </div>
                                 <div class="col-md-55" th:each = "client : ${clients}">
                                     <div class="thumbnail client-item">
                                         <a href="/clients/{name}" th:href="@{/clients/{name}(name = ${client.getName()})}">

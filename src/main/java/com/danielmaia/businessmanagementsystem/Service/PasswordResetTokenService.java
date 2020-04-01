@@ -44,7 +44,7 @@ public class PasswordResetTokenService {
         passwordResetTokenRepository.deleteAll(allExpiredTokens);
     }
 
-    public void delete(PasswordResetToken token) {
+    public void deleteToken(PasswordResetToken token) {
         passwordResetTokenRepository.delete(token);
     }
 

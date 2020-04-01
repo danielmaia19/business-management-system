@@ -31,6 +31,10 @@ public class ClientService {
         return clientRepository.findClientsByUser(user);
     }
 
+    public void saveAllClients(List<Client> clients) {
+        clientRepository.saveAll(clients);
+    }
+
     public void deleteClient(Client client) {
         clientRepository.delete(client);
     }

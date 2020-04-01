@@ -7,29 +7,20 @@ import com.danielmaia.businessmanagementsystem.Service.EmailService;
 import com.danielmaia.businessmanagementsystem.Service.PasswordResetTokenService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 public class ForgotPasswordController {
@@ -105,7 +96,7 @@ public class ForgotPasswordController {
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         if(new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(date)).before(new Date())) {
-            passwordResetTokenService.delete(passwordResetTokenService.findByToken(token));
+            passwordResetTokenService.deleteToken(passwordResetTokenService.findByToken(token));
             modelAndView.addObject("invalidToken", "Token is now Invalid, create a new Token");
             modelAndView.setViewName("redirect:/login");
             return modelAndView;
@@ -140,7 +131,7 @@ public class ForgotPasswordController {
             // Save user
             userService.saveUser(user);
 
-            passwordResetTokenService.delete(passwordResetTokenService.findByToken(requestParams.get("token")));
+            passwordResetTokenService.deleteToken(passwordResetTokenService.findByToken(requestParams.get("token")));
 
             // In order to set a model attribute on a redirect, we must use
             redir.addFlashAttribute("message", "You have successfully reset your password.");
