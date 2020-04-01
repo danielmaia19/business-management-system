@@ -14,7 +14,7 @@ public class LoginController {
     public String index() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.getPrincipal() instanceof UserDetails) {
-            return "redirect:/dashboard";
+            return "forward:/dashboard";
         } else return "login";
     }
 
