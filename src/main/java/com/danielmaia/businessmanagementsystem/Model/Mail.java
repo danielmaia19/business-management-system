@@ -1,7 +1,12 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
+@Getter
+@Setter
 public class Mail {
 
     private String from;
@@ -18,55 +23,5 @@ public class Mail {
         this.to = to;
         this.subject = subject;
         this.content = content;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Map<String, Object> getProps() {
-        return props;
-    }
-
-    public void setProps(Map<String, Object> props) {
-        this.props = props;
-    }
-
-    @Override
-    public String toString() {
-        return "Email{" +
-                "from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", subject='" + subject + '\'' +
-                ", content='" + content + '\'' +
-                '}';
     }
 }

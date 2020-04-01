@@ -33,7 +33,7 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <ul class="nav navbar-right panel_toolbox">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="button" onclick="location.href='/projects/add'" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                         Create Project
                                     </button>
                                 </ul>
@@ -50,38 +50,46 @@
                                     <div class="table-responsive">
                                         <table class="table table-striped jambo_table bulk_action">
                                             <thead>
-                                            <tr class="headings">
-                                                <th>
-                                                    <input type="checkbox" id="check-all" class="flat">
-                                                </th>
-                                                <th class="column-title">Project Name </th>
-                                                <th class="column-title">Start Date </th>
-                                                <th class="column-title">Quote </th>
-                                                <th class="column-title">Project Name </th>
-                                                <th class="column-title">Start Date </th>
-                                                <th class="column-title">Quote </th>
-                                                <th class="column-title no-link last"><span class="nobr">Action</span>
-                                                </th>
-                                                <th class="bulk-actions" colspan="7">
-                                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                                </th>
+                                            <tr>
+                                                <th style="width: 1%">#</th>
+                                                <th >Project Name</th>
+                                                <th>Team Members</th>
+                                                <th>Project Progress</th>
+                                                <th>Status</th>
+                                                <th style="width: 20%">Actions</th>
                                             </tr>
                                             </thead>
 
                                             <tbody  th:each="project : ${projects}">
-                                            <tr class="odd pointer">
-                                                <td class="a-center ">
-                                                    <input type="checkbox" class="flat" name="table_records">
+                                            <tr>
+                                                <td>#</td>
+                                                <td>
+                                                    <a th:href="@{/projects/{name}(name = ${project.getName()})}" th:text="${project.getName()}"></a>
+                                                    <br />
+                                                    <small>Created 01.01.2015</small>
                                                 </td>
-                                                <td class=" " th:text="${project.getName()}"></td>
-                                                <td class=" ">May 23, 2014 11:47:56 PM </td>
-                                                <td class=" ">121000210 <i class="success fa fa-long-arrow-up"></i></td>
-                                                <td class=" ">John Blank L</td>
-                                                <td class=" ">Paid</td>
-                                                <td class="a-right a-right ">$7.45</td>
-                                                <td class=" last" style="word-spacing: 1em">
-                                                    <a class="btn-link" href="#"><span class="glyphicon glyphicon-edit"></span></a>
-                                                    <a class="" href="#"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                                                <td>
+                                                    <ul class="list-inline">
+                                                        <li>
+                                                            <img src="/images/img.jpg" alt="Avatar" class="avatar">
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td style="padding-top: 21px">
+                                                    <div class="progress">
+                                                        <div class="progress-bar-success" role="progressbar"  aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                                        </div>
+                                                        <span class="sr-only">0% Complete</span>
+                                                    </div>
+                                                    <small>0% Complete</small>
+                                                </td>
+                                                <td style="padding-top: 21px">
+                                                    <h7>Success</h7>
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="btn btn-link btn-sm"><i class="fa fa-folder"></i> View </a>
+                                                    <a href="#" class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                                    <a style="color: red" href="#" class="btn btn-link btn-sm"><i class="fa fa-trash-o"></i> Delete </a>
                                                 </td>
                                             </tr>
 
@@ -91,8 +99,6 @@
 
 
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -103,39 +109,38 @@
 
 
 
-
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" name="signup" th:action="@{/projects}" th:object="${project}"
-                              method="POST" modelAttribute="client" enctype="UTF8">
+<!--        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--            <div class="modal-dialog" role="document">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
+<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                            <span aria-hidden="true">&times;</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        <form class="form-horizontal" name="signup" th:action="@{/templates/project}" th:object="${project}"-->
+<!--                              method="POST" modelAttribute="client" enctype="UTF8">-->
 
-                            <!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
+<!--                            &lt;!&ndash;                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>&ndash;&gt;-->
 
-                            <div class="form-group row ">
-                                <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">
-                                </div>
-                            </div>
+<!--                            <div class="form-group row ">-->
+<!--                                <div class="col-md-12 col-sm-12 ">-->
+<!--                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">-->
+<!--                                </div>-->
+<!--                            </div>-->
 
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
-                            </div>
+<!--                            <div class="modal-footer">-->
+<!--                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                                <button type="submit" class="btn btn-primary">Save changes</button>-->
+<!--                            </div>-->
 
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div th:insert="components/footer"></div>
 </div>

@@ -1,5 +1,8 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -7,6 +10,8 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "notes")
 public class Note {
 
@@ -25,35 +30,11 @@ public class Note {
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 
-    public Long getId() {
-        return id;
+    public Note() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUser_note() {
-        return user_note;
-    }
-
-    public void setUser_note(String user_note) {
+    public Note(String user_note, Client client) {
         this.user_note = user_note;
-    }
-
-    public LocalDate getSubmittedDate() {
-        return submittedDate;
-    }
-
-    public void setSubmittedDate(LocalDate submittedDate) {
-        this.submittedDate = submittedDate;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
         this.client = client;
     }
 }

@@ -58,6 +58,12 @@ public class ClientServiceTest {
     }
 
     @Test
+    public void testSaveClient() {
+        service.saveClient(client);
+        verify(repository).save(any(Client.class));
+    }
+
+    @Test
     public void testFindClientsByUser() {
 
         when(repository.findClientsByUser(user)).thenReturn(clients);
@@ -68,6 +74,20 @@ public class ClientServiceTest {
         assertThat(foundProjects).isEqualTo(clients);
 
         verify(repository).findClientsByUser(any(User.class));
+    }
+
+
+    @Test
+    public void testSaveAllClients() {
+        service.saveAllClients(clients);
+        verify(repository).saveAll(anyList());
+    }
+
+    @Test
+    public void testDeleteClient() {
+        //TODO: Do this!
+        service.deleteClient(client);
+        verify(repository).delete(any(Client.class));
     }
 
 }

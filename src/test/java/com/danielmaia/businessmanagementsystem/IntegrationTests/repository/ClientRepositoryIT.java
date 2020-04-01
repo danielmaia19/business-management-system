@@ -38,7 +38,6 @@ public class ClientRepositoryIT {
     }
 
     @Test
-    @Disabled
     public void testFindByName() {
         repository.save(client);
 
@@ -49,7 +48,6 @@ public class ClientRepositoryIT {
     }
 
     @Test
-    @Disabled
     void testFindClientsByUser() {
         repository.save(clients.get(0));
         repository.save(clients.get(1));
