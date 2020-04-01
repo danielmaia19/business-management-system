@@ -1,5 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +16,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Getter
+@Setter
 @Transactional
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
@@ -68,67 +72,9 @@ public class User implements UserDetails {
 
     public User(){}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
     public String getFullName() {
         return StringUtils.capitalize(getFirst_name()) + " " + StringUtils.capitalize(getLast_name());
     }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public List<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(List<Client> clients) {
-        this.clients = clients;
-    }
-
-    //
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -170,3 +116,4 @@ public class User implements UserDetails {
         this.password = password;
     }
 }
+
