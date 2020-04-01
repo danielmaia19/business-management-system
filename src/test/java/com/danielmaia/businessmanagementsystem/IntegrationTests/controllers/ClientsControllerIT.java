@@ -5,49 +5,28 @@ import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.Note;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
+import com.danielmaia.businessmanagementsystem.Service.NoteService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.AuthenticatedPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,32 +40,43 @@ class ClientsControllerIT {
     @Autowired
     private ClientsController controller;
 
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private NoteService noteService;
+
     @Mock
     private Model model;
 
     @Autowired
     private MockMvc mvc;
 
-    User user;
-    Client client;
+    private User user;
+    private Client client;
     private List<Client> clients = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
         user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
 
-        client = new Client("Client Name");
+        client = new Client("Client Name", user);
 
-        clients.add(new Client("Client 1"));
-        clients.add(new Client("Client 2"));
+        clients.add(new Client("Client 1", user));
+        clients.add(new Client("Client 2", user));
     }
 
     @Test
     @DisplayName("Client Page View OK?")
     void index() throws Exception {
+        clientService.saveAllClients(clients);
+
+        User adminUser = userService.findByUsername("admin");
+
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("name", "Admin Admin"))
+                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findClientsByUser(adminUser)))
                 .andExpect(view().name("clients"));
     }
 
@@ -108,14 +98,19 @@ class ClientsControllerIT {
 
     @Test
     @DisplayName("User Can View Client Page")
-    @Disabled
-    public void testViewClientsAndNotes() {
-        String viewClient = controller.viewClientsAndNotes(clients.get(0).getName(), new Note(), model);
+    public void testViewClientsAndNotes() throws Exception {
+        clientService.saveClient(client);
+        String viewClient = controller.viewClientsAndNotes(client.getName(), new Note("Some Note", client), model);
 
-        then(model).should().addAttribute(anyString(), any());
-        then(model).should().addAttribute(anyString(), any());
+        mvc.perform(MockMvcRequestBuilders.get("/clients/{name}", client.getName()).with(user(userService.loadUserByUsername("admin"))))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("client", client))
+                .andExpect(MockMvcResultMatchers.model().attribute("notes", noteService.findAllByClientOrderBySubmittedDateDesc(client)));
+
         assertThat(viewClient).isNotNull();
         assertThat("client/view").isEqualToIgnoringCase(viewClient);
     }
+
+
 
 }

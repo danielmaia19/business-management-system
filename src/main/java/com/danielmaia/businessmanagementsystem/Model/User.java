@@ -72,6 +72,18 @@ public class User implements UserDetails {
 
     public User(){}
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public String getFullName() {
         return StringUtils.capitalize(getFirst_name()) + " " + StringUtils.capitalize(getLast_name());
     }

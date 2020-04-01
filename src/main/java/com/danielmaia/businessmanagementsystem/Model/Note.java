@@ -29,4 +29,12 @@ public class Note {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
+
+    public Note() {
+    }
+
+    public Note(String user_note, Client client) {
+        this.user_note = user_note;
+        this.client = client;
+    }
 }
