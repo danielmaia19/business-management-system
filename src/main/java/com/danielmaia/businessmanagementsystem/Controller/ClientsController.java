@@ -2,9 +2,11 @@ package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.Note;
+import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.NoteService;
+import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,9 @@ public class ClientsController {
     private ClientService clientService;
 
     @Autowired
+    private ProjectService projectService;
+
+    @Autowired
     private NoteService noteService;
 
     @GetMapping("/clients")
@@ -38,6 +43,7 @@ public class ClientsController {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
+        model.addAttribute("projects", projectService.findProjectsByUser(currentUser));
         model.addAttribute("clients", clientService.findClientsByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());
 
@@ -45,11 +51,7 @@ public class ClientsController {
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
-    public String createClient(@ModelAttribute("client") @Valid Client client, BindingResult bindingResult, Authentication authentication) {
-        //TODO: Handle errors to show in modal
-        if (bindingResult.hasErrors()) {
-            return "clients";
-        } else {
+    public String createClient(@ModelAttribute("client") Client client, BindingResult bindingResult, Authentication authentication) {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
@@ -57,7 +59,6 @@ public class ClientsController {
             clientService.saveClient(client);
 
             return "redirect:/clients";
-        }
     }
 
     @RequestMapping(path = "/clients/{name}", method = RequestMethod.GET)

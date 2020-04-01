@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,10 +20,18 @@ public class Project {
 
     @Column
     private String name;
+    private String contactPerson;
+    private String description;
+    private String status;
+    private int progress;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name="client_id", referencedColumnName = "client_id")
+    private Client client;
 
     public Project() {
     }

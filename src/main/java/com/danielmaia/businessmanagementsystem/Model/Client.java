@@ -9,10 +9,10 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
-@Table(name = "clients")
-@Transactional
 @Getter
 @Setter
+@Transactional
+@Table(name = "clients")
 public class Client {
 
     @Id
@@ -40,6 +40,9 @@ public class Client {
     private User user;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Project> projects;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
 
     public Client(String name, User user) {
@@ -53,3 +56,5 @@ public class Client {
         this.name = name;
     }
 }
+
+
