@@ -18,4 +18,8 @@ public class ProjectService {
 
     public List<Project> findProjectsByUser(User user) { return projectRepository.findProjectsByUser(user); }
 
+    public Project findByName(String name) {
+        return projectRepository.findByName(name);
+    }
+
 }
