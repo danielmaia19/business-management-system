@@ -41,13 +41,6 @@ public class LoginPageTest {
     }
 
     @Test
-    @DisplayName("Remember Me Checkbox and Title Appears Test")
-    public void testRememberMeCheckboxAppears() throws IOException {
-        assertThat(mock.getElemAndAttri(port, path, "remember-me", "name")).contains("remember-me");
-        assertThat(mock.getElemByName(port, path, "remember-me")).isEqualTo("input");
-    }
-
-    @Test
     @DisplayName("Test Login Button Appears")
     public void testLoginButtonAppears() throws IOException {
         assertThat(mock.getElemAndAttri(port, path, "login-btn", "name")).contains("login");

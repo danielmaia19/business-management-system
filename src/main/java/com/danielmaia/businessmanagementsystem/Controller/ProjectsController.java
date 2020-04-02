@@ -15,7 +15,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class ProjectsController {
@@ -29,6 +32,7 @@ public class ProjectsController {
     @Autowired
     private ProjectService projectService;
 
+    //Show all users projects
     @GetMapping("/projects")
     public String index(ModelMap model, Project project, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
@@ -40,6 +44,7 @@ public class ProjectsController {
         return "projects";
     }
 
+    // Show view to add projects
     @GetMapping("/projects/add")
     public String addProjectView(ModelMap model, Project project, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
@@ -53,9 +58,9 @@ public class ProjectsController {
         return "project/add";
     }
 
-    @RequestMapping(path = "/projects", method = RequestMethod.POST)
+    // Add new projects
+    @PostMapping(path = "/projects")
     public String createClient(@RequestParam("client") String client, @ModelAttribute("project") @Valid Project project, BindingResult bindingResult, Authentication authentication) {
-
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
@@ -63,25 +68,22 @@ public class ProjectsController {
 
             System.out.println(selectedClient.getName());
 
-            project.setClient(selectedClient);
+            project.setCreated_on(new Date());
+
             project.setUser(currentUser);
+            project.setClient(selectedClient);
             projectService.saveProject(project);
 
             return "redirect:/projects";
-
     }
 
-    @RequestMapping(path = "/projects/{name}", method = RequestMethod.GET)
+    // Individual project view
+    @GetMapping(path = "/projects/{name}")
     public String viewProject(@PathVariable("name") String name, Model model) {
-
         Project project = projectService.findByName(name);
-
         model.addAttribute("project", project);
-
         return "project/view";
     }
-
-
 }
 
 
