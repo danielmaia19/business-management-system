@@ -2,6 +2,7 @@ package com.danielmaia.businessmanagementsystem.Model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Project {
     private String name;
     private String contactPerson;
     private String description;
-    private String status;
+    private String status = "To do";
     private int progress;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
