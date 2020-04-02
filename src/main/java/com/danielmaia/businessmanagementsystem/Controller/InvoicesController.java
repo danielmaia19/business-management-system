@@ -16,6 +16,7 @@ public class InvoicesController {
     @Autowired
     private UserService userService;
 
+    //Show invoices page
     @GetMapping("/invoices")
     public String index(ModelMap model) {
 

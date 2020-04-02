@@ -16,6 +16,7 @@ public class ReportsController {
     @Autowired
     private UserService userService;
 
+    // Show reports page
     @GetMapping("/reports")
     public String index(ModelMap model) {
 

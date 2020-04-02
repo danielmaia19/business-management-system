@@ -9,9 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,12 +27,14 @@ public class SignupController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @RequestMapping("/signup")
+    // Show signup page
+    @GetMapping("/signup")
     public String index(ModelAndView modelAndView, User user) {
         return "signup";
     }
 
-    @RequestMapping(path = "/signup", method = RequestMethod.POST)
+    // Add new signup user
+    @PostMapping(path = "/signup")
     public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
 
         User usernameExists = userService.findByUsername(user.getUsername());

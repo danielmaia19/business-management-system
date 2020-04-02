@@ -16,6 +16,7 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
+    // Show profile page
     @GetMapping("/profile")
     public String index(ModelMap model) {
 
@@ -29,5 +30,4 @@ public class ProfileController {
 
         return "profile";
     }
-
 }

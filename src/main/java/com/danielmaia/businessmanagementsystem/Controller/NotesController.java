@@ -28,7 +28,8 @@ public class NotesController {
     @Autowired
     private ClientService clientService;
 
-    @RequestMapping(path = "/clients/{name}/add", method = RequestMethod.POST)
+    // Add note
+    @PostMapping(path = "/clients/{name}/add")
     public String postNote(Model model, @ModelAttribute("note") @Valid Note note, BindingResult result, @PathVariable("name") String name) {
 
         if(result.hasErrors()) {
@@ -48,17 +49,18 @@ public class NotesController {
         return "redirect:/clients/{name}";
     }
 
-    @RequestMapping(path = "/clients/{name}/note/{id}/delete", method = RequestMethod.POST)
+    // Delete note
+    @PostMapping(path = "/clients/{name}/note/{id}/delete")
     public String deleteNote(Model model, @ModelAttribute("note") Note note, @PathVariable("name") String name, @PathVariable("id") Long id) {
         noteService.deleteNote(noteService.findNoteById(id));
 
         return "redirect:/clients/{name}";
     }
 
-    @RequestMapping(path = "/clients/{name}/note/{id}/edit", method = RequestMethod.POST)
+    // Edit note
+    //TODO: Allow users to edit their notes
+    @PostMapping(path = "/clients/{name}/note/{id}/edit")
     public String editNote(Model model, @ModelAttribute("note") Note note, @PathVariable("name") String name, @PathVariable("id") Long id) {
-        System.out.println("executed");
-
         return "redirect:/clients/{name}";
     }
 

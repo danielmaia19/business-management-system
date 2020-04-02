@@ -16,6 +16,7 @@ public class CalendarController {
     @Autowired
     private UserService userService;
 
+    // Show the calendar page
     @GetMapping("/calendar")
     public String index(ModelMap model) {
 

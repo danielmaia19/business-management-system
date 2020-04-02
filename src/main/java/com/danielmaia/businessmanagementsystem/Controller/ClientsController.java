@@ -38,6 +38,7 @@ public class ClientsController {
     @Autowired
     private NoteService noteService;
 
+    // Show the clients page and lists all the clients
     @GetMapping("/clients")
     public String index(ModelMap model, Client client, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -50,7 +51,8 @@ public class ClientsController {
         return "clients";
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    // Save client created by user
+    @PostMapping(path = "/clients")
     public String createClient(@ModelAttribute("client") Client client, BindingResult bindingResult, Authentication authentication) {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
@@ -61,7 +63,8 @@ public class ClientsController {
             return "redirect:/clients";
     }
 
-    @RequestMapping(path = "/clients/{name}", method = RequestMethod.GET)
+    // View selected client, its information and all the notes.
+    @GetMapping(path = "/clients/{name}")
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") Note note, Model model) {
 
         Client client = clientService.findByName(name);
@@ -73,7 +76,8 @@ public class ClientsController {
         return "client/view";
     }
 
-    @RequestMapping(value = "/clients/{name}/edit", method = RequestMethod.POST)
+    // Edit client
+    @PostMapping(value = "/clients/{name}/edit")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, Authentication authentication){
         //TODO: Handle errors to show in modal
         if (bindingResult.hasErrors()) {
@@ -104,13 +108,10 @@ public class ClientsController {
 
     }
 
+    // Delete client
     @RequestMapping(value = "/clients/{name}/delete")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client){
-
         clientService.deleteClient(clientService.findByName(client.getName()));
-
-        System.out.println("executed");
-
         return "redirect:/clients";
     }
 
