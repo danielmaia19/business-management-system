@@ -24,7 +24,7 @@ public class UserRepositoryIntegrationIT {
 
     @BeforeEach
     void setUp() {
-        user = new User("Daniel", "Maia", "dmaia", "arsenal", "dmaia@gmail.com");
+        user = new User("Daniel", "Maia", "dmaia", "password123456789", "dmaia@gmail.com");
     }
 
     @Test

@@ -32,7 +32,7 @@ public class ProjectRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
+        user = new User("Daniel", "Maia", "dmaia", "password123456", "dmaia@gmail.com");
 
         projects.add(new Project("Project 1", user));
         projects.add(new Project("Project 2", user));

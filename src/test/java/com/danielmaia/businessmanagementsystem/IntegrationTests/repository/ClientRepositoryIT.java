@@ -29,7 +29,7 @@ public class ClientRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
+        user = new User("Daniel", "Maia", "dmaia", "password123456", "dmaia@gmail.com");
 
         client = new Client("Name", user);
 
