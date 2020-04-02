@@ -46,7 +46,7 @@ public class SignupController {
         }
 
         if(emailExists != null) {
-            bindingResult.addError(new FieldError("email","email", "Email already exists"));
+            bindingResult.addError(new FieldError("email","email", "Email is already associated to an account"));
             return "signup";
         }
 
