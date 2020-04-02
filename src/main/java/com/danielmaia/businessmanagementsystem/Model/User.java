@@ -7,12 +7,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.util.StringUtils;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,29 +26,30 @@ public class User implements UserDetails {
     private Long user_id;
 
     @Column(unique = true)
-    @NotEmpty(message = "Please enter your username")
+    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Please enter only alphanumeric characters")
     private String username;
 
     @Column
-    @NotEmpty(message = "Please enter your first name")
-    @Size(min = 2, max = 20)
+    @NotEmpty(message = "Please enter a first name")
     private String first_name;
 
     @Column
-    @NotEmpty(message = "Please enter your last name")
+    @NotEmpty(message = "Please enter a last name")
     private String last_name;
 
     @Column(unique = true)
-    @Email(message = "Please enter a valid email")
-    @NotEmpty(message = "Please enter an email address")
+    @Pattern(regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$", message = "Please enter a valid email address")
     private String email;
 
     @Column
     private boolean enabled;
 
     @Column
-    @Size(min = 5, message = "Password length needs to be greater than 8")
+    @Size(min = 8, message = "Length needs to be greater than 8")
     private String password;
+
+    @Transient
+    private String confirmPassword;
 
     @OneToOne
     @JoinColumn(name = "role_id")

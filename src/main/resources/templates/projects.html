@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <div th:insert="components/header"></div>
 
@@ -66,7 +65,7 @@
                                                 <td>
                                                     <a th:href="@{/projects/{name}(name = ${project.getName()})}" th:text="${project.getName()}"></a>
                                                     <br />
-                                                    <small>Created 01.01.2015</small>
+                                                    <small th:text="${'Created on: ' + project.getCreated_on().toLocaleString()}"></small>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline">

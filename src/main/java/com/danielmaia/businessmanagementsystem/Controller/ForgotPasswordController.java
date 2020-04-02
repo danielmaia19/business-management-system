@@ -9,6 +9,7 @@ import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,20 +40,21 @@ public class ForgotPasswordController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // Display forgotPassword page
-    @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
+    @GetMapping(value = "/forgot-password")
     public ModelAndView displayForgotPasswordPage() {
         return new ModelAndView("forgot-password");
     }
 
     // Process form submission from forgotPassword page
-    @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
-    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes) throws ParseException, MessagingException, IOException {
+    @PostMapping(value = "/forgot-password")
+    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail, HttpServletRequest request, RedirectAttributes redirectAttributes)
+            throws ParseException, MessagingException, IOException {
 
         // Lookup user in database by e-mail
         User user = userService.findByEmail(userEmail);
 
         if (user == null) {
-            redirectAttributes.addFlashAttribute("errorEmail", "There is no account with that email address.");
+            redirectAttributes.addFlashAttribute("errorMessage", "There is no account with that email address.");
             //modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
             modelAndView.setViewName("redirect:/forgot-password");
         } else {
@@ -65,7 +68,7 @@ public class ForgotPasswordController {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
             calendar.add(Calendar.HOUR, 24);
-            Date date1=new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(calendar.getTime()));
+            Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(calendar.getTime()));
             theToken.setExpiryDate(date1);
 
             passwordResetTokenService.saveToken(theToken);
@@ -91,13 +94,13 @@ public class ForgotPasswordController {
     }
 
     // Display form to reset password
-    @RequestMapping(value = "/reset", method = RequestMethod.GET)
+    @GetMapping(value = "/reset")
     public ModelAndView displayResetPasswordPage(ModelAndView modelAndView, @RequestParam("token") String token) throws ParseException {
 
         Date date = passwordResetTokenService.findByToken(token).getExpiryDate();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        if(new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(date)).before(new Date())) {
+        if (new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(dateFormat.format(date)).before(new Date())) {
             passwordResetTokenService.deleteToken(passwordResetTokenService.findByToken(token));
             modelAndView.addObject("invalidToken", "Token is now Invalid, create a new Token");
             modelAndView.setViewName("redirect:/login");
@@ -113,13 +116,15 @@ public class ForgotPasswordController {
             modelAndView.addObject("errorMessage", "Oops!  This is an invalid password reset link.");
         }
 
+        modelAndView.addObject("user", user);
+
         modelAndView.setViewName("reset-password");
         return modelAndView;
     }
 
     // Process reset password form
-    @RequestMapping(value = "/reset", method = RequestMethod.POST)
-    public ModelAndView setNewPassword(ModelAndView modelAndView, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) throws ParseException {
+    @PostMapping(value = "/reset")
+    public ModelAndView setNewPassword(@ModelAttribute("user") User resetUser, ModelAndView modelAndView, @RequestParam Map<String, String> requestParams, RedirectAttributes redir) throws ParseException {
 
         // Find the user associated with the reset token
         User user = passwordResetTokenService.findByToken(requestParams.get("token")).getUser();

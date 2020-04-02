@@ -24,6 +24,7 @@
     <link href="/webjars/select2/4.0.2/dist/css/select2.min.css" rel="stylesheet">
     <link href="/webjars/switchery/0.8.1/dist/switchery.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
+
 </head>
 <body class="login">
 
@@ -31,49 +32,53 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form name="signup" th:action="@{/signup}" th:object="${user}" method="POST" modelAttribute="user" enctype="UTF8">
+                    <form id="ourform" name="signup" th:action="@{/signup}" th:object="${user}" method="POST" modelAttribute="user" enctype="UTF8">
                         <h1>Create User</h1>
 
-                        <div th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}" class="alert alert-danger"></div>
-                        <div th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}" class="alert alert-danger"></div>
-                        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert alert-danger"></div>
-                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger"></div>
-                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert alert-danger"></div>
-
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
-                            <input th:field="*{first_name}" id="first_name" name="first_name" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <input style="margin: 0px" th:field="*{first_name}" id="first_name" name="first_name" type="text" class="form-control has-feedback-left" placeholder="First Name">
+                            <span style="float:left; color: red; text-align: left;" th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}" ></span>
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-6 col-sm-6  form-group has-feedback">
-                            <input th:field="*{last_name}" id="last_name" name="last_name" type="text" class="form-control" placeholder="Last Name">
+                            <input style="margin: 0px" th:field="*{last_name}" id="last_name" name="last_name" type="text" class="form-control" placeholder="Last Name">
+                            <span style="float:left; color: red; text-align: left;" th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}" ></span>
                             <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input th:field="*{username}" type="text" name="username" class="form-control has-feedback-left" id="username" placeholder="Username">
+                            <input style="margin: 0px" th:field="*{username}" type="text" name="username" class="form-control has-feedback-left" id="username" placeholder="Username">
+                            <span style="float:left; color: red; text-align: left;" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" id="username-error"></span>
                             <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input th:field="*{email}"  type="text" class="form-control has-feedback-left" id="email" name="email" placeholder="Email">
+                            <input style="margin: 0px" th:field="*{email}"  type="text" class="form-control has-feedback-left" id="email" name="email" placeholder="Email">
+                            <span style="float:left; color: red; text-align: left;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" id="error-validateEmail"></span>
                             <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="col-md-12 col-sm-6  form-group has-feedback">
-                            <input th:field="*{password}"  id="password" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <input style="margin: 0px" th:field="*{password}"  id="password" name="password"  type="password" class="form-control has-feedback-left" placeholder="Password">
+                            <span style="float:left; color: red; text-align: left;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" id="error-passwordMatch"></span>
+                            <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
+                        </div>
+
+                        <div class="col-md-12 col-sm-6  form-group has-feedback">
+                            <input style="margin: 0px" th:field="*{confirmPassword}" id="confirmPassword" name="confirmPassword"  type="password" class="form-control has-feedback-left" placeholder="Confirm Password" onChange="formValidation();">
                             <span class="fa fa-key form-control-feedback left" aria-hidden="true"></span>
                         </div>
 
                         <div class="form-actions" style="margin-top: 12px;">
-                            <button type="submit" class="btn btn-light">Add user</button>
+                            <button type="submit" id="btnSubmit" class="btn btn-light">Add user</button>
                         </div>
 
                         <div class="clearfix"></div>
 
                         <div class="separator">
                             <p class="change_link">Already a member ?
-                                <a id="already-member" href="/#signin" class="to_register"> Log in </a>
+                                <a id="already-member" href="/login" class="to_register"> Log in </a>
                             </p>
 
                             <div class="clearfix"></div>
@@ -88,14 +93,34 @@
                                 </p>
 
                         </div>
+                        </div>
                     </form>
+
+
                 </section>
             </div>
         </div>
     </div>
 
+    <script type="text/javascript">
+        $(function () {
+            $("#btnSubmit").click(function formValidation() {
+                var password = $("#password").val();
+                var confirmPassword = $("#confirmPassword").val();
 
+                if (password != confirmPassword) {
+                    $("#error-passwordMatch").html("Passwords do not match!");
+                    return false;
+                }
+
+            });
+        });
+
+        $(document).ready(function () {
+            $("#confirmPassword").keyup(formValidation);
+        });
+
+    </script>
     <script src="js/validator.js"></script>
-
 </body>
 </html>
