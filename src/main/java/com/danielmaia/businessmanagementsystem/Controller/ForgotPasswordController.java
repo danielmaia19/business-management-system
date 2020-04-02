@@ -51,7 +51,9 @@ public class ForgotPasswordController {
         User user = userService.findByEmail(userEmail);
 
         if (user == null) {
-            modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
+            redirectAttributes.addFlashAttribute("errorEmail", "There is no account with that email address.");
+            //modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
+            modelAndView.setViewName("redirect:/forgot-password");
         } else {
 
             // Generate random 36-character string token for reset password;
@@ -70,9 +72,9 @@ public class ForgotPasswordController {
 
             String url = request.getScheme() + "://" + request.getServerName() + ":/reset?token=" + token;
             Mail mail = new Mail();
-            mail.setFrom("yourmailid@email.com");
+            mail.setFrom("support@bms.com");
             mail.setTo(user.getEmail());
-            mail.setSubject("Email with Spring boot and thymeleaf template!");
+            mail.setSubject("BMS Password Reset");
             Map<String, Object> model = new HashMap<String, Object>();
             model.put("name", user.getFullName());
             model.put("url", url);
