@@ -43,6 +43,9 @@ public class Client {
     private List<Project> projects;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<File> files;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
 
     public Client(String name, User user) {

@@ -1,13 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.Note;
-import com.danielmaia.businessmanagementsystem.Model.Project;
-import com.danielmaia.businessmanagementsystem.Model.User;
-import com.danielmaia.businessmanagementsystem.Service.ClientService;
-import com.danielmaia.businessmanagementsystem.Service.NoteService;
-import com.danielmaia.businessmanagementsystem.Service.ProjectService;
-import com.danielmaia.businessmanagementsystem.Service.UserService;
+import com.danielmaia.businessmanagementsystem.Model.*;
+import com.danielmaia.businessmanagementsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,13 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 public class ClientsController {
@@ -31,6 +21,9 @@ public class ClientsController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private ClientFileService clientFileService;
 
     @Autowired
     private ProjectService projectService;
@@ -68,10 +61,12 @@ public class ClientsController {
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") Note note, Model model) {
 
         Client client = clientService.findByName(name);
-        List<Note> notes = noteService.findAllByClientOrderBySubmittedDateDesc(client);
 
+        List<File> files = clientFileService.findAllByClient(client);
+
+        model.addAttribute("clientFiles", files);
         model.addAttribute("client", client);
-        model.addAttribute("notes", notes);
+        model.addAttribute("notes", noteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
     }
