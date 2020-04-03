@@ -1,7 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Service;
 
 import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.File;
+import com.danielmaia.businessmanagementsystem.Model.ClientFile;
 import com.danielmaia.businessmanagementsystem.Repository.ClientFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +18,26 @@ public class ClientFileService {
     @Autowired
     private ClientFileRepository clientFileRepository;
 
-    public File saveFile(Client client, MultipartFile file) throws IOException {
+    public ClientFile saveFile(Client client, MultipartFile file) throws IOException {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
 
         if (filename.contains("..")) {
             throw new RuntimeException("Could not upload file to database");
         }
 
-        File dbFile = new File();
-        dbFile.setFilename(StringUtils.cleanPath(file.getOriginalFilename()));
-        dbFile.setFileType(file.getContentType());
-        dbFile.setData(file.getBytes());
-        dbFile.setClient(client);
-        return clientFileRepository.save(dbFile);
+        ClientFile dbClientFile = new ClientFile();
+        dbClientFile.setFilename(StringUtils.cleanPath(file.getOriginalFilename()));
+        dbClientFile.setFileType(file.getContentType());
+        dbClientFile.setData(file.getBytes());
+        dbClientFile.setClient(client);
+        return clientFileRepository.save(dbClientFile);
     }
 
-    public File getFile(String fileId) {
+    public ClientFile getFile(String fileId) {
         return clientFileRepository.findByClientFileId(fileId);
     }
 
-    public List<File> findAllByClient(Client client) {
+    public List<ClientFile> findAllByClient(Client client) {
         return clientFileRepository.findAllByClient(client);
     }
 

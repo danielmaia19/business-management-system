@@ -1,7 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.File;
+import com.danielmaia.businessmanagementsystem.Model.ClientFile;
 import com.danielmaia.businessmanagementsystem.Service.ClientFileService;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +28,11 @@ public class ClientFileController {
     @PostMapping("/clients/{name}/upload")
     public String testingUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         Client client = clientService.findByName(name);
-        File fileName = clientFileService.saveFile(client, file);
+        ClientFile clientFileName = clientFileService.saveFile(client, file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/clients/" + name + "/downloads/")
-                .path(fileName.getClientFileId())
+                .path(clientFileName.getClientFileId())
                 .toUriString();
 
         log.info(fileDownloadUri);

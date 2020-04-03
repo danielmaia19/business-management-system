@@ -19,7 +19,7 @@
         <div class="right_col" role="main">
 
             <div style="float:right; width:100%; text-align: center" th:if="${uploaded}" id="mydiv" class="alert alert-success alert-dismissible fade show">
-                Your file was uploaded successfully
+                The project was uploaded successfully
             </div>
 
             <div style="float:right; width:100%; text-align: center" th:if="${deleted}" id="mydiv" class="alert alert-info alert-dismissible fade show">
@@ -186,13 +186,16 @@
 
 
                                             <form th:action="@{/clients/{name}/upload(name = ${client.getName()})}" enctype="multipart/form-data" th:method="post">
-                                                <div class="form-group">
-                                                    <label for="exampleFormControlFile1">File input</label>
-                                                    <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
-                                                    <input type="submit" value="Upload"/>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input style="cursor: pointer" type="file" name="file" class="custom-file-input" id="my_file" aria-describedby="inputGroupFileAddon01">
+                                                        <label class="custom-file-label" id="filename" for="my_file">Choose file</label>
+                                                    </div>
+                                                    <div class="input-group-prepend">
+                                                        <button type="submit" style="font-size: inherit" class="input-group-text" id="inputGroupFileAddon01">Upload</button>
+                                                    </div>
                                                 </div>
                                             </form>
-
 
                                             <br />
                                             <br/>
@@ -293,8 +296,8 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
                             </div>
 
                         </form>
@@ -320,8 +323,8 @@
 
                     <div class="modal-footer">
                         <form class="form-horizontal" th:action="@{/clients/{name}/delete(name = ${client.getName()})}" th:object="${client}" method="POST" modelAttribute="client" enctype="UTF8">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Delete Client</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
                         </form>
 
                     </div>
@@ -338,6 +341,13 @@
     setTimeout(function() {
         $('#mydiv').fadeOut('slow');
     }, 3000); // <-- time in milliseconds
+</script>
+
+<script>
+    $("input[id='my_file']").change(function (e) {
+        var $this = $(this);
+        $this.next().html($this.val().split('\\').pop());
+    });
 </script>
 
 <script src="/js/custom.min.js"></script>

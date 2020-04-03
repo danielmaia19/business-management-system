@@ -11,4 +11,5 @@ import java.util.List;
 public interface ProjectRepository extends CrudRepository<Project, Integer> {
     List<Project> findProjectsByUser(User user);
     Project findByName(String name);
+    void deleteProjectByName(String name);
 }

@@ -17,6 +17,17 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
+
+            <div style="float:right; width:100%; text-align: center" th:if="${successDeletion}" id="mydiv"
+                 class="alert alert-success alert-dismissible fade show">
+                The project was successfully deleted
+            </div>
+            .
+            <div style="float:right; width:100%; text-align: center" th:if="${failedDeletion}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                The project was not able to be deleted. Please contact support.
+            </div>
+
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
@@ -32,7 +43,8 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <ul class="nav navbar-right panel_toolbox">
-                                    <button type="button" onclick="location.href='/projects/add'" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="button" onclick="location.href='/projects/add'"
+                                            class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                         Create Project
                                     </button>
                                 </ul>
@@ -51,20 +63,22 @@
                                             <thead>
                                             <tr>
                                                 <th style="width: 1%">#</th>
-                                                <th >Project Name</th>
+                                                <th>Project Name</th>
                                                 <th>Team Members</th>
                                                 <th>Project Progress</th>
+                                                <th>Client</th>
                                                 <th>Status</th>
                                                 <th style="width: 20%">Actions</th>
                                             </tr>
                                             </thead>
 
-                                            <tbody  th:each="project : ${projects}">
+                                            <tbody th:each="project : ${projects}">
                                             <tr>
                                                 <td>#</td>
                                                 <td>
-                                                    <a th:href="@{/projects/{name}(name = ${project.getName()})}" th:text="${project.getName()}"></a>
-                                                    <br />
+                                                    <a th:href="@{/projects/{name}(name = ${project.getName()})}"
+                                                       th:text="${project.getName()}"></a>
+                                                    <br/>
                                                     <small th:text="${'Created on: ' + project.getCreated_on().toLocaleString()}"></small>
                                                 </td>
                                                 <td>
@@ -76,21 +90,64 @@
                                                 </td>
                                                 <td style="padding-top: 21px">
                                                     <div class="progress">
-                                                        <div class="progress-bar-success" role="progressbar"  aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                                        <div class="progress-bar-success" role="progressbar"
+                                                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                                                             th:style="'width:' + ${project.getProgress()} + '%'">
                                                         </div>
                                                         <span class="sr-only">0% Complete</span>
                                                     </div>
-                                                    <small>0% Complete</small>
+                                                    <small th:text="${project.progress} + '% Complete'"></small>
                                                 </td>
                                                 <td style="padding-top: 21px">
-                                                    <h7>Success</h7>
+                                                    <h7 th:text="${project.getClient().getName()}"></h7>
+                                                </td>
+                                                <td style="padding-top: 21px">
+                                                    <h7 th:text="${project.getStatus()}"></h7>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="btn btn-link btn-sm"><i class="fa fa-folder"></i> View </a>
-                                                    <a href="#" class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit </a>
-                                                    <a style="color: red" href="#" class="btn btn-link btn-sm"><i class="fa fa-trash-o"></i> Delete </a>
+                                                    <a th:href="@{/projects/{name}/edit (name=${project.getName()}) }"
+                                                       class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit
+                                                    </a>
+                                                    <a th:href="@{/projects/{name}/delete (name=${project.getName()}) }"
+                                                       data-toggle="modal" data-target=".bd-example-modal-sm"
+                                                       style="color: red" href="#" class="btn btn-link btn-sm"><i
+                                                            class="fa fa-trash-o"></i> Delete </a>
                                                 </td>
                                             </tr>
+
+                                            <!--  Modal Delete Confirmation  -->
+                                            <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
+                                                 aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                    <div class="modal-content">
+
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Are you
+                                                                sure?</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to delete: <span
+                                                                    style="font-weight: bold"
+                                                                    th:text=" ${project.getName()}"></span></p>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.getName()})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                                                            </form>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
 
                                             </tbody>
                                         </table>
@@ -106,75 +163,47 @@
         </div>
         <!-- /page content -->
 
-
-
-        <!-- Modal -->
-<!--        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--            <div class="modal-dialog" role="document">-->
-<!--                <div class="modal-content">-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>-->
-<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                            <span aria-hidden="true">&times;</span>-->
-<!--                        </button>-->
-<!--                    </div>-->
-<!--                    <div class="modal-body">-->
-<!--                        <form class="form-horizontal" name="signup" th:action="@{/templates/project}" th:object="${project}"-->
-<!--                              method="POST" modelAttribute="client" enctype="UTF8">-->
-
-<!--                            &lt;!&ndash;                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>&ndash;&gt;-->
-
-<!--                            <div class="form-group row ">-->
-<!--                                <div class="col-md-12 col-sm-12 ">-->
-<!--                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            <div class="modal-footer">-->
-<!--                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                                <button type="submit" class="btn btn-primary">Save changes</button>-->
-<!--                            </div>-->
-
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
         <div th:insert="components/footer"></div>
-</div>
+    </div>
 
-<script src="js/custom.min.js"></script>
-<script>
-    function toggleFullscreen(elem) {
-        elem = elem || document.documentElement;
-        if (!document.fullscreenElement && !document.mozFullScreenElement &&
-            !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
+    <script>
+        setTimeout(function () {
+            $('#mydiv').fadeOut('slow');
+        }, 3000); // <-- time in milliseconds
+    </script>
+
+    <script src="js/custom.min.js"></script>
+    <script>
+        function toggleFullscreen(elem) {
+            elem = elem || document.documentElement;
+            if (!document.fullscreenElement && !document.mozFullScreenElement &&
+                !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
             }
         }
-    }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
-        toggleFullscreen();
-    });
-</script>
+
+        document.getElementById('linkFullscreen').addEventListener('click', function () {
+            toggleFullscreen();
+        });
+    </script>
 
 </body>
 </html>

@@ -27,13 +27,12 @@
 
                 <div class="clearfix"></div>
 
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x_panel">
                             <div class="x_content">
 
-                                <form class="form-horizontal" name="signup" th:action="@{/projects}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+                                <form class="form-horizontal" name="signup" th:action="@{/projects/{name}/edit (name = ${project.getName()})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label for="project-name">Project Name:</label>
@@ -48,7 +47,7 @@
                                             <label for="project-manager">Assign Client:</label>
                                             <select th:field="*{client}" id="project" class="form-control">
                                                 <option hidden selected value="">-- Assign Client --</option>
-                                                <option th:each="client : ${clients}" th:text="${client.getName()}" th:value="${client.getName()}" th:selected="${client.getName()}"></option>
+                                                <option th:each="client : ${clients}" th:text="${client.getName()}" th:value="${client.getClient_id()}" th:selected="${client.getName()}"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -72,7 +71,7 @@
                                         <div class="form-group col-md-2">
                                             <label for="project-manager">Status:</label>
                                             <select th:field="*{status}" id="status" class="form-control">
-                                                <!--                                                <option hidden selected value="" th:text="${project.getStatus()}"></option>-->
+<!--                                                <option hidden selected value="" th:text="${project.getStatus()}"></option>-->
                                                 <option th:value="To + ' ' + do" >To Do </option>
                                                 <option th:value="In + ' ' + Progress" >In Progress</option>
                                                 <option th:value="Completed">Completed</option>
@@ -93,10 +92,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
         <!-- /page content -->

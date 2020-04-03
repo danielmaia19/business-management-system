@@ -9,10 +9,13 @@ import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.text.DateFormat;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
+@Transactional
 public class ProjectsController {
 
     @Autowired
@@ -84,6 +88,51 @@ public class ProjectsController {
         model.addAttribute("project", project);
         return "project/view";
     }
+
+    @GetMapping("/projects/{name}/edit")
+    public String projectEditView(@PathVariable String name, Model model, Authentication authentication) {
+        User user = (User)authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
+
+        Project project = projectService.findByName(name);
+        model.addAttribute("project", project);
+        model.addAttribute("projectClient", project.getClient());
+        model.addAttribute("clients", clientService.findClientsByUser(currentUser));
+
+        return "project/edit";
+    }
+
+    @PostMapping("/projects/{name}/edit")
+    public String projectEdit(@PathVariable String name, @ModelAttribute("project") Project project, Model model, Authentication authentication) {
+
+        Project foundProject = projectService.findByName(name);
+
+        foundProject.setName(project.getName());
+        foundProject.setStatus(project.getStatus());
+        foundProject.setProgress(project.getProgress());
+        foundProject.setDescription(project.getDescription());
+        foundProject.setContactPerson(project.getContactPerson());
+        foundProject.setQuotePrice(project.getQuotePrice());
+        foundProject.setClient(project.getClient());
+        projectService.saveProject(foundProject);
+
+        return "redirect:/projects";
+    }
+
+    @PostMapping("/projects/{name}/delete")
+    public String projectDelete(@PathVariable String name, Model model, RedirectAttributes redirectAttributes) {
+
+        try {
+            projectService.deleteProjectByName(name);
+            redirectAttributes.addFlashAttribute("successDeletion", "Successfully removed the project");
+        } catch (Exception e) {
+            System.out.println("there was an error");
+            redirectAttributes.addFlashAttribute("failedDeletion", "Failed to remove the project");
+        }
+
+        return "redirect:/projects";
+    }
+
 }
 
 

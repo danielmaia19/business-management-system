@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "client_files")
-public class File {
+public class ClientFile {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -28,8 +28,8 @@ public class File {
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 
-    public File() {}
+    public ClientFile() {}
 
-    public File(String filename, String contentType, byte[] bytes) {
+    public ClientFile(String filename, String contentType, byte[] bytes) {
     }
 }
