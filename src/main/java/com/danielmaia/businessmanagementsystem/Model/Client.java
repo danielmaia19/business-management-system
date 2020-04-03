@@ -43,10 +43,10 @@ public class Client {
     private List<Project> projects;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<File> files;
+    private List<ClientFile> clientFiles;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Note> notes;
+    private List<ClientNote> clientNotes;
 
     public Client(String name, User user) {
         this.name = name;

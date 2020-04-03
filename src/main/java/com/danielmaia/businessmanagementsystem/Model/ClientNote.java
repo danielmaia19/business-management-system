@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "client_notes")
-public class Note {
+public class ClientNote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +30,10 @@ public class Note {
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 
-    public Note() {
+    public ClientNote() {
     }
 
-    public Note(String user_note, Client client) {
+    public ClientNote(String user_note, Client client) {
         this.user_note = user_note;
         this.client = client;
     }

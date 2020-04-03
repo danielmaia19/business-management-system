@@ -29,7 +29,7 @@ public class ClientsController {
     private ProjectService projectService;
 
     @Autowired
-    private NoteService noteService;
+    private ClientNoteService clientNoteService;
 
     // Show the clients page and lists all the clients
     @GetMapping("/clients")
@@ -58,15 +58,15 @@ public class ClientsController {
 
     // View selected client, its information and all the notes.
     @GetMapping(path = "/clients/{name}")
-    public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") Note note, Model model) {
+    public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") ClientNote clientNote, Model model) {
 
         Client client = clientService.findByName(name);
 
-        List<File> files = clientFileService.findAllByClient(client);
+        List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
 
-        model.addAttribute("clientFiles", files);
+        model.addAttribute("clientFiles", clientFiles);
         model.addAttribute("client", client);
-        model.addAttribute("notes", noteService.findAllByClientOrderBySubmittedDateDesc(client));
+        model.addAttribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
     }

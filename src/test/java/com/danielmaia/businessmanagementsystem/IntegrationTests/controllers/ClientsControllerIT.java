@@ -2,10 +2,10 @@ package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
 import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.Note;
+import com.danielmaia.businessmanagementsystem.Model.ClientNote;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
-import com.danielmaia.businessmanagementsystem.Service.NoteService;
+import com.danielmaia.businessmanagementsystem.Service.ClientNoteService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,6 @@ import org.springframework.ui.Model;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,7 +43,7 @@ class ClientsControllerIT {
     private ClientService clientService;
 
     @Autowired
-    private NoteService noteService;
+    private ClientNoteService clientNoteService;
 
     @Mock
     private Model model;
@@ -100,12 +99,12 @@ class ClientsControllerIT {
     @DisplayName("User Can View Client Page")
     public void testViewClientsAndNotes() throws Exception {
         clientService.saveClient(client);
-        String viewClient = controller.viewClientsAndNotes(client.getName(), new Note("Some Note", client), model);
+        String viewClient = controller.viewClientsAndNotes(client.getName(), new ClientNote("Some Note", client), model);
 
         mvc.perform(MockMvcRequestBuilders.get("/clients/{name}", client.getName()).with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("client", client))
-                .andExpect(MockMvcResultMatchers.model().attribute("notes", noteService.findAllByClientOrderBySubmittedDateDesc(client)));
+                .andExpect(MockMvcResultMatchers.model().attribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client)));
 
         assertThat(viewClient).isNotNull();
         assertThat("client/view").isEqualToIgnoringCase(viewClient);
