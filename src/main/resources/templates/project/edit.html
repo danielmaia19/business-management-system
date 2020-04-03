@@ -71,7 +71,8 @@
                                         <div class="form-group col-md-2">
                                             <label for="project-manager">Status:</label>
                                             <select th:field="*{status}" id="status" class="form-control">
-                                                <option th:value="To + ' ' + do" >To Do</option>
+<!--                                                <option hidden selected value="" th:text="${project.getStatus()}"></option>-->
+                                                <option th:value="To + ' ' + do" >To Do </option>
                                                 <option th:value="In + ' ' + Progress" >In Progress</option>
                                                 <option th:value="Completed">Completed</option>
                                             </select>

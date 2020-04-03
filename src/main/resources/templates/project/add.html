@@ -54,6 +54,33 @@
                                     </div>
 
                                     <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="project-name">Contact Person Full Name:</label>
+                                            <input th:field="*{contactPerson}" type="text" class="form-control" id="contactPerson" placeholder="Project Name">
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="project-manager">Project Progress:</label>
+                                            <input th:field="*{progress}" type="number" class="form-control" id="progress" min="0" max="100" data-bind="value:replyNumber" />
+                                        </div>
+
+                                        <div class="form-group col-md-2">
+                                            <label for="project-manager">Quoted Price:</label>
+                                            <input th:field="*{quotePrice}" type="number" class="form-control" id="quotePrice" min="0" data-bind="value:replyNumber" />
+                                        </div>
+
+                                        <div class="form-group col-md-2">
+                                            <label for="project-manager">Status:</label>
+                                            <select th:field="*{status}" id="status" class="form-control">
+                                                <!--                                                <option hidden selected value="" th:text="${project.getStatus()}"></option>-->
+                                                <option th:value="To + ' ' + do" >To Do </option>
+                                                <option th:value="In + ' ' + Progress" >In Progress</option>
+                                                <option th:value="Completed">Completed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label for="project-description">Project Description:</label>
                                             <textarea th:field="*{description}" rows="15" cols="100" type="text" class="form-control" id="project-description" placeholder=""></textarea>

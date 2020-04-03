@@ -22,4 +22,8 @@ public class ProjectService {
         return projectRepository.findByName(name);
     }
 
+    public void deleteProjectByName(String name) {
+        projectRepository.deleteProjectByName(name);
+    }
+
 }
