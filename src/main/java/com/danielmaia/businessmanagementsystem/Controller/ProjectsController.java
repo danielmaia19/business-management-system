@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.text.DateFormat;
@@ -84,6 +85,37 @@ public class ProjectsController {
         model.addAttribute("project", project);
         return "project/view";
     }
+
+    @GetMapping("/projects/{name}/edit")
+    public String projectEditView(@PathVariable String name, Model model, Authentication authentication) {
+        User user = (User)authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
+
+        Project project = projectService.findByName(name);
+        model.addAttribute("project", project);
+        model.addAttribute("projectClient", project.getClient());
+        model.addAttribute("clients", clientService.findClientsByUser(currentUser));
+
+        return "project/edit";
+    }
+
+    @PostMapping("/projects/{name}/edit")
+    public String projectEdit(@PathVariable String name, @ModelAttribute("project") Project project, Model model, Authentication authentication) {
+
+        Project foundProject = projectService.findByName(name);
+
+        foundProject.setName(project.getName());
+        foundProject.setStatus(project.getStatus());
+        foundProject.setProgress(project.getProgress());
+        foundProject.setDescription(project.getDescription());
+        foundProject.setContactPerson(project.getContactPerson());
+        foundProject.setQuotePrice(project.getQuotePrice());
+        foundProject.setClient(project.getClient());
+        projectService.saveProject(foundProject);
+
+        return "redirect:/projects";
+    }
+
 }
 
 
