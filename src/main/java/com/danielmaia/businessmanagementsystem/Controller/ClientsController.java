@@ -1,13 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.Note;
-import com.danielmaia.businessmanagementsystem.Model.Project;
-import com.danielmaia.businessmanagementsystem.Model.User;
-import com.danielmaia.businessmanagementsystem.Service.ClientService;
-import com.danielmaia.businessmanagementsystem.Service.NoteService;
-import com.danielmaia.businessmanagementsystem.Service.ProjectService;
-import com.danielmaia.businessmanagementsystem.Service.UserService;
+import com.danielmaia.businessmanagementsystem.Model.*;
+import com.danielmaia.businessmanagementsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,13 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Controller
 public class ClientsController {
@@ -33,11 +23,15 @@ public class ClientsController {
     private ClientService clientService;
 
     @Autowired
+    private ClientFileService clientFileService;
+
+    @Autowired
     private ProjectService projectService;
 
     @Autowired
     private NoteService noteService;
 
+    // Show the clients page and lists all the clients
     @GetMapping("/clients")
     public String index(ModelMap model, Client client, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -50,7 +44,8 @@ public class ClientsController {
         return "clients";
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    // Save client created by user
+    @PostMapping(path = "/clients")
     public String createClient(@ModelAttribute("client") Client client, BindingResult bindingResult, Authentication authentication) {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
@@ -61,19 +56,23 @@ public class ClientsController {
             return "redirect:/clients";
     }
 
-    @RequestMapping(path = "/clients/{name}", method = RequestMethod.GET)
+    // View selected client, its information and all the notes.
+    @GetMapping(path = "/clients/{name}")
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") Note note, Model model) {
 
         Client client = clientService.findByName(name);
-        List<Note> notes = noteService.findAllByClientOrderBySubmittedDateDesc(client);
 
+        List<File> files = clientFileService.findAllByClient(client);
+
+        model.addAttribute("clientFiles", files);
         model.addAttribute("client", client);
-        model.addAttribute("notes", notes);
+        model.addAttribute("notes", noteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
     }
 
-    @RequestMapping(value = "/clients/{name}/edit", method = RequestMethod.POST)
+    // Edit client
+    @PostMapping(value = "/clients/{name}/edit")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, Authentication authentication){
         //TODO: Handle errors to show in modal
         if (bindingResult.hasErrors()) {
@@ -104,13 +103,10 @@ public class ClientsController {
 
     }
 
+    // Delete client
     @RequestMapping(value = "/clients/{name}/delete")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client){
-
         clientService.deleteClient(clientService.findByName(client.getName()));
-
-        System.out.println("executed");
-
         return "redirect:/clients";
     }
 

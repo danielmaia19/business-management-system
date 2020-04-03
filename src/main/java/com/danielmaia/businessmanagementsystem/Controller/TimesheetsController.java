@@ -15,6 +15,7 @@ public class TimesheetsController {
     @Autowired
     private UserRepository userRepository;
 
+    // Show timesheet page
     @GetMapping("/timesheets")
     public String index(ModelMap model) {
 
@@ -28,5 +29,4 @@ public class TimesheetsController {
 
         return "timesheets";
     }
-
 }

@@ -16,6 +16,7 @@ public class SettingsController {
     @Autowired
     private UserService userService;
 
+    // Show settings page
     @GetMapping("/settings")
     public String index(ModelMap model) {
 

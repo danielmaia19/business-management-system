@@ -16,6 +16,7 @@ public class ExpensesController {
     @Autowired
     private UserService userService;
 
+    // Show the expenses page
     @GetMapping("/expenses")
     public String index(ModelMap model) {
 
