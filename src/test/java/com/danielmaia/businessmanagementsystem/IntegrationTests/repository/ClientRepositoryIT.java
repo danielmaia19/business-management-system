@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Client Repository - Integration Test")
+@Disabled
 public class ClientRepositoryIT {
 
     @Autowired
