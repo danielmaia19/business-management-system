@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,8 +38,15 @@ public class ClientsController {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
-        model.addAttribute("projects", projectService.findProjectsByUser(currentUser));
-        model.addAttribute("clients", clientService.findClientsByUser(currentUser));
+        List<Client> clients = clientService.findAllByUser(currentUser);
+        List<Project> projects = new ArrayList<>();
+
+        for(Client userClient : clients) {
+            projects.addAll(userClient.getProjects());
+        }
+
+        model.addAttribute("projects", projects);
+        model.addAttribute("clients", clientService.findAllByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());
 
         return "clients";
@@ -59,7 +67,6 @@ public class ClientsController {
     // View selected client, its information and all the notes.
     @GetMapping(path = "/clients/{name}")
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") ClientNote clientNote, Model model) {
-
         Client client = clientService.findByName(name);
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);

@@ -8,7 +8,6 @@ import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ClientNoteService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Disabled
 @DisplayName("Clients Controller - Integration Test")
 class ClientsControllerIT {
 
@@ -77,7 +75,7 @@ class ClientsControllerIT {
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("name", "Admin Admin"))
-                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findClientsByUser(adminUser)))
+                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findAllByUser(adminUser)))
                 .andExpect(view().name("clients"));
     }
 

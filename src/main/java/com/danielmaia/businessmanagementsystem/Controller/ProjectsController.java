@@ -14,14 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 @Transactional
@@ -42,8 +40,15 @@ public class ProjectsController {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
+        List<Client> clients = clientService.findAllByUser(currentUser);
+        List<Project> projects = new ArrayList<>();
+
+        for(Client client : clients) {
+            projects.addAll(client.getProjects());
+        }
+
         model.addAttribute("name", currentUser.getFullName());
-        model.addAttribute("projects", projectService.findProjectsByUser(currentUser));
+        model.addAttribute("projects", projects);
 
         return "projects";
     }
@@ -54,7 +59,7 @@ public class ProjectsController {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
-        List<Client> clients = clientService.findClientsByUser(currentUser);
+        List<Client> clients = clientService.findAllByUser(currentUser);
 
         model.addAttribute("clients", clients);
         model.addAttribute("project", project);
@@ -74,7 +79,7 @@ public class ProjectsController {
 
             project.setCreated_on(new Date());
 
-            project.setUser(currentUser);
+            //project.setUser(currentUser);
             project.setClient(selectedClient);
             projectService.saveProject(project);
 
@@ -97,7 +102,7 @@ public class ProjectsController {
         Project project = projectService.findByName(name);
         model.addAttribute("project", project);
         model.addAttribute("projectClient", project.getClient());
-        model.addAttribute("clients", clientService.findClientsByUser(currentUser));
+        model.addAttribute("clients", clientService.findAllByUser(currentUser));
 
         return "project/edit";
     }

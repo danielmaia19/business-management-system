@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Long> {
     Client findByName(String clientName);
-    List<Client> findClientsByUser(User user);
+    List<Client> findAllByUser(User user);
 }

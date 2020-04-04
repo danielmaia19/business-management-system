@@ -3,6 +3,7 @@ package com.danielmaia.businessmanagementsystem.IntegrationTests.repository;
 import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
+import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Client Repository - Integration Test")
-@Disabled
 public class ClientRepositoryIT {
 
     @Autowired
@@ -30,9 +30,9 @@ public class ClientRepositoryIT {
 
     @BeforeEach
     void setUp() {
-        user = new User("Daniel", "Maia", "dmaia", "password123456", "dmaia@gmail.com");
+        user = new User("John", "Doe", "jdoe", "password123456", "emial@gmail.com");
 
-        client = new Client("Name", user);
+        client = new Client("Name");
 
         clients.add(new Client("Client 1", user));
         clients.add(new Client("Client 2", user));
@@ -40,6 +40,7 @@ public class ClientRepositoryIT {
 
     @Test
     public void testFindByName() {
+        client.setUser(user);
         repository.save(client);
 
         Client foundClient = repository.findByName("Name");
@@ -49,11 +50,11 @@ public class ClientRepositoryIT {
     }
 
     @Test
-    void testFindClientsByUser() {
+    void testFindAllByUser() {
         repository.save(clients.get(0));
         repository.save(clients.get(1));
 
-        List<Client> foundClients = repository.findClientsByUser(user);
+        List<Client> foundClients = repository.findAllByUser(user);
 
         assertThat(foundClients).isNotNull();
         assertThat(foundClients).isEqualTo(clients);
