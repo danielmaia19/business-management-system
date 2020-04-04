@@ -1,5 +1,6 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.services;
 
+import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectRepository;
@@ -29,34 +30,34 @@ public class ProjectServiceTest {
     @InjectMocks
     private ProjectService service;
 
+    private Client client;
     private Project project;
-    private User user;
-    private List<Project> projects;
+    List<Project> projects = new ArrayList<>();
 
     @BeforeEach
     public void setup(){
 
         project = new Project("test");
 
-        user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
+        User user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
 
-        projects = new ArrayList<>();
-        projects.add(new Project("Test 1"));
-        projects.add(new Project("Test 2"));
+        client = new Client("Client Name", user);
 
+        projects.add(new Project("Test 1", client));
+        projects.add(new Project("Test 2", client));
     }
 
     @Test
-    public void testFindProjectByUser() {
-         // When
-        when(repository.findProjectsByUser(user)).thenReturn(projects);
+    public void testFindAllByClient() {
+        // When
+        when(repository.findAllByClient(client)).thenReturn(projects);
 
-        List<Project> foundProjects = service.findProjectsByUser(user);
+        List<Project> foundProjects = service.findAllByClient(client);
 
         assertThat(foundProjects).isNotNull();
         assertThat(foundProjects).isEqualTo(projects);
 
-        verify(repository).findProjectsByUser(any(User.class));
+        verify(repository).findAllByClient(any(Client.class));
     }
 
     @Test

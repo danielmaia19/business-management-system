@@ -75,7 +75,7 @@ class ClientsControllerIT {
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("name", "Admin Admin"))
-                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findClientsByUser(adminUser)))
+                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findAllByUser(adminUser)))
                 .andExpect(view().name("clients"));
     }
 

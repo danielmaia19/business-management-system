@@ -33,11 +33,7 @@ public class Project {
     private Date created_on;
     private BigDecimal quotePrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="user_id", referencedColumnName = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 
@@ -48,9 +44,9 @@ public class Project {
         this.name = projectName;
     }
 
-    public Project(String projectName, User user) {
+    public Project(String projectName, Client client) {
         this.name = projectName;
-        this.user = user;
+        this.client = client;
     }
 
 }

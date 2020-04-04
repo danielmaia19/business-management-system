@@ -1,5 +1,6 @@
 package com.danielmaia.businessmanagementsystem.Service;
 
+import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectRepository;
@@ -16,7 +17,7 @@ public class ProjectService {
 
     public void saveProject(Project projectName) { projectRepository.save(projectName); }
 
-    public List<Project> findProjectsByUser(User user) { return projectRepository.findProjectsByUser(user); }
+    public List<Project> findAllByClient(Client client) { return projectRepository.findAllByClient(client); }
 
     public Project findByName(String name) {
         return projectRepository.findByName(name);

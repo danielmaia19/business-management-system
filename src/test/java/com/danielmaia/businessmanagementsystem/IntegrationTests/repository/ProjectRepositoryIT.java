@@ -1,5 +1,6 @@
 package com.danielmaia.businessmanagementsystem.IntegrationTests.repository;
 
+import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectRepository;
@@ -28,22 +29,22 @@ public class ProjectRepositoryIT {
     private ProjectRepository repository;
 
     private User user;
+    private Client client;
     private List<Project> projects = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         user = new User("Daniel", "Maia", "dmaia", "password123456", "dmaia@gmail.com");
-
-        projects.add(new Project("Project 1", user));
-        projects.add(new Project("Project 2", user));
+        client = new Client("Name Client", user);
+        projects.add(new Project("Project 1", client));
+        projects.add(new Project("Project 2", client));
     }
 
     @Test
-    @Disabled
     public void testFindProjectsByUser() {
         repository.saveAll(projects);
 
-        List<Project> foundProjects = repository.findProjectsByUser(user);
+        List<Project> foundProjects = repository.findAllByClient(client);
 
         assertThat(foundProjects).isNotNull();
         assertThat(foundProjects).isEqualTo(projects);

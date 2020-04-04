@@ -35,7 +35,7 @@ public class Client {
     private String contactPerson;
     private String contactPersonEmail;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")
     private User user;
 

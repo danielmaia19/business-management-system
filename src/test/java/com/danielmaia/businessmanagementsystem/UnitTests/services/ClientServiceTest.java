@@ -1,11 +1,9 @@
 package com.danielmaia.businessmanagementsystem.UnitTests.services;
 
 import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,14 +64,14 @@ public class ClientServiceTest {
     @Test
     public void testFindClientsByUser() {
 
-        when(repository.findClientsByUser(user)).thenReturn(clients);
+        when(repository.findAllByUser(user)).thenReturn(clients);
 
-        List<Client> foundProjects = service.findClientsByUser(user);
+        List<Client> foundProjects = service.findAllByUser(user);
 
         assertThat(foundProjects).isNotNull();
         assertThat(foundProjects).isEqualTo(clients);
 
-        verify(repository).findClientsByUser(any(User.class));
+        verify(repository).findAllByUser(any(User.class));
     }
 
 

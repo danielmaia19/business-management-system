@@ -27,8 +27,8 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    public List<Client> findClientsByUser(User user) {
-        return clientRepository.findClientsByUser(user);
+    public List<Client> findAllByUser(User user) {
+        return clientRepository.findAllByUser(user);
     }
 
     public void saveAllClients(List<Client> clients) {
