@@ -28,7 +28,7 @@ public class Project {
     private String name;
     private String contactPerson;
     private String description;
-    private String status = "To do";
+    private String status = "To Do";
     private int progress;
     private Date created_on;
     private BigDecimal quotePrice;

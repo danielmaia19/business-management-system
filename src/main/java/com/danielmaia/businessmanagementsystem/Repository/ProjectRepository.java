@@ -13,4 +13,6 @@ public interface ProjectRepository extends CrudRepository<Project, Integer> {
     List<Project> findAllByClient(Client client);
     Project findByName(String name);
     void deleteProjectByName(String name);
+    int countProjectsByClient(Client client);
+    int countProjectsByStatusEqualsOrStatusEquals(String todo, String inprogress);
 }

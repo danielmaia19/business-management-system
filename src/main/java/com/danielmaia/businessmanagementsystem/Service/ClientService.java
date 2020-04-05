@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Service;
 
 import com.danielmaia.businessmanagementsystem.Model.Client;
+import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
@@ -33,6 +34,10 @@ public class ClientService {
 
     public void saveAllClients(List<Client> clients) {
         clientRepository.saveAll(clients);
+    }
+
+    public int countAllByUser(User user) {
+        return clientRepository.countAllByUser(user);
     }
 
     public void deleteClient(Client client) {

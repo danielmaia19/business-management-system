@@ -23,6 +23,14 @@ public class ProjectService {
         return projectRepository.findByName(name);
     }
 
+    public int countProjectsByClient(Client client) {
+        return projectRepository.countProjectsByClient(client);
+    }
+
+    public int countProjectsByStatusEqualsOrStatusEquals(String todo, String inprogress) {
+        return projectRepository.countProjectsByStatusEqualsOrStatusEquals(todo, inprogress);
+    }
+
     public void deleteProjectByName(String name) {
         projectRepository.deleteProjectByName(name);
     }
