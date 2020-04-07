@@ -33,7 +33,7 @@ public class Project {
     private Date created_on;
     private BigDecimal quotePrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 

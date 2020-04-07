@@ -8,6 +8,7 @@ import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @Transactional
@@ -38,16 +42,27 @@ public class ProjectsController {
 
     //Show all users projects
     @GetMapping("/projects")
-    public String index(ModelMap model, Project project, @PageableDefault(size = 3) Pageable pageable, Authentication authentication) {
+    public String index(ModelMap model, Project project, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
         List<Client> clients = clientService.findAllByUser(currentUser);
 
-        Page<Project> projects = projectService.findAllUsersProjectsPages(clients,pageable);
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(2);
+
+        Page<Project> projects = projectService.findAllUsersProjectsPages(clients, PageRequest.of(currentPage-1, pageSize));
 
         //Page<Project> page = projectService.findAll(pageable);
         model.addAttribute("test", projects);
+
+        int totalPages = projects.getTotalPages();
+        if(totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
         model.addAttribute("name", currentUser.getFullName());
+        model.addAttribute("currentPage", currentPage);
         //model.addAttribute("projects", projects);
 
         return "projects";

@@ -168,7 +168,7 @@
                                             <li class="page-item disabled">
                                                 <a class="page-link" href="#" tabindex="-1">Previous</a>
                                             </li>
-                                            <li class="page-item" th:each="i: ${#numbers.sequence(1, test.getTotalPages())}">
+                                            <li class="page-item" th:each="i: ${#numbers.sequence(1, test.getTotalPages())}" th:classappend="${currentPage} == ${i} ? 'active' : ''">
                                                 <a class="page-link" th:text="${i}" th:href="@{/projects(page=${i})}"></a></li>
                                             <li class="page-item">
                                                 <a class="page-link" href="#">Next</a>

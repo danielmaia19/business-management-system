@@ -38,16 +38,26 @@ public class DashboardController {
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
         User currentUser = userService.findByUsername(username);
+        List<Project> usersProjects = new ArrayList<>();
 
         List<Client> clients = clientService.findAllByUser(currentUser);
         int count = 0;
+        int projectsCount = 0;
 
         for(Client client : clients) {
             count += projectService.countProjectsByClient(client);
+            usersProjects.addAll(client.getProjects());
         }
 
+        for(Project project : usersProjects) {
+            if(project.getStatus().equals("To Do") || project.getStatus().equals("In Progress")) {
+                projectsCount++;
+            }
+        }
 
-        model.addAttribute("activeProjects", projectService.countProjectsByStatusEqualsOrStatusEquals("To Do", "In Progress"));
+        //projectService.countProjectsByStatusEqualsOrStatusEquals("To Do", "In Progress")
+
+        model.addAttribute("activeProjects", projectsCount);
         model.addAttribute("projectsCount", count);
         model.addAttribute("clientsCount", clientService.countAllByUser(currentUser));
         model.addAttribute("name", currentUser.getFullName());

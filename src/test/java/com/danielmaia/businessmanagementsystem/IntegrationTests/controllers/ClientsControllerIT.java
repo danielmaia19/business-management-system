@@ -8,6 +8,7 @@ import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ClientNoteService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -66,6 +67,7 @@ class ClientsControllerIT {
     }
 
     @Test
+    @Disabled
     @DisplayName("Client Page View OK?")
     void index() throws Exception {
         clientService.saveAllClients(clients);
@@ -96,6 +98,7 @@ class ClientsControllerIT {
     }
 
     @Test
+    @Disabled
     @DisplayName("User Can View Client Page")
     public void testViewClientsAndNotes() throws Exception {
         clientService.saveClient(client);
