@@ -7,6 +7,9 @@ import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,19 +38,17 @@ public class ProjectsController {
 
     //Show all users projects
     @GetMapping("/projects")
-    public String index(ModelMap model, Project project, Authentication authentication) {
+    public String index(ModelMap model, Project project, @PageableDefault(size = 3) Pageable pageable, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-
         List<Client> clients = clientService.findAllByUser(currentUser);
-        List<Project> projects = new ArrayList<>();
 
-        for(Client client : clients) {
-            projects.addAll(client.getProjects());
-        }
+        Page<Project> projects = projectService.findAllUsersProjectsPages(clients,pageable);
 
+        //Page<Project> page = projectService.findAll(pageable);
+        model.addAttribute("test", projects);
         model.addAttribute("name", currentUser.getFullName());
-        model.addAttribute("projects", projects);
+        //model.addAttribute("projects", projects);
 
         return "projects";
     }

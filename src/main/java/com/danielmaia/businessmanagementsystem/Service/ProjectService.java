@@ -5,8 +5,15 @@ import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,6 +40,30 @@ public class ProjectService {
 
     public void deleteProjectByName(String name) {
         projectRepository.deleteProjectByName(name);
+    }
+
+    public Page<Project> findAllUsersProjectsPages(List<Client> clients, Pageable pageable) {
+        List<Project> projects = new ArrayList<>();
+
+        for(Client client : clients) {
+            projects.addAll(client.getProjects());
+        }
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Project> list;
+
+        if (projects.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, projects.size());
+            list = projects.subList(startItem, toIndex);
+        }
+
+        Page<Project> projectPage = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), projects.size());
+
+        return projectPage;
     }
 
 }
