@@ -103,6 +103,23 @@
 
 <script src="/js/custom.min.js"></script>
 <script>
+    $('#progress').on('keypress', function(e){
+        return e.metaKey || // cmd/ctrl
+            e.which <= 0 || // arrow keys
+            e.which == 8 || // delete key
+            /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+    })
+
+
+    $('#progress').keyup(function(){
+        if ($(this).val() > 100){
+            // alert("No numbers above 100");
+            $(this).val('100');
+        }
+    });
+
+</script>
+<script>
     function toggleFullscreen(elem) {
         elem = elem || document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
