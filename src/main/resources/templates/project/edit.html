@@ -102,17 +102,6 @@
 
 <script src="/js/custom.min.js"></script>
 <script>
-    $('#progress').on('keypress', function(e){
-        return e.metaKey || // cmd/ctrl
-            e.which <= 0 || // arrow keys
-            e.which == 8 || // delete key
-            /[0-9]/.test(String.fromCharCode(e.which)); // numbers
-    })
-
-</script>
-
-
-<script>
     function check(e,value){
         //Check Charater
         var unicode=e.charCode? e.charCode : e.keyCode;
@@ -132,10 +121,14 @@
             document.getElementById('progress').value = str;
         }
     }
-</script>
 
+    $('#progress').on('keypress', function(e){
+        return e.metaKey || // cmd/ctrl
+            e.which <= 0 || // arrow keys
+            e.which == 8 || // delete key
+            /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+    })
 
-<script>
     function toggleFullscreen(elem) {
         elem = elem || document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
@@ -164,6 +157,7 @@
     document.getElementById('linkFullscreen').addEventListener('click', function() {
         toggleFullscreen();
     });
+
 </script>
 
 </body>

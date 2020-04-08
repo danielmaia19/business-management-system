@@ -163,15 +163,15 @@
 
                                     </div>
 
-                                    <nav aria-label="Page navigation example" class="demo1">
+                                    <nav aria-label="Page navigation example" class="demo1" th:style="${test.getTotalPages() < 2} ? 'display:none' : ''">
                                         <ul class="pagination justify-content-end">
-                                            <li class="page-item disabled">
+                                            <li class="page-item" th:classappend="${!test.hasPrevious()} ? 'disabled' : ''">
                                                 <a class="page-link" href="#" tabindex="-1">Previous</a>
                                             </li>
                                             <li class="page-item" th:each="i: ${#numbers.sequence(1, test.getTotalPages())}" th:classappend="${currentPage} == ${i} ? 'active' : ''">
                                                 <a class="page-link" th:text="${i}" th:href="@{/projects(page=${i})}"></a></li>
-                                            <li class="page-item">
-                                                <a class="page-link" href="#">Next</a>
+                                            <li class="page-item" th:classappend="${!test.hasNext()} ? 'disabled' : ''">
+                                                <a class="page-link" th:href="@{/projects(page=${currentPage+1})}">Next</a>
                                             </li>
                                         </ul>
                                     </nav>

@@ -48,7 +48,7 @@ public class ProjectsController {
         List<Client> clients = clientService.findAllByUser(currentUser);
 
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(2);
+        int pageSize = size.orElse(10);
 
         Page<Project> projects = projectService.findAllUsersProjectsPages(clients, PageRequest.of(currentPage-1, pageSize));
 
@@ -85,20 +85,17 @@ public class ProjectsController {
     // Add new projects
     @PostMapping(path = "/projects")
     public String createClient(@RequestParam("client") String client, @ModelAttribute("project") @Valid Project project, BindingResult bindingResult, Authentication authentication) {
-            User user = (User) authentication.getPrincipal();
-            User currentUser = userService.findByUsername(user.getUsername());
+        Client selectedClient = clientService.findByName(client);
 
-            Client selectedClient = clientService.findByName(client);
+        System.out.println(selectedClient.getName());
 
-            System.out.println(selectedClient.getName());
+        project.setCreated_on(new Date());
 
-            project.setCreated_on(new Date());
+        //project.setUser(currentUser);
+        project.setClient(selectedClient);
+        projectService.saveProject(project);
 
-            //project.setUser(currentUser);
-            project.setClient(selectedClient);
-            projectService.saveProject(project);
-
-            return "redirect:/projects";
+        return "redirect:/projects";
     }
 
     // Individual project view
