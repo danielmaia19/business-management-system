@@ -41,16 +41,17 @@
                             </div>
 
 
-
                             <div class="x_content">
                                 <div th:if="${#lists.isEmpty(clients)}">
                                     There are no clients!
                                 </div>
-                                <div class="col-md-55" th:each = "client : ${clients}">
+                                <div class="col-md-55" th:each="client : ${clients}">
                                     <div class="thumbnail client-item">
-                                        <a href="/clients/{name}" th:href="@{/clients/{name}(name = ${client.getName()})}">
+                                        <a href="/clients/{name}"
+                                           th:href="@{/clients/{name}(name = ${client.getName()})}">
                                             <div class="image view view-first">
-                                                <img style="width: 100%; display: block;" src="images/media.jpg" alt="image"/>
+                                                <img style="width: 100%; display: block;" src="images/media.jpg"
+                                                     alt="image"/>
                                             </div>
                                         </a>
                                         <div class="caption">
@@ -85,70 +86,92 @@
                         <form class="form-horizontal" name="signup" th:action="@{/clients}" th:object="${client}"
                               method="POST" modelAttribute="client" enctype="UTF8">
 
-<!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
+                            <!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" placeholder="Client Name">
+                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control" required placeholder="Client Name">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validName">Cannot be empty</span>
                                 </div>
                             </div>
 
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" type="text" class="form-control" placeholder="Address Line 1">
+                                    <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne" required
+                                           type="text" class="form-control" placeholder="Address Line 1">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validAddressOne">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo" type="text" class="form-control" placeholder="Address Line 2">
+                                    <input th:field="*{addressLineTwo}" id="addressLineTwo" name="addressLineTwo"
+                                           type="text" class="form-control" placeholder="Address Line 2">
                                 </div>
                             </div>
 
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{city}" id="city" name="city" type="text" class="form-control" placeholder="City / Town">
+                                    <input th:field="*{city}" id="city" name="city" type="text" class="form-control" required
+                                           placeholder="City / Town">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validCity">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{region}" id="region" name="region" type="text" class="form-control" placeholder="State/Province/Region">
+                                    <input th:field="*{region}" id="region" name="region" type="text" required
+                                           class="form-control" placeholder="State/Province/Region">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validRegion">Cannot be empty</span>
                                 </div>
 
                             </div>
 
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text" class="form-control" placeholder="Zip / Postal Code">
+                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text" required
+                                           class="form-control" placeholder="Zip / Postal Code">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validPostcode">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{country}" id="country" name="country" type="text" class="form-control" placeholder="Country">
+                                    <input th:field="*{country}" id="country" name="country" type="text" required
+                                           class="form-control" placeholder="Country">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validCountry">Please enter a valid email</span>
                                 </div>
                             </div>
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson" type="text" class="form-control" placeholder="Contact Person">
+                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson" required
+                                           type="text" class="form-control" placeholder="Contact Person">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validContactPerson">Cannot be empty</span>
                                 </div>
                             </div>
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{contactPersonEmail}" th:type="email" id="contactPersonEmail" name="contactPersonEmail" type="text" class="form-control" placeholder="Contact Person Email">
+                                    <input th:field="*{contactPersonEmail}" th:type="email" required id="contactPersonEmail"
+                                           name="contactPersonEmail" type="text" class="form-control"
+                                           placeholder="Contact Person Email">
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validEmail">Please enter a valid email</span>
                                 </div>
                             </div>
 
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <textarea th:field="*{description}" id="description" required="required" class="form-control" name="description" data-parsley-trigger="keyup" data-parsley-minlength="20"
-                                              data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.." data-parsley-validation-threshold="10"
+                                    <textarea th:field="*{description}" id="description" required
+                                              class="form-control" name="description" data-parsley-trigger="keyup"
+                                              data-parsley-minlength="20"
+                                              data-parsley-maxlength="100"
+                                              data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
+                                              data-parsley-validation-threshold="10"
                                               placeholder="Description">
                                     </textarea>
+                                    <span style="float:left; color: red; text-align: left; display: none" id="error-validDescription">Cannot be empty</span>
                                 </div>
                             </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary">Save changes</button>
                             </div>
 
                         </form>
@@ -161,38 +184,126 @@
     </div>
 
 </div>
-    <script src="js/custom.min.js"></script>
-    <script>
-        function toggleFullscreen(elem) {
-            elem = elem || document.documentElement;
-            if (!document.fullscreenElement && !document.mozFullScreenElement &&
-                !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                } else if (elem.mozRequestFullScreen) {
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
+
+<!-- Field Validation -->
+<script type="text/javascript">
+        $("#btnSubmit").click(function () {
+            var nameField = $("#name").val();
+            var addressOne = $("#addressLineOne").val();
+            var city = $("#city").val();
+            var region = $("#region").val();
+            var postcode = $("#postCode").val();
+            var country = $("#country").val();
+            var contactPerson = $("#contactPerson").val();
+            var description = $("#description").val();
+            var emailField = $("#contactPersonEmail").val();
+
+            console.log(contactPerson);
+
+            if(nameField == "") {
+                document.getElementById("error-validName").style.display = "block";
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
+                document.getElementById("error-validName").style.display = "none";
+            }
+
+            if(addressOne == "") {
+                document.getElementById("error-validAddressOne").style.display = "block";
+            } else {
+                document.getElementById("error-validAddressOne").style.display = "none";
+            }
+
+            if(city == "") {
+                document.getElementById("error-validCity").style.display = "block";
+            } else {
+                document.getElementById("error-validCity").style.display = "none";
+            }
+
+            if(region == "") {
+                document.getElementById("error-validRegion").style.display = "block";
+            } else {
+                document.getElementById("error-validRegion").style.display = "none";
+            }
+
+            if(postcode == "") {
+                document.getElementById("error-validPostcode").style.display = "block";
+            } else {
+                document.getElementById("error-validPostcode").style.display = "none";
+            }
+
+            if(country == "") {
+                document.getElementById("error-validCountry").style.display = "block";
+            } else {
+                document.getElementById("error-validCountry").style.display = "none";
+            }
+
+            if(contactPerson == "") {
+                document.getElementById("error-validContactPerson").style.display = "block";
+            } else {
+                document.getElementById("error-validContactPerson").style.display = "none";
+            }
+
+            if(description == "") {
+                document.getElementById("error-validDescription").style.display = "block";
+            } else {
+                document.getElementById("error-validDescription").style.display = "none";
+            }
+
+            if(emailField == "") {
+                document.getElementById("error-validEmail").style.display = "block";
+            } else {
+                document.getElementById("error-validEmail").style.display = "none";
+            }
+
+        });
+
+</script>
+
+<script src="js/custom.min.js"></script>
+<script>
+    function toggleFullscreen(elem) {
+        elem = elem || document.documentElement;
+        if (!document.fullscreenElement && !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
             }
         }
+    }
 
-        document.getElementById('linkFullscreen').addEventListener('click', function () {
-            toggleFullscreen();
-        });
-    </script>
+    document.getElementById('linkFullscreen').addEventListener('click', function () {
+        toggleFullscreen();
+    });
+</script>
+
+<script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
+<script>
+    var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua &amp; Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia &amp; Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Cayman Islands","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cruise Ship","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyz Republic","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Namibia","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre &amp; Miquelon","Samoa","San Marino","Satellite","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","St Kitts &amp; Nevis","St Lucia","St Vincent","St. Lucia","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad &amp; Tobago","Tunisia","Turkey","Turkmenistan","Turks &amp; Caicos","Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","Uzbekistan","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+
+    $('#country').autocomplete({
+        lookup: countries,
+        // onSelect: function (suggestion) {
+        //     alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+        // }
+    });
+
+
+</script>
 
 </body>
 </html>

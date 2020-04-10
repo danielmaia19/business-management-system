@@ -4898,3 +4898,28 @@ ul.notifications {
 .highcharts-credits {
   display: none;
 }
+
+.autocomplete-suggestions strong {
+
+  color: #029cca;
+  font-weight: normal;
+
+}
+
+.autocomplete-suggestion {
+  background: #FFFFFF;
+  overflow: hidden;
+  padding: 5px 15px;
+  white-space: nowrap;
+}
+
+.autocomplete-suggestions strong {
+
+  color: #029cca;
+  font-weight: normal;
+
+}
+
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }

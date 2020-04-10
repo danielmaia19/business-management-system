@@ -85,7 +85,7 @@
                                             <tr>
                                                 <td>#</td>
                                                 <td>
-                                                    <a id="project-name" th:href="@{/projects/{name}(name = ${project.name})}"
+                                                    <a data="name" id="project-name" th:href="@{/projects/{name}(name = ${project.name})}"
                                                        th:text="${project.name}"></a>
                                                     <br/>
                                                     <small th:text="${'Created on: ' + project.createdOn.toLocaleString()}"></small>
@@ -234,33 +234,45 @@
 </body>
 <div th:insert="components/footer"></div>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 
+<script>
 
-<script th:inline="javascript">
+    // function myFunction() {
+    //     var input, filter, table, tr, td, i, txtValue;
+    //     input = document.getElementById("myInput");
+    //     filter = input.value.toUpperCase();
+    //     table = document.getElementById("myTable");
+    //     tr = table.getElementsByTagName("tr");
+    //     for (i = 0; i < tr.length; i++) {
+    //         td = tr[i].getElementsByTagName("td")[0];
+    //         if (td) {
+    //             txtValue = td.textContent || td.innerText;
+    //             if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //                 tr[i].style.display = "";
+    //             } else {
+    //                 tr[i].style.display = "none";
+    //             }
+    //         }
+    //     }
+    // }
 
-    function myFunction() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("a")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
+    $(document).ready(function() {
+        var table = $('#myTable').DataTable();
 
-    /*[# th:each="n : ${projects}"]*/
-    console.log("[(${n.getName()})]")
+        //$('#search-date').datepicker({"dateFormat":"yy/mm/dd"});
+        $('#myInput').on('change', function(){
 
-    /*[/]*/
+            table
+                .column(4)
+                .search(this.value)
+                .draw();
+
+        });
+
+    } );
+
 </script>
 
 

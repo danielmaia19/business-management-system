@@ -322,6 +322,13 @@
             <version>2.10.5</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.webjars/jQuery-Autocomplete -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jQuery-Autocomplete</artifactId>
+            <version>1.4.10</version>
+        </dependency>
+
 
 
 
