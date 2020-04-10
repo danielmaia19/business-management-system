@@ -4894,3 +4894,7 @@ ul.notifications {
   vertical-align: bottom;
   padding: 0;
 }
+
+.highcharts-credits {
+  display: none;
+}

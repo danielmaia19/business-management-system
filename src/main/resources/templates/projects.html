@@ -88,7 +88,7 @@
                                                     <a id="project-name" th:href="@{/projects/{name}(name = ${project.name})}"
                                                        th:text="${project.name}"></a>
                                                     <br/>
-                                                    <small th:text="${'Created on: ' + project.created_on.toLocaleString()}"></small>
+                                                    <small th:text="${'Created on: ' + project.createdOn.toLocaleString()}"></small>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline">

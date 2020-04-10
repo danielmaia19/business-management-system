@@ -70,7 +70,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text">£</span>
                                                 </div>
-                                                <input th:field="*{quotePrice}" type="number" class="form-control" id="quotePrice" min="0" data-bind="value:replyNumber" aria-label="Amount (to the nearest dollar)">
+                                                <input th:field="*{quotePrice}" type="number" class="form-control" id="quotePrice" min="0" data-bind="value:replyNumber" step=".01" aria-label="Amount (to the nearest dollar)">
                                             </div>
 
                                         </div>

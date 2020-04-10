@@ -89,7 +89,7 @@ public class ProjectsController {
 
         System.out.println(selectedClient.getName());
 
-        project.setCreated_on(new Date());
+        project.setCreatedOn(new Date());
 
         //project.setUser(currentUser);
         project.setClient(selectedClient);

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Project {
     private String description;
     private String status = "To Do";
     private int progress;
-    private Date created_on;
+    private Date createdOn;
     private BigDecimal quotePrice;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)

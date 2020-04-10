@@ -53,20 +53,24 @@
 
                                 <div class="col-md-9 col-sm-9  ">
 
-<!--                                    <ul class="stats-overview">-->
-<!--                                        <li>-->
-<!--                                            <span class="name"> Estimated budget </span>-->
-<!--                                            <span class="value text-success"> £2300 </span>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <span class="name"> Total amount spent </span>-->
-<!--                                            <span class="value text-success"> £2000 </span>-->
-<!--                                        </li>-->
-<!--                                        <li class="hidden-phone">-->
-<!--                                            <span class="name"> Estimated project duration </span>-->
-<!--                                            <span class="value text-success"> £20 </span>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
+                                    <ul class="stats-overview">
+                                        <li>
+                                            <span class="name"> Total Quoted </span>
+                                            <span class="value text-success" th:text="'£'+ ${totalQuoted}"></span>
+                                        </li>
+                                        <li>
+                                            <span class="name"> Total amount Paid </span>
+                                            <span class="value text-success"> £0.00 </span>
+                                        </li>
+                                        <li class="hidden-phone">
+                                            <span class="name"> Estimated project duration </span>
+                                            <span class="value text-success"> £0.00 </span>
+                                        </li>
+                                    </ul>
+
+                                    <br/>
+
+                                    <div id="container" style="width: 100%; height:400px;"></div>
 
                                     <br />
 
@@ -381,5 +385,77 @@
         toggleFullscreen();
     });
 </script>
+
+
+
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var client = /*[[${client.getName()}]]*/ 'client';
+
+    /*]]>*/
+
+
+    console.log(client);
+
+    $.ajax({
+        url: '/clients/' + client +'/chart',
+        success: function (result) {
+            var month = JSON.parse(result).month;
+            var count = JSON.parse(result).count;
+            drawLineChart(month, count);
+        },
+
+    });
+
+    function drawLineChart(month, count) {
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Yearly Projects'
+            },
+            subtitle: {
+                text: 'The number of projects for ' + client + ' over the last twelve months',
+            },
+            xAxis: {
+                categories: month,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                allowDecimals: false,
+                title: {
+                    text: 'No. of Projects'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Projects',
+                data: count
+
+            }]
+        });
+    }
+
+</script>
+
+
 </body>
 </html>
