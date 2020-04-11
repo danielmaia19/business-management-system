@@ -61,11 +61,11 @@
                             </div>
                             <div class="x_content">
 
-                                <div th:if="${#lists.isEmpty(test)}">
+                                <div th:if="${#lists.isEmpty(projects)}">
                                     There are no projects!
                                 </div>
 
-                                <div class="x_content" th:if="${!#lists.isEmpty(test)}">
+                                <div class="x_content" th:if="${!#lists.isEmpty(projects)}">
 
                                     <div class="table-responsive">
                                         <table class="table table-striped jambo_table bulk_action" id="myTable">
@@ -81,8 +81,8 @@
                                             </tr>
                                             </thead>
 
-                                            <tbody th:each="project : ${test}">
-                                            <tr>
+                                            <tbody>
+                                            <tr  th:each="project : ${projects}">
                                                 <td>#</td>
                                                 <td>
                                                     <a data="name" id="project-name" th:href="@{/projects/{name}(name = ${project.name})}"
@@ -117,65 +117,51 @@
                                                     <a th:href="@{/projects/{name}/edit (name=${project.name}) }"
                                                        class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit
                                                     </a>
-                                                    <a th:href="@{/projects/{name}/delete (name=${project.name}) }"
-                                                       data-toggle="modal" data-target=".bd-example-modal-sm"
-                                                       style="color: red" href="#" class="btn btn-link btn-sm"><i
-                                                            class="fa fa-trash-o"></i> Delete </a>
+                                                    <a th:href="@{/projects/{name}/delete (name=${project.name}) }" data-toggle="modal" data-target=".bd-example-modal-sm" style="color: red" href="#" class="btn btn-link btn-sm">
+                                                        <i class="fa fa-trash-o"></i> Delete </a>
+
+                                                    <!--  Modal Delete Confirmation  -->
+                                                    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
+                                                         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                            <div class="modal-content">
+
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Are you
+                                                                        sure?</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="modal-body">
+                                                                    <p>Are you sure you want to delete: <span
+                                                                            style="font-weight: bold"
+                                                                            th:text=" ${project.getName()}"></span></p>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.name})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                                                                    </form>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
                                                 </td>
                                             </tr>
-
-                                            <!--  Modal Delete Confirmation  -->
-                                            <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
-                                                 aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-sm modal-dialog-centered">
-                                                    <div class="modal-content">
-
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Are you
-                                                                sure?</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <p>Are you sure you want to delete: <span
-                                                                    style="font-weight: bold"
-                                                                    th:text=" ${project.getName()}"></span></p>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.name})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
-                                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
-                                                            </form>
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
 
 
                                             </tbody>
                                         </table>
 
                                     </div>
-
-                                    <nav aria-label="Page navigation example" class="demo1" th:style="${test.getTotalPages() < 2} ? 'display:none' : ''">
-                                        <ul class="pagination justify-content-end">
-                                            <li class="page-item" th:classappend="${!test.hasPrevious()} ? 'disabled' : ''">
-                                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                            </li>
-                                            <li class="page-item" th:each="i: ${#numbers.sequence(1, test.getTotalPages())}" th:classappend="${currentPage} == ${i} ? 'active' : ''">
-                                                <a class="page-link" th:text="${i}" th:href="@{/projects(page=${i})}"></a></li>
-                                            <li class="page-item" th:classappend="${!test.hasNext()} ? 'disabled' : ''">
-                                                <a class="page-link" th:href="@{/projects(page=${currentPage+1})}">Next</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-
 
                                 </div>
                             </div>
@@ -189,104 +175,57 @@
 
     </div>
 
-    <script>
-        setTimeout(function () {
-            $('#mydiv').fadeOut('slow');
-        }, 3000); // <-- time in milliseconds
-    </script>
-
-    <script src="js/custom.min.js"></script>
-    <script>
-        function toggleFullscreen(elem) {
-            elem = elem || document.documentElement;
-            if (!document.fullscreenElement && !document.mozFullScreenElement &&
-                !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                } else if (elem.mozRequestFullScreen) {
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
-            }
-        }
-
-        document.getElementById('linkFullscreen').addEventListener('click', function () {
-            toggleFullscreen();
-        });
-    </script>
-
-
-
 </div>
 </body>
 <div th:insert="components/footer"></div>
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-
 <script>
 
-    // function myFunction() {
-    //     var input, filter, table, tr, td, i, txtValue;
-    //     input = document.getElementById("myInput");
-    //     filter = input.value.toUpperCase();
-    //     table = document.getElementById("myTable");
-    //     tr = table.getElementsByTagName("tr");
-    //     for (i = 0; i < tr.length; i++) {
-    //         td = tr[i].getElementsByTagName("td")[0];
-    //         if (td) {
-    //             txtValue = td.textContent || td.innerText;
-    //             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-    //                 tr[i].style.display = "";
-    //             } else {
-    //                 tr[i].style.display = "none";
-    //             }
-    //         }
-    //     }
-    // }
-
     $(document).ready(function() {
-        var table = $('#myTable').DataTable();
-
-        //$('#search-date').datepicker({"dateFormat":"yy/mm/dd"});
-        $('#myInput').on('change', function(){
-
-            table
-                .column(4)
-                .search(this.value)
-                .draw();
-
-        });
-
+        $('#myTable').DataTable();
     } );
 
 </script>
 
-
 <script>
-    $('.demo1').bootpag({
-        total: 1
-    }).on("page", function(event, num){
-        $("#myTable").html("Page " + num); // or some ajax content loading...
+    setTimeout(function () {
+        $('#mydiv').fadeOut('slow');
+    }, 3000); // <-- time in milliseconds
+</script>
 
-        // ... after content load -> change total to 10
-        $(this).bootpag({total: 10, maxVisible: 10});
+<script src="js/custom.min.js"></script>
+<script>
+    function toggleFullscreen(elem) {
+        elem = elem || document.documentElement;
+        if (!document.fullscreenElement && !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        }
+    }
 
+    document.getElementById('linkFullscreen').addEventListener('click', function () {
+        toggleFullscreen();
     });
 </script>
+
 
 
 </html>

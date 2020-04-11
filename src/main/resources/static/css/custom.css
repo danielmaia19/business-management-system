@@ -4923,3 +4923,11 @@ ul.notifications {
 .autocomplete-selected { background: #F0F0F0; }
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+.dataTables_scrollBody {
+  width: 98%
+}
+
+table.dataTable.no-footer {
+  width: 99.9%;
+}

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,29 +43,18 @@ public class ProjectsController {
 
     //Show all users projects
     @GetMapping("/projects")
-    public String index(ModelMap model, Project project, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size, Authentication authentication) {
+    public String index(ModelMap model, Project project, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
         List<Client> clients = clientService.findAllByUser(currentUser);
+        List<Project> projects = new ArrayList<>();
 
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(10);
-
-        Page<Project> projects = projectService.findAllUsersProjectsPages(clients, PageRequest.of(currentPage-1, pageSize));
-
-        //Page<Project> page = projectService.findAll(pageable);
-        model.addAttribute("test", projects);
-
-        int totalPages = projects.getTotalPages();
-        if(totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1,totalPages).boxed().collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+        for(Client client : clients) {
+            projects.addAll(client.getProjects());
         }
 
+        model.addAttribute("projects", projects);
         model.addAttribute("name", currentUser.getFullName());
-        model.addAttribute("currentPage", currentPage);
-        //model.addAttribute("projects", projects);
-
         return "projects";
     }
 
@@ -138,7 +128,6 @@ public class ProjectsController {
 
     @PostMapping("/projects/{name}/delete")
     public String projectDelete(@PathVariable String name, Model model, RedirectAttributes redirectAttributes) {
-
         try {
             projectService.deleteProjectByName(name);
             redirectAttributes.addFlashAttribute("successDeletion", "Successfully removed the project");
@@ -146,7 +135,6 @@ public class ProjectsController {
             System.out.println("there was an error");
             redirectAttributes.addFlashAttribute("failedDeletion", "Failed to remove the project");
         }
-
         return "redirect:/projects";
     }
 
