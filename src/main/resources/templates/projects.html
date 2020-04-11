@@ -34,14 +34,14 @@
                         <h3>Projects</h3>
                     </div>
 
-                    <div class="title_right">
-                        <div class="col-md-5 col-sm-5  form-group pull-right top_search">
-                            <div class="input-group">
-                                <input type="text" class="form-control" onkeyup="myFunction()" id="myInput" placeholder="Search for Projects...">
-                                <span class="input-group-btn"></span>
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div class="title_right">-->
+<!--                        <div class="col-md-5 col-sm-5  form-group pull-right top_search">-->
+<!--                            <div class="input-group">-->
+<!--                                <input type="text" class="form-control" onkeyup="myFunction()" id="myInput" placeholder="Search for Projects...">-->
+<!--                                <span class="input-group-btn"></span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                 </div>
 
@@ -83,7 +83,7 @@
 
                                             <tbody>
                                             <tr  th:each="project : ${projects}">
-                                                <td>#</td>
+                                                <td th:text="${project.project_id}"></td>
                                                 <td>
                                                     <a data="name" id="project-name" th:href="@{/projects/{name}(name = ${project.name})}"
                                                        th:text="${project.name}"></a>
@@ -117,47 +117,12 @@
                                                     <a th:href="@{/projects/{name}/edit (name=${project.name}) }"
                                                        class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit
                                                     </a>
-                                                    <a th:href="@{/projects/{name}/delete (name=${project.name}) }" data-toggle="modal" data-target=".bd-example-modal-sm" style="color: red" href="#" class="btn btn-link btn-sm">
+                                                    <a data-toggle="modal" data-target=".bd-example-modal-sm" style="color: red" class="btn btn-link btn-sm delete">
                                                         <i class="fa fa-trash-o"></i> Delete </a>
 
-                                                    <!--  Modal Delete Confirmation  -->
-                                                    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
-                                                         aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-sm modal-dialog-centered">
-                                                            <div class="modal-content">
-
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">Are you
-                                                                        sure?</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal"
-                                                                            aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-
-                                                                <div class="modal-body">
-                                                                    <p>Are you sure you want to delete: <span
-                                                                            style="font-weight: bold"
-                                                                            th:text=" ${project.getName()}"></span></p>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.name})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
-                                                                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
-                                                                    </form>
-
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
+                                                    <input type="hidden" id="projectName" th:value="${project.name}"/>
                                                 </td>
                                             </tr>
-
-
                                             </tbody>
                                         </table>
 
@@ -172,6 +137,34 @@
         </div>
         <!-- /page content -->
 
+        <!--  Modal Delete Confirmation  -->
+        <div class="modal fade bd-example-modal-sm" id="deleteProject" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+
+                    <form class="form-horizontal" th:action="@{/projects/{name}/delete(name=${project.name})}" method="POST" enctype="UTF8">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete: <span style="font-weight: bold" class="project"></span></p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                            <input type="hidden" name="projectName" id="projectName">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -179,22 +172,34 @@
 </body>
 <div th:insert="components/footer"></div>
 
+<script src="js/custom.min.js"></script>
 <script>
 
     $(document).ready(function() {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            "caseInsensitive": true,
+            language: {
+                searchPlaceholder: "Search Project by Name, ID or Client",
+                search: "",
+            }
+        });
     } );
 
-</script>
+    // Handles the view for modal for each of the clients.
+    // Alters the POST request
+    $(document).ready(function() {
+        $('table .delete').on('click', function() {
+            var name = $(this).parent().find('#projectName').val();
+           // alert(name + ' value');
+            $('#deleteProject #projectName').val(name);
+            $( ".project" ).replaceWith("<span style=\"font-weight: bold\" class=\"project\">" + name + " </span>");
 
-<script>
-    setTimeout(function () {
-        $('#mydiv').fadeOut('slow');
-    }, 3000); // <-- time in milliseconds
-</script>
+            $('form').attr('action', function(i, value) {
+                return "/projects/" + name + "/delete";
+            });
+        });
+    });
 
-<script src="js/custom.min.js"></script>
-<script>
     function toggleFullscreen(elem) {
         elem = elem || document.documentElement;
         if (!document.fullscreenElement && !document.mozFullScreenElement &&
@@ -221,12 +226,13 @@
         }
     }
 
+    setTimeout(function () {
+        $('#mydiv').fadeOut('slow');
+    }, 3000); // <-- time in milliseconds
+
     document.getElementById('linkFullscreen').addEventListener('click', function () {
         toggleFullscreen();
     });
 </script>
-
-
-
 </html>
 

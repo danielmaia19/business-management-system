@@ -4931,3 +4931,13 @@ ul.notifications {
 table.dataTable.no-footer {
   width: 99.9%;
 }
+
+.dataTables_wrapper .dataTables_filter input {
+
+  /*margin-left: 0.5em;*/
+  width: 250px;
+  border-radius: 5px;
+  font-family: inherit;
+  padding: 5px 5px;
+
+}
