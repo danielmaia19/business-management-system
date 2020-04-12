@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.*;
+import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Service.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.persistence.NonUniqueResultException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -145,16 +149,23 @@ public class ClientsController {
 
     // Edit client
     @PostMapping(value = "/clients/{name}/edit")
-    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, Authentication authentication){
-        //TODO: Handle errors to show in modal
-        if (bindingResult.hasErrors()) {
-            return "clients";
+    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, RedirectAttributes redirectAttributes, Authentication authentication) {
+
+        User user = (User) authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
+
+
+        
+        
+        if(!client.getName().equals(name) && clientService.existsByName(client.getName())) {
+            redirectAttributes.addFlashAttribute("duplicateClient", "This client already exists");
+            System.out.println("client.getName exists");
+            return "redirect:/clients/"+name;
         } else {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
             Client updatedClient = clientService.findByName(name);
-
             updatedClient.setName(client.getName());
             updatedClient.setCity(client.getCity());
             updatedClient.setRegion(client.getRegion());
@@ -170,8 +181,11 @@ public class ClientsController {
 
             clientService.saveClient(updatedClient);
 
-            return "redirect:/clients/"+updatedClient.getName();
+            return "redirect:/clients/" + updatedClient.getName();
         }
+
+
+
 
     }
 
