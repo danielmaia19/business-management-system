@@ -152,19 +152,18 @@ public class ClientsController {
 
     // Edit client
     @PostMapping(value = "/clients/{name}/edit")
-    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, Authentication authentication){
+    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, RedirectAttributes redirectAttributes, Authentication authentication){
 
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
-
-        //TODO: Handle errors to show in modal
-        if (bindingResult.hasErrors()) {
-            return "clients";
+        if (!client.getName().equals(name) && clientService.existsByName(client.getName())) {
+            System.out.println("the client already exists");
+            redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
+            return "redirect:/clients/" + name;
         } else {
 
             Client updatedClient = clientService.findByName(name);
-
 
             updatedClient.setName(client.getName());
             updatedClient.setCity(client.getCity());
@@ -180,9 +179,8 @@ public class ClientsController {
 
             clientService.saveClient(updatedClient);
 
-            return "redirect:/clients/"+updatedClient.getName();
+            return "redirect:/clients/" + updatedClient.getName();
         }
-
     }
 
     // Delete client

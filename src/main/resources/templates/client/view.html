@@ -502,10 +502,12 @@
         lookup: countries,
     });
 
-
     if($('#addressLineTwo').text() == "") {
         $('span.addressLineTwo').hide();
         $('#addressLineTwoBR').hide();
+    } else {
+        $('span.addressLineTwo').show();
+        $('#addressLineTwoBR').show();
     }
 
 </script>

@@ -20,7 +20,7 @@ public class Client {
     @Column(unique = true)
     private Long client_id;
 
-    @Column(unique = true)
+    @Column
     @NotEmpty(message = "Please enter a Client name")
     private String name;
 
