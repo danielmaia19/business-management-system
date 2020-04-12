@@ -43,4 +43,9 @@ public class ClientService {
     public void deleteClient(Client client) {
         clientRepository.delete(client);
     }
+
+    public boolean existsByName(String name) {
+        return clientRepository.existsByName(name);
+    }
+
 }

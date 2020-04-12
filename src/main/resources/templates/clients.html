@@ -15,8 +15,16 @@
 
         <div th:insert="components/top-navigation"></div>
 
+
+
         <!-- page content -->
         <div class="right_col" role="main">
+
+            <div style="float:right; width:100%; text-align: center" th:if="${error}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                Client Already Exists
+            </div>
+
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
@@ -93,7 +101,7 @@
                                     <input th:field="*{name}" id="name" name="name" type="text" class="form-control"
                                            required placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
-                                          id="error-validName">Cannot be empty</span>
+                                          id="name-exists">Client already exists</span>
                                 </div>
                             </div>
 
@@ -183,7 +191,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" onclick="javascript:window.location='/clients'" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="submit" id="btnSubmit" class="btn btn-primary">Save changes</button>
                             </div>
 
@@ -276,6 +284,11 @@
         lookup: countries,
     });
 
+    setTimeout(function () {
+        $('#mydiv').fadeOut('slow');
+    }, 3000); // <-- time in milliseconds
+
 </script>
+
 </body>
 </html>

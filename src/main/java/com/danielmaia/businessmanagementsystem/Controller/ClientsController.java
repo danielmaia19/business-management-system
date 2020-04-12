@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -59,14 +61,19 @@ public class ClientsController {
 
     // Save client created by user
     @PostMapping(path = "/clients")
-    public String createClient(@ModelAttribute("client") Client client, BindingResult bindingResult, Authentication authentication) {
+    public String createClient(Model model, @ModelAttribute("client") Client client, RedirectAttributes redirectAttributes, Authentication authentication) {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
-            client.setUser(currentUser);
-            clientService.saveClient(client);
-
-            return "redirect:/clients";
+            if(clientService.existsByName(client.getName())) {
+                System.out.println("Client already exists");
+                redirectAttributes.addFlashAttribute("error", "client already exists");
+                return "redirect:/clients";
+            } else {
+                client.setUser(currentUser);
+                clientService.saveClient(client);
+                return "redirect:/clients";
+            }
     }
 
     // View selected client, its information and all the notes.
@@ -146,14 +153,18 @@ public class ClientsController {
     // Edit client
     @PostMapping(value = "/clients/{name}/edit")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, Authentication authentication){
+
+        User user = (User) authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
+
+
         //TODO: Handle errors to show in modal
         if (bindingResult.hasErrors()) {
             return "clients";
         } else {
-            User user = (User) authentication.getPrincipal();
-            User currentUser = userService.findByUsername(user.getUsername());
 
             Client updatedClient = clientService.findByName(name);
+
 
             updatedClient.setName(client.getName());
             updatedClient.setCity(client.getCity());
@@ -165,7 +176,6 @@ public class ClientsController {
             updatedClient.setAddressLineOne(client.getAddressLineOne());
             updatedClient.setAddressLineTwo(client.getAddressLineTwo());
             updatedClient.setContactPersonEmail(client.getContactPersonEmail());
-
             updatedClient.setUser(currentUser);
 
             clientService.saveClient(updatedClient);
