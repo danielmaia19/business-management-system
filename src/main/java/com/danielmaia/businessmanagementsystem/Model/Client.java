@@ -25,30 +25,14 @@ public class Client {
     private String name;
 
     @Column
-    @NotEmpty
     private String addressLineOne;
-
     private String addressLineTwo;
-
-    @NotEmpty
     private String city;
-
-    @NotEmpty
     private String region;
-
-    @NotEmpty
     private String postCode;
-
-    @NotEmpty
     private String country;
-
-    @NotEmpty
     private String description;
-
-    @NotEmpty
     private String contactPerson;
-
-    @NotEmpty
     private String contactPersonEmail;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
