@@ -103,14 +103,12 @@
         </div>
         <!-- /page content -->
 
-        <div th:insert="components/footer"></div>
     </div>
 </div>
 
-
+<div th:insert="components/footer"></div>
 <script src="/js/custom.min.js"></script>
 <script>
-
     function check(e,value){
         //Check Charater
         var unicode=e.charCode? e.charCode : e.keyCode;
@@ -139,36 +137,6 @@
             e.which == 8 || // delete key
             /[0-9]/.test(String.fromCharCode(e.which)); // numbers
     })
-
-
-    function toggleFullscreen(elem) {
-        elem = elem || document.documentElement;
-        if (!document.fullscreenElement && !document.mozFullScreenElement &&
-            !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
-        }
-    }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
-        toggleFullscreen();
-    });
 </script>
 
 </body>
