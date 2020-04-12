@@ -3,7 +3,6 @@
 
 <div th:insert="components/header"></div>
 
-
 <body class="nav-md">
 <div class="container body">
     <div class="main_container">
@@ -45,18 +44,26 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Client Details</h3>
+                        <h3 th:text="${client.getName()}">Client Details</h3>
                     </div>
+
                 </div>
 
                 <div class="clearfix"></div>
-
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2 th:text="${name}"></h2>
+                                <h2 th:text="${client.getName()}"></h2>
+                                <button style="float:right" type="button" class="btn btn-danger btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".bd-example-modal-sm">Delete Client
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-primary btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#exampleModalCenter">Edit Client
+                                </button>
 
                                 <div class="clearfix"></div>
                             </div>
@@ -79,7 +86,6 @@
                                             <span class="value text-success"> £0.00 </span>
                                         </li>
                                     </ul>
-
                                     <br/>
 
                                     <div id="container" style="width: 100%; height:400px;"></div>
@@ -95,7 +101,7 @@
                                           th:action="@{/clients/{name}/add(name = ${client.getName()})}"
                                           th:object="${note}" method="POST" enctype="UTF8">
                                         <div class="form-group row">
-                                            <div class="col-md-12">
+                                            <div style="padding-left:0px;" class="col-md-12">
                                                 <textarea th:field="*{user_note}" id="user_note" name="user_note"
                                                           class="resizable_textarea form-control"
                                                           placeholder="Enter a note...."></textarea>
@@ -103,7 +109,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-12" style="padding-left: 0px">
                                                 <button type="submit" class="btn btn-primary btn-sm">Save Note</button>
                                             </div>
                                         </div>
@@ -148,6 +154,7 @@
 
                                         </ul>
                                         <!-- end of user messages -->
+
                                     </div>
                                 </div>
 
@@ -179,7 +186,8 @@
                                                 <h5 class="title">Client Address</h5>
                                                 <span th:text="${client.getAddressLineOne()}"></span>
                                                 <br/>
-                                                <span id="addressLineTwo" class="addressLineTwo" th:text="${client.getAddressLineTwo()}"></span>
+                                                <span id="addressLineTwo" class="addressLineTwo"
+                                                      th:text="${client.getAddressLineTwo()}"></span>
                                                 <br id="addressLineTwoBR"/>
                                                 <span th:text="${client.getCity()}"></span>
                                                 <br/>
@@ -233,26 +241,28 @@
                                             <br/>
                                             <br/>
 
-                                            <div class="text-left mtop20">
+<!--                                            <div class="text-left mtop20">-->
 
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                        data-target="#exampleModalCenter">Edit Client
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                        data-target=".bd-example-modal-sm">Delete Client
-                                                </button>
+<!--                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"-->
+<!--                                                        data-target="#exampleModalCenter">Edit Client-->
+<!--                                                </button>-->
+<!--                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"-->
+<!--                                                        data-target=".bd-example-modal-sm">Delete Client-->
+<!--                                                </button>-->
 
-                                            </div>
+<!--                                            </div>-->
                                         </div>
 
                                     </section>
 
                                 </div>
                                 <!-- end project-detail sidebar -->
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!-- /page content -->
@@ -355,6 +365,7 @@
                                               name="description" data-parsley-trigger="keyup"
                                               data-parsley-minlength="20"
                                               data-parsley-maxlength="100"
+                                              rows="5"
                                               data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
                                               data-parsley-validation-threshold="10"
                                               placeholder="Description">
@@ -407,12 +418,11 @@
         </div>
 
     </div>
-
 </div>
 
-
 <div th:insert="components/footer"></div>
-<script src="js/custom.min.js"></script>
+<script src="/js/custom.min.js"></script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
 
@@ -502,7 +512,7 @@
         lookup: countries,
     });
 
-    if($('#addressLineTwo').text() == "") {
+    if ($('#addressLineTwo').text() == "") {
         $('span.addressLineTwo').hide();
         $('#addressLineTwoBR').hide();
     } else {
