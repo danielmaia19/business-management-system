@@ -47,33 +47,38 @@
                                         <div class="form-group col-md-4">
                                             <label for="project-manager">Assign Client:</label>
                                             <select th:field="*{client}" id="project" class="form-control">
-                                                <option hidden selected value="">-- Assign Client --</option>
                                                 <option th:each="client : ${clients}" th:text="${client.getName()}" th:value="${client.getName()}" th:selected="${client.getName()}"></option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="form-row">
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-2">
                                             <label for="project-name">Contact Person Full Name:</label>
                                             <input th:field="*{contactPerson}" type="text" class="form-control" id="contactPerson" placeholder="Project Name">
                                         </div>
 
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-2">
                                             <label for="project-manager">Project Progress:</label>
-                                            <input th:field="*{progress}" type="number" class="form-control" id="progress" min="0" max="100" data-bind="value:replyNumber" />
+                                            <input th:field="*{progress}" onKeyPress="return check(event,value)" onInput="checkLength()" type="number" class="form-control" id="progress" min="0" max="100" maxlength="3" data-bind="value:replyNumber" />
                                         </div>
 
                                         <div class="form-group col-md-2">
                                             <label for="project-manager">Quoted Price:</label>
-                                            <input th:field="*{quotePrice}" type="number" class="form-control" id="quotePrice" min="0" data-bind="value:replyNumber" />
+
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">£</span>
+                                                </div>
+                                                <input th:field="*{quotePrice}" type="number" class="form-control" id="quotePrice" min="0" data-bind="value:replyNumber" step=".01" aria-label="Amount (to the nearest dollar)">
+                                            </div>
+
                                         </div>
 
                                         <div class="form-group col-md-2">
                                             <label for="project-manager">Status:</label>
                                             <select th:field="*{status}" id="status" class="form-control">
-                                                <!--                                                <option hidden selected value="" th:text="${project.getStatus()}"></option>-->
-                                                <option th:value="To + ' ' + do" >To Do </option>
+                                                <option th:value="To + ' ' + Do" >To Do </option>
                                                 <option th:value="In + ' ' + Progress" >In Progress</option>
                                                 <option th:value="Completed">Completed</option>
                                             </select>
@@ -94,48 +99,44 @@
                     </div>
                 </div>
 
-
-
-
             </div>
         </div>
         <!-- /page content -->
 
-        <div th:insert="components/footer"></div>
     </div>
 </div>
 
-
+<div th:insert="components/footer"></div>
 <script src="/js/custom.min.js"></script>
 <script>
-    function toggleFullscreen(elem) {
-        elem = elem || document.documentElement;
-        if (!document.fullscreenElement && !document.mozFullScreenElement &&
-            !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
+    function check(e,value){
+        //Check Charater
+        var unicode=e.charCode? e.charCode : e.keyCode;
+        if (value.indexOf(".") != -1)if( unicode == 46 )return false;
+        if (unicode!=8)if((unicode<48||unicode>57)&&unicode!=46)return false;
+    }
+
+    function checkLength(){
+        var fieldVal = document.getElementById('progress').value;
+        //Suppose u want 3 number of character
+
+        if(fieldVal <= 100){
+            return true;
+        }
+        else
+        {
+            var str = document.getElementById('progress').value;
+            str = str.substring(0, str.length - 1);
+            document.getElementById('progress').value = str;
         }
     }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
-        toggleFullscreen();
-    });
+
+    $('#progress').on('keypress', function(e){
+        return e.metaKey || // cmd/ctrl
+            e.which <= 0 || // arrow keys
+            e.which == 8 || // delete key
+            /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+    })
 </script>
 
 </body>

@@ -8,21 +8,25 @@ import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ClientNoteService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -51,31 +55,25 @@ class ClientsControllerIT {
     @Autowired
     private MockMvc mvc;
 
-    private User user;
     private Client client;
     private List<Client> clients = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
-        user = new User("Daniel", "Maia", "dmaia", "password", "dmaia@gmail.com");
+        client = new Client("Client Name", (User) userService.loadUserByUsername("admin"));
 
-        client = new Client("Client Name", user);
+        clients.add(new Client("Client 1", userService.findByUsername("admin")));
+        clients.add(new Client("Client 2", userService.findByUsername("admin")));
 
-        clients.add(new Client("Client 1", user));
-        clients.add(new Client("Client 2", user));
     }
 
     @Test
     @DisplayName("Client Page View OK?")
     void index() throws Exception {
-        clientService.saveAllClients(clients);
-
-        User adminUser = userService.findByUsername("admin");
-
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attribute("name", "Admin Admin"))
-                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findAllByUser(adminUser)))
+                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findAllByUser((User) userService.loadUserByUsername("admin"))))
+                .andExpect(MockMvcResultMatchers.model().attribute("name", ((User) userService.loadUserByUsername("admin")).getFullName()))
                 .andExpect(view().name("clients"));
     }
 
@@ -97,7 +95,7 @@ class ClientsControllerIT {
 
     @Test
     @DisplayName("User Can View Client Page")
-    public void testViewClientsAndNotes() throws Exception {
+    public void testViewClientAndNotes() throws Exception {
         clientService.saveClient(client);
         String viewClient = controller.viewClientsAndNotes(client.getName(), new ClientNote("Some Note", client), model);
 
@@ -109,7 +107,5 @@ class ClientsControllerIT {
         assertThat(viewClient).isNotNull();
         assertThat("client/view").isEqualToIgnoringCase(viewClient);
     }
-
-
 
 }

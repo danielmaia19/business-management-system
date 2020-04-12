@@ -7,6 +7,10 @@ import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,9 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @Transactional
@@ -39,7 +46,6 @@ public class ProjectsController {
     public String index(ModelMap model, Project project, Authentication authentication) {
         User user = (User)authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-
         List<Client> clients = clientService.findAllByUser(currentUser);
         List<Project> projects = new ArrayList<>();
 
@@ -47,9 +53,8 @@ public class ProjectsController {
             projects.addAll(client.getProjects());
         }
 
-        model.addAttribute("name", currentUser.getFullName());
         model.addAttribute("projects", projects);
-
+        model.addAttribute("name", currentUser.getFullName());
         return "projects";
     }
 
@@ -70,20 +75,17 @@ public class ProjectsController {
     // Add new projects
     @PostMapping(path = "/projects")
     public String createClient(@RequestParam("client") String client, @ModelAttribute("project") @Valid Project project, BindingResult bindingResult, Authentication authentication) {
-            User user = (User) authentication.getPrincipal();
-            User currentUser = userService.findByUsername(user.getUsername());
+        Client selectedClient = clientService.findByName(client);
 
-            Client selectedClient = clientService.findByName(client);
+        System.out.println(selectedClient.getName());
 
-            System.out.println(selectedClient.getName());
+        project.setCreatedOn(new Date());
 
-            project.setCreated_on(new Date());
+        //project.setUser(currentUser);
+        project.setClient(selectedClient);
+        projectService.saveProject(project);
 
-            //project.setUser(currentUser);
-            project.setClient(selectedClient);
-            projectService.saveProject(project);
-
-            return "redirect:/projects";
+        return "redirect:/projects";
     }
 
     // Individual project view
@@ -126,7 +128,6 @@ public class ProjectsController {
 
     @PostMapping("/projects/{name}/delete")
     public String projectDelete(@PathVariable String name, Model model, RedirectAttributes redirectAttributes) {
-
         try {
             projectService.deleteProjectByName(name);
             redirectAttributes.addFlashAttribute("successDeletion", "Successfully removed the project");
@@ -134,7 +135,6 @@ public class ProjectsController {
             System.out.println("there was an error");
             redirectAttributes.addFlashAttribute("failedDeletion", "Failed to remove the project");
         }
-
         return "redirect:/projects";
     }
 

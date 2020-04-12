@@ -22,7 +22,7 @@
                  class="alert alert-success alert-dismissible fade show">
                 The project was successfully deleted
             </div>
-            .
+
             <div style="float:right; width:100%; text-align: center" th:if="${failedDeletion}" id="mydiv"
                  class="alert alert-danger alert-dismissible fade show">
                 The project was not able to be deleted. Please contact support.
@@ -33,7 +33,6 @@
                     <div class="title_left">
                         <h3>Projects</h3>
                     </div>
-
                 </div>
 
                 <div class="clearfix"></div>
@@ -59,7 +58,7 @@
                                 <div class="x_content" th:if="${!#lists.isEmpty(projects)}">
 
                                     <div class="table-responsive">
-                                        <table class="table table-striped jambo_table bulk_action">
+                                        <table class="table table-striped jambo_table bulk_action" id="myTable">
                                             <thead>
                                             <tr>
                                                 <th style="width: 1%">#</th>
@@ -72,14 +71,15 @@
                                             </tr>
                                             </thead>
 
-                                            <tbody th:each="project : ${projects}">
-                                            <tr>
-                                                <td>#</td>
+                                            <tbody>
+                                            <tr th:each="project : ${projects}">
+                                                <td th:text="${project.project_id}"></td>
                                                 <td>
-                                                    <a th:href="@{/projects/{name}(name = ${project.getName()})}"
-                                                       th:text="${project.getName()}"></a>
+                                                    <a data="name" id="project-name"
+                                                       th:href="@{/projects/{name}(name = ${project.name})}"
+                                                       th:text="${project.name}"></a>
                                                     <br/>
-                                                    <small th:text="${'Created on: ' + project.getCreated_on().toLocaleString()}"></small>
+                                                    <small th:text="${'Created on: ' + project.createdOn.toLocaleString()}"></small>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline">
@@ -92,67 +92,33 @@
                                                     <div class="progress">
                                                         <div class="progress-bar-success" role="progressbar"
                                                              aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
-                                                             th:style="'width:' + ${project.getProgress()} + '%'">
+                                                             th:style="'width:' + ${project.progress} + '%'">
                                                         </div>
                                                         <span class="sr-only">0% Complete</span>
                                                     </div>
                                                     <small th:text="${project.progress} + '% Complete'"></small>
                                                 </td>
                                                 <td style="padding-top: 21px">
-                                                    <h7 th:text="${project.getClient().getName()}"></h7>
+                                                    <h7 th:text="${project.client.name}"></h7>
                                                 </td>
                                                 <td style="padding-top: 21px">
-                                                    <h7 th:text="${project.getStatus()}"></h7>
+                                                    <h7 th:text="${project.status}"></h7>
                                                 </td>
                                                 <td>
-                                                    <a th:href="@{/projects/{name}/edit (name=${project.getName()}) }"
+                                                    <a th:href="@{/projects/{name}/edit (name=${project.name}) }"
                                                        class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit
                                                     </a>
-                                                    <a th:href="@{/projects/{name}/delete (name=${project.getName()}) }"
-                                                       data-toggle="modal" data-target=".bd-example-modal-sm"
-                                                       style="color: red" href="#" class="btn btn-link btn-sm"><i
-                                                            class="fa fa-trash-o"></i> Delete </a>
+                                                    <a data-toggle="modal" data-target=".bd-example-modal-sm"
+                                                       style="color: red" class="btn btn-link btn-sm delete">
+                                                        <i class="fa fa-trash-o"></i> Delete </a>
+
+                                                    <input type="hidden" id="projectName" th:value="${project.name}"/>
                                                 </td>
                                             </tr>
-
-                                            <!--  Modal Delete Confirmation  -->
-                                            <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
-                                                 aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-sm modal-dialog-centered">
-                                                    <div class="modal-content">
-
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Are you
-                                                                sure?</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            <p>Are you sure you want to delete: <span
-                                                                    style="font-weight: bold"
-                                                                    th:text=" ${project.getName()}"></span></p>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.getName()})}" th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
-                                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
-                                                            </form>
-
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                             </tbody>
                                         </table>
-                                    </div>
 
+                                    </div>
 
                                 </div>
                             </div>
@@ -163,47 +129,76 @@
         </div>
         <!-- /page content -->
 
-        <div th:insert="components/footer"></div>
+        <!--  Modal Delete Confirmation  -->
+        <div class="modal fade bd-example-modal-sm" id="deleteProject" tabindex="-1" role="dialog"
+             aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+
+                    <form class="form-horizontal" th:action="@{/projects/{name}/delete(name=${project.name})}"
+                          method="POST" enctype="UTF8">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete: <span style="font-weight: bold" class="project"></span>
+                            </p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                            <input type="hidden" name="projectName" id="projectName">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        setTimeout(function () {
-            $('#mydiv').fadeOut('slow');
-        }, 3000); // <-- time in milliseconds
-    </script>
+</div>
 
-    <script src="js/custom.min.js"></script>
-    <script>
-        function toggleFullscreen(elem) {
-            elem = elem || document.documentElement;
-            if (!document.fullscreenElement && !document.mozFullScreenElement &&
-                !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.msRequestFullscreen) {
-                    elem.msRequestFullscreen();
-                } else if (elem.mozRequestFullScreen) {
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) {
-                    elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                }
+<div th:insert="components/footer"></div>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "caseInsensitive": true,
+            language: {
+                searchPlaceholder: "Search Project by Name, ID or Client",
+                search: "",
             }
-        }
-
-        document.getElementById('linkFullscreen').addEventListener('click', function () {
-            toggleFullscreen();
         });
-    </script>
+    });
+
+    // Handles the view for modal for each of the clients.
+    // Alters the POST request
+    $(document).ready(function () {
+        $('table .delete').on('click', function () {
+            var name = $(this).parent().find('#projectName').val();
+            // alert(name + ' value');
+            $('#deleteProject #projectName').val(name);
+            $(".project").replaceWith("<span style=\"font-weight: bold\" class=\"project\">" + name + " </span>");
+
+            $('form').attr('action', function (i, value) {
+                return "/projects/" + name + "/delete";
+            });
+        });
+    });
+
+    setTimeout(function () {
+        $('#mydiv').fadeOut('slow');
+    }, 3000); // <-- time in milliseconds
+
+</script>
 
 </body>
 </html>
+

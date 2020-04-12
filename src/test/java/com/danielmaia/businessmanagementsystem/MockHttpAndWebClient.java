@@ -17,6 +17,7 @@ public class MockHttpAndWebClient {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUri().toURL().toString();
         WebClient webClient = new WebClient();
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
         return webClient.getPage(baseUrl + ":" + port + uriPath);
     }
 

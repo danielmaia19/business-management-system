@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class Project {
     private String name;
     private String contactPerson;
     private String description;
-    private String status = "To do";
+    private String status = "To Do";
     private int progress;
-    private Date created_on;
+    private Date createdOn;
     private BigDecimal quotePrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 

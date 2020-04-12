@@ -27,7 +27,6 @@
 
                 <div class="clearfix"></div>
 
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x_panel">
@@ -37,7 +36,8 @@
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
                                     <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                           aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                             <a class="dropdown-item" href="#">Settings 1</a>
                                             <a class="dropdown-item" href="#">Settings 2</a>
@@ -67,7 +67,7 @@
                                             <span class="value text-success"> £20 </span>
                                         </li>
                                     </ul>
-                                    <br />
+                                    <br/>
 
                                     <div id="mainb"></div>
                                     <figure class="highcharts-figure">
@@ -92,11 +92,16 @@
                                                 </div>
                                                 <div class="message_wrapper">
                                                     <h4 class="heading">Desmond Davison</h4>
-                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
-                                                    <br />
+                                                    <blockquote class="message">Raw denim you probably haven't heard of
+                                                        them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher
+                                                        retro keffiyeh dreamcatcher synth.
+                                                    </blockquote>
+                                                    <br/>
                                                     <p class="url">
-                                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                                        <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
+                                                        <span class="fs1 text-info" aria-hidden="true"
+                                                              data-icon=""></span>
+                                                        <a href="#"><i class="fa fa-paperclip"></i> User Acceptance
+                                                            Test.doc </a>
                                                     </p>
                                                 </div>
                                             </li>
@@ -117,29 +122,22 @@
                                         <div class="panel-body">
                                             <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>
 
-                                            <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
-                                            <br />
+                                            <p th:text="${project.description}"></p>
+                                            <br/>
 
                                             <div class="project_detail">
                                                 <p class="title">Contact Person</p>
-                                                <p>Tony Chicken</p>
+                                                <p th:text="${project.contactPerson}"></p>
                                             </div>
 
-                                            <br />
+                                            <br/>
                                             <h5>Project files</h5>
                                             <ul class="list-unstyled project_files">
-                                                <li><a href=""><i class="fa fa-file-word-o"></i> Functional-requirements.docx</a>
-                                                </li>
-                                                <li><a href=""><i class="fa fa-file-pdf-o"></i> UAT.pdf</a>
-                                                </li>
-                                                <li><a href=""><i class="fa fa-mail-forward"></i> Email-from-flatbal.mln</a>
-                                                </li>
-                                                <li><a href=""><i class="fa fa-picture-o"></i> Logo.png</a>
-                                                </li>
-                                                <li><a href=""><i class="fa fa-file-word-o"></i> Contract-10_12_2014.docx</a>
+                                                <li><a href=""><i class="fa fa-file-word-o"></i>
+                                                    Functional-requirements.docx</a>
                                                 </li>
                                             </ul>
-                                            <br />
+                                            <br/>
 
                                             <div class="text-left mtop20">
                                                 <a href="#" class="btn btn-sm btn-primary">Add files</a>
@@ -157,56 +155,20 @@
                     </div>
                 </div>
 
-
-
-
             </div>
         </div>
         <!-- /page content -->
 
-        <div th:insert="components/footer"></div>
     </div>
 </div>
 
-
+<div th:insert="components/footer"></div>
 <script src="/js/custom.min.js"></script>
-<script>
-    function toggleFullscreen(elem) {
-        elem = elem || document.documentElement;
-        if (!document.fullscreenElement && !document.mozFullScreenElement &&
-            !document.webkitFullscreenElement && !document.msFullscreenElement) {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            }
-        }
-    }
-    document.getElementById('linkFullscreen').addEventListener('click', function() {
-        toggleFullscreen();
-    });
-</script>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/dumbbell.js"></script>
 <script src="https://code.highcharts.com/modules/lollipop.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
     Highcharts.chart('container', {
@@ -295,7 +257,6 @@
 
     });
 </script>
-
 
 </body>
 </html>

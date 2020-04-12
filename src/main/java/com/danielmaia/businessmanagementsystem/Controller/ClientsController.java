@@ -2,6 +2,9 @@ package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.*;
 import com.danielmaia.businessmanagementsystem.Service.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -10,8 +13,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Controller
@@ -70,12 +75,72 @@ public class ClientsController {
         Client client = clientService.findByName(name);
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
+        List<Project> projects = projectService.findAllByClient(client);
+        
+        BigDecimal totalQuoted = new BigDecimal(0);
 
+        for(Project project : projects) {
+            totalQuoted = totalQuoted.add(project.getQuotePrice());
+        }
+
+        model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
         model.addAttribute("client", client);
         model.addAttribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
+    }
+
+    @GetMapping("/clients/{name}/chart")
+    @ResponseBody
+    public String lineChart(@PathVariable("name") String name) {
+        Client client = clientService.findByName(name);
+        List<Project> projects = projectService.findAllByClient(client);
+        LinkedHashMap<String, Integer> prevTwelveMonths = new LinkedHashMap<>();
+
+        JsonArray jsonMonth = new JsonArray();
+        JsonArray jsonProjectCount = new JsonArray();
+        JsonObject json = new JsonObject();
+
+        // Sorts the projects by date
+        projects.sort(new Comparator<Project>() {
+
+            @Override
+            public int compare(Project o1, Project o2) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM");
+                    return sdf.parse(o1.getCreatedOn().toString()).compareTo(sdf.parse(o2.getCreatedOn().toString()));  //sdf.parse returns date - So, Compare Date with date
+                } catch (ParseException ex) {
+                    return o1.getCreatedOn().toString().compareTo(o2.getCreatedOn().toString());
+                }
+            }
+        });
+
+        for(Project project : projects) {
+            Date projectDate = project.getCreatedOn();
+            LocalDate date = new LocalDate(projectDate);
+            String month = date.monthOfYear().getAsText();
+
+            if(prevTwelveMonths.size() < 12) {
+                if(!prevTwelveMonths.containsKey(month)) {
+                    prevTwelveMonths.put(month,1);
+                } else {
+                    prevTwelveMonths.replace(month, prevTwelveMonths.get(month)+1);
+                }
+            } else {
+                // Removes the first month when the 12 month has been reached
+                System.out.println(prevTwelveMonths.entrySet().toArray()[0]);
+            }
+        }
+
+        prevTwelveMonths.forEach((key, value) -> {
+            jsonMonth.add(key);
+            jsonProjectCount.add(value);
+        });
+
+        json.add("month", jsonMonth);
+        json.add("count", jsonProjectCount);
+        return json.toString();
     }
 
     // Edit client

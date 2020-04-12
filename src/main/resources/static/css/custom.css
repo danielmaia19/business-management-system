@@ -4886,3 +4886,58 @@ ul.notifications {
 .modal-dialog {
   max-width: 500px;
 }
+
+.tile-stats .icon i {
+  margin: 0;
+  font-size: 53px !important;
+  line-height: 0;
+  vertical-align: bottom;
+  padding: 0;
+}
+
+.highcharts-credits {
+  display: none;
+}
+
+.autocomplete-suggestions strong {
+
+  color: #029cca;
+  font-weight: normal;
+
+}
+
+.autocomplete-suggestion {
+  background: #FFFFFF;
+  overflow: hidden;
+  padding: 5px 15px;
+  white-space: nowrap;
+}
+
+.autocomplete-suggestions strong {
+
+  color: #029cca;
+  font-weight: normal;
+
+}
+
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+.dataTables_scrollBody {
+  width: 98%
+}
+
+table.dataTable.no-footer {
+  width: 99.9%;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+
+  /*margin-left: 0.5em;*/
+  width: 250px;
+  border-radius: 5px;
+  font-family: inherit;
+  padding: 5px 5px;
+
+}
