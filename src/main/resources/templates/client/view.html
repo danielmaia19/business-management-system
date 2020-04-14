@@ -270,13 +270,13 @@
                     </div>
                     <div class="modal-body">
 
-                        <form class="form-horizontal" name="signup"
+                        <form class="form-horizontal" name="editClient" id="editClient"
                               th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}"
                               method="POST" modelAttribute="client" enctype="UTF8">
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{name}" id="name" name="name" type="text" required
+                                    <input th:field="*{name}" id="name" name="name" type="text"
                                            class="form-control" placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validName">Cannot be empty</span>
@@ -286,7 +286,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne"
-                                           required type="text" class="form-control" placeholder="Address Line 1">
+                                            type="text" class="form-control" placeholder="Address Line 1">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validAddressOne">Cannot be empty</span>
                                 </div>
@@ -300,14 +300,14 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{city}" id="city" name="city" type="text" class="form-control"
-                                           required placeholder="City / Town">
+                                            placeholder="City / Town">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCity">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{region}" id="region" name="region" type="text"
-                                           class="form-control" required placeholder="State/Province/Region">
+                                           class="form-control" placeholder="State/Province/Region">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validRegion">Cannot be empty</span>
                                 </div>
@@ -317,14 +317,14 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{postCode}" id="postCode" name="postCode" type="text"
-                                           class="form-control" required placeholder="Zip / Postal Code">
+                                           class="form-control" placeholder="Zip / Postal Code">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validPostCode">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{country}" id="country" name="country" type="text"
-                                           class="form-control" required placeholder="Country">
+                                           class="form-control" placeholder="Country">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCountry">Cannot be empty</span>
                                 </div>
@@ -333,7 +333,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
                                     <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson"
-                                           type="text" required class="form-control" placeholder="Contact Person">
+                                           type="text" class="form-control" placeholder="Contact Person">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validContactPerson">Cannot be empty</span>
                                 </div>
@@ -342,7 +342,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
                                     <input th:field="*{contactPersonEmail}" id="contactPersonEmail"
-                                           name="contactPersonEmail" required type="text" class="form-control"
+                                           name="contactPersonEmail" type="text" class="form-control"
                                            placeholder="Contact Person Email">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validEmail">Cannot be empty</span>
@@ -351,7 +351,7 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <textarea th:field="*{description}" id="description" required class="form-control"
+                                    <textarea th:field="*{description}" id="description" class="form-control"
                                               name="description" data-parsley-trigger="keyup"
                                               data-parsley-minlength="20"
                                               data-parsley-maxlength="100"
@@ -368,7 +368,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close
                                 </button>
-                                <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary btn-sm">Save changes</button>
                             </div>
 
                         </form>
@@ -383,15 +383,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <p>Are you sure you want to delete: <span style="font-weight: bold"
-                                                                  th:text=" ${client.getName()}"></span></p>
+                        <p class="text text-danger">If you confirm to delete this client, you will also be deleting all the projects associated to this client.</p>
+
+                        <h6 class="text text-danger">Are you sure you want to delete: <span style="font-weight: bold"
+                                                                                           th:text=" ${client.getName()}"></span></h6>
                     </div>
 
                     <div class="modal-footer">
@@ -415,6 +417,7 @@
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 
 <script>
     setTimeout(function () {
@@ -426,74 +429,68 @@
         $this.next().html($this.val().split('\\').pop());
     });
 
-    <!-- Field Validation -->
-    $("#btnSubmit").click(function () {
-        var nameField = $("#name").val();
-        var addressOne = $("#addressLineOne").val();
-        var city = $("#city").val();
-        var region = $("#region").val();
-        var postcode = $("#postCode").val();
-        var country = $("#country").val();
-        var contactPerson = $("#contactPerson").val();
-        var description = $("#description").val();
-        var emailField = $("#contactPersonEmail").val();
-
-        console.log(contactPerson);
-
-        if (nameField == "") {
-            document.getElementById("error-validName").style.display = "block";
-        } else {
-            document.getElementById("error-validName").style.display = "none";
-        }
-
-        if (addressOne == "") {
-            document.getElementById("error-validAddressOne").style.display = "block";
-        } else {
-            document.getElementById("error-validAddressOne").style.display = "none";
-        }
-
-        if (city == "") {
-            document.getElementById("error-validCity").style.display = "block";
-        } else {
-            document.getElementById("error-validCity").style.display = "none";
-        }
-
-        if (region == "") {
-            document.getElementById("error-validRegion").style.display = "block";
-        } else {
-            document.getElementById("error-validRegion").style.display = "none";
-        }
-
-        if (postcode == "") {
-            document.getElementById("error-validPostcode").style.display = "block";
-        } else {
-            document.getElementById("error-validPostcode").style.display = "none";
-        }
-
-        if (country == "") {
-            document.getElementById("error-validCountry").style.display = "block";
-        } else {
-            document.getElementById("error-validCountry").style.display = "none";
-        }
-
-        if (contactPerson == "") {
-            document.getElementById("error-validContactPerson").style.display = "block";
-        } else {
-            document.getElementById("error-validContactPerson").style.display = "none";
-        }
-
-        if (description == "") {
-            document.getElementById("error-validDescription").style.display = "block";
-        } else {
-            document.getElementById("error-validDescription").style.display = "none";
-        }
-
-        if (emailField == "") {
-            document.getElementById("error-validEmail").style.display = "block";
-        } else {
-            document.getElementById("error-validEmail").style.display = "none";
-        }
-
+    $(document).ready(function(){
+        $("#editClient").validate({
+            rules :{
+                "name" : {
+                    required : true
+                },
+                "addressLineOne" : {
+                    required : true
+                },
+                "city" : {
+                    required : true
+                },
+                "region" : {
+                    required : true
+                },
+                "postCode" : {
+                    required : true
+                },
+                "country" : {
+                    required : true
+                },
+                "contactPerson" : {
+                    required : true
+                },
+                "contactPersonEmail" : {
+                    required : true,
+                    email : true
+                },
+                "description" : {
+                    required : true
+                }
+            },
+            messages :{
+                "name" : {
+                    required : 'Enter a Client Name'
+                },
+                "addressLineOne" : {
+                    required : 'Address Line One Cannot be Empty',
+                },
+                "city" : {
+                    required : 'City Cannot be Empty'
+                },
+                "region" : {
+                    required : 'Region Cannot be Empty'
+                },
+                "postCode" : {
+                    required : 'Postcode Cannot be Empty'
+                },
+                "country" : {
+                    required : 'Country Cannot be Empty'
+                },
+                "contactPerson" : {
+                    required : 'Contact Person Cannot be Empty '
+                },
+                "contactPersonEmail" : {
+                    required : 'Contact Person Email Cannot be Empty'
+                },
+                "description" : {
+                    required : 'Enter a valid address line one'
+                },
+            }
+        });
     });
 
     var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua &amp; Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia &amp; Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cruise Ship", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyz Republic", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre &amp; Miquelon", "Samoa", "San Marino", "Satellite", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "St Kitts &amp; Nevis", "St Lucia", "St Vincent", "St. Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad &amp; Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks &amp; Caicos", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];

@@ -118,6 +118,7 @@ public class ProjectsController {
         foundProject.setStatus(project.getStatus());
         foundProject.setProgress(project.getProgress());
         foundProject.setDescription(project.getDescription());
+        foundProject.setProjectManager(project.getProjectManager());
         foundProject.setContactPerson(project.getContactPerson());
         foundProject.setQuotePrice(project.getQuotePrice());
         foundProject.setClient(project.getClient());
