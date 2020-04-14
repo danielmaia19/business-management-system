@@ -31,6 +31,7 @@ public class Client {
     private String region;
     private String postCode;
     private String country;
+    @Column(length = 1024)
     private String description;
     private String contactPerson;
     private String contactPersonEmail;

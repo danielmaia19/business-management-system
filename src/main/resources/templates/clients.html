@@ -91,15 +91,15 @@
                     </div>
                     <div class="modal-body">
 
-                        <form class="form-horizontal" name="signup" th:action="@{/clients}" th:object="${client}"
+                        <form class="form-horizontal" name="newClient" id="newClient" th:action="@{/clients}" th:object="${client}"
                               method="POST" modelAttribute="client" enctype="UTF8">
 
                             <!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{name}" id="name" name="name" type="text" class="form-control"
-                                           required placeholder="Client Name">
+                                    <input th:field="*{name}" id="name" name="name" type="text" required class="form-control"
+                                            placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="name-exists">Client already exists</span>
                                 </div>
@@ -108,7 +108,6 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne"
-                                           required
                                            type="text" class="form-control" placeholder="Address Line 1">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validAddressOne">Cannot be empty</span>
@@ -123,14 +122,13 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{city}" id="city" name="city" type="text" class="form-control"
-                                           required
                                            placeholder="City / Town">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCity">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{region}" id="region" name="region" type="text" required
+                                    <input th:field="*{region}" id="region" name="region" type="text"
                                            class="form-control" placeholder="State/Province/Region">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validRegion">Cannot be empty</span>
@@ -140,14 +138,14 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text" required
+                                    <input th:field="*{postCode}" id="postCode" name="postCode" type="text"
                                            class="form-control" placeholder="Zip / Postal Code">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validPostcode">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
-                                    <input th:field="*{country}" id="country" name="country" type="text" required
+                                    <input th:field="*{country}" id="country" name="country" type="text"
                                            class="form-control" placeholder="Country">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCountry">Please enter a valid email</span>
@@ -156,7 +154,7 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson" required
+                                    <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson"
                                            type="text" class="form-control" placeholder="Contact Person">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validContactPerson">Cannot be empty</span>
@@ -165,7 +163,7 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{contactPersonEmail}" th:type="email" required
+                                    <input th:field="*{contactPersonEmail}" th:type="email"
                                            id="contactPersonEmail"
                                            name="contactPersonEmail" type="text" class="form-control"
                                            placeholder="Contact Person Email">
@@ -177,7 +175,7 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <textarea th:field="*{description}" id="description" required
+                                    <textarea th:field="*{description}" id="description"
                                               class="form-control" name="description" data-parsley-trigger="keyup"
                                               data-parsley-minlength="20"
                                               data-parsley-maxlength="100"
@@ -208,75 +206,71 @@
 
 <div th:insert="components/footer"></div>
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 <script type="text/javascript">
-    // Field Validation
-    $("#btnSubmit").click(function () {
-        var nameField = $("#name").val();
-        var addressOne = $("#addressLineOne").val();
-        var city = $("#city").val();
-        var region = $("#region").val();
-        var postcode = $("#postCode").val();
-        var country = $("#country").val();
-        var contactPerson = $("#contactPerson").val();
-        var description = $("#description").val();
-        var emailField = $("#contactPersonEmail").val();
 
-        console.log(contactPerson);
-
-        if (nameField == "") {
-            document.getElementById("error-validName").style.display = "block";
-        } else {
-            document.getElementById("error-validName").style.display = "none";
-        }
-
-        if (addressOne == "") {
-            document.getElementById("error-validAddressOne").style.display = "block";
-        } else {
-            document.getElementById("error-validAddressOne").style.display = "none";
-        }
-
-        if (city == "") {
-            document.getElementById("error-validCity").style.display = "block";
-        } else {
-            document.getElementById("error-validCity").style.display = "none";
-        }
-
-        if (region == "") {
-            document.getElementById("error-validRegion").style.display = "block";
-        } else {
-            document.getElementById("error-validRegion").style.display = "none";
-        }
-
-        if (postcode == "") {
-            document.getElementById("error-validPostcode").style.display = "block";
-        } else {
-            document.getElementById("error-validPostcode").style.display = "none";
-        }
-
-        if (country == "") {
-            document.getElementById("error-validCountry").style.display = "block";
-        } else {
-            document.getElementById("error-validCountry").style.display = "none";
-        }
-
-        if (contactPerson == "") {
-            document.getElementById("error-validContactPerson").style.display = "block";
-        } else {
-            document.getElementById("error-validContactPerson").style.display = "none";
-        }
-
-        if (description == "") {
-            document.getElementById("error-validDescription").style.display = "block";
-        } else {
-            document.getElementById("error-validDescription").style.display = "none";
-        }
-
-        if (emailField == "") {
-            document.getElementById("error-validEmail").style.display = "block";
-        } else {
-            document.getElementById("error-validEmail").style.display = "none";
-        }
-
+    $(document).ready(function(){
+        $("#newClient").validate({
+            rules :{
+                "name" : {
+                    required : true
+                },
+                "addressLineOne" : {
+                    required : true
+                },
+                "city" : {
+                    required : true
+                },
+                "region" : {
+                    required : true
+                },
+                "postCode" : {
+                    required : true
+                },
+                "country" : {
+                    required : true
+                },
+                "contactPerson" : {
+                    required : true
+                },
+                "contactPersonEmail" : {
+                    required : true
+                },
+                "description" : {
+                    required : true
+                }
+            },
+            messages :{
+                "name" : {
+                    required : 'Enter a valid Client'
+                },
+                "addressLineOne" : {
+                    required : 'Enter a valid address line one',
+                },
+                "city" : {
+                    required : 'Enter a valid address line one'
+                },
+                "region" : {
+                    required : 'Enter a valid address line one'
+                },
+                "postCode" : {
+                    required : 'Enter a valid address line one'
+                },
+                "country" : {
+                    required : 'Enter a valid address line one'
+                },
+                "contactPerson" : {
+                    required : 'Enter a valid address line one'
+                },
+                "contactPersonEmail" : {
+                    required : 'Enter a valid address line one'
+                },
+                "description" : {
+                    required : 'Enter a valid address line one'
+                },
+            }
+        });
     });
 
     var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua &amp; Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia &amp; Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cruise Ship", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyz Republic", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre &amp; Miquelon", "Samoa", "San Marino", "Satellite", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "St Kitts &amp; Nevis", "St Lucia", "St Vincent", "St. Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad &amp; Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks &amp; Caicos", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];

@@ -28,6 +28,7 @@ public class Project {
     @Column
     private String name;
     private String contactPerson;
+    @Column(length = 1024)
     private String description;
     private String status = "To Do";
     private int progress;
