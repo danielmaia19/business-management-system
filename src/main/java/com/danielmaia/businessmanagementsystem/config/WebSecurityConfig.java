@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login", "/", "/forgot-password", "/reset-password", "/reset").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/loggedUsers").hasRole("SUPER_ADMIN")
+                .antMatchers("/loggedUsers/**").hasRole("SUPER_ADMIN")
                 .antMatchers("/profile/**", "/dashboard").fullyAuthenticated()
                 .and()
                 .formLogin()
@@ -58,9 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll()
-                .and()
-                .rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login").permitAll();
+                //.and()
+                //.rememberMe().tokenValiditySeconds(2592000).key("my-secret").alwaysRemember(true);
     }
 
     @Override
