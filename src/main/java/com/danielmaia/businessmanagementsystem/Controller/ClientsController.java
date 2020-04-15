@@ -150,12 +150,6 @@ public class ClientsController {
     // Edit client
     @PostMapping(value = "/clients/{name}/edit")
     public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, BindingResult bindingResult, RedirectAttributes redirectAttributes, Authentication authentication) {
-
-        User user = (User) authentication.getPrincipal();
-        User currentUser = userService.findByUsername(user.getUsername());
-
-
-        
         
         if(!client.getName().equals(name) && clientService.existsByName(client.getName())) {
             redirectAttributes.addFlashAttribute("duplicateClient", "This client already exists");
