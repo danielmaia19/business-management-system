@@ -46,20 +46,13 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2 th:text="${project.getName()}"></h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                           aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
+                                <button style="float:right" type="button" class="btn btn-danger btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".bd-example-modal-sm">Delete Project
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-primary btn-sm">
+                                    <a th:href="@{/projects/{name}/edit (name= ${project.getName()})}" style="color: white">Edit Project</a>
+                                </button>
                                 <div class="clearfix"></div>
                             </div>
 
@@ -234,6 +227,38 @@
             </div>
         </div>
         <!-- /page content -->
+
+        <!--Modal to confirm the user wants to delete client-->
+        <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <h6 class="text text-danger">Are you sure you want to delete: <span style="font-weight: bold"
+                                                                                            th:text=" ${project.getName()}"></span></h6>
+                    </div>
+
+                    <div class="modal-footer">
+                        <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.getName()})}"
+                              th:object="${project}" method="POST" modelAttribute="client" enctype="UTF8">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </div>
