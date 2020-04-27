@@ -12,9 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -225,5 +228,37 @@ public class ClientsController {
     public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
         return "redirect:/clients/{name}";
     }
+
+    @PostMapping("/clients/{name}/upload")
+    public String testingUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+        Client client = clientService.findByName(name);
+        ClientFile clientFileName = clientFileService.saveFile(client, file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/clients/" + name + "/downloads/")
+                .path(clientFileName.getClientFileId())
+                .toUriString();
+
+        //log.info(fileDownloadUri);
+
+        redirectAttributes.addFlashAttribute("uploaded", "File was successfully uploaded");
+
+        return "redirect:/clients/"+name;
+    }
+
+    @PostMapping("/clients/{name}/downloads/{clientFileId:.+}/delete")
+    public String deleteFile(@PathVariable String name, @PathVariable String clientFileId, RedirectAttributes redirectAttributes) {
+
+        clientFileService.deleteFile(clientFileId);
+
+        redirectAttributes.addFlashAttribute("deleted", "File was successfully uploaded");
+
+        return "redirect:/clients/"+name;
+    }
+
+    //@PostMapping("/multipleFiles")
+    //public List<File> uploadingMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    //    return Arrays.asList(files).stream().map(file -> testingUpload("test", file)).collect(Collectors.toList());
+    //}
 
 }

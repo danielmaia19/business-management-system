@@ -2,10 +2,7 @@ package com.danielmaia.businessmanagementsystem.Controller;
 
 import com.danielmaia.businessmanagementsystem.Model.*;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectNoteRepository;
-import com.danielmaia.businessmanagementsystem.Service.ClientService;
-import com.danielmaia.businessmanagementsystem.Service.ProjectNoteService;
-import com.danielmaia.businessmanagementsystem.Service.ProjectService;
-import com.danielmaia.businessmanagementsystem.Service.UserService;
+import com.danielmaia.businessmanagementsystem.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +44,9 @@ public class ProjectsController {
 
     @Autowired
     private ProjectNoteService projectNoteService;
+
+    @Autowired
+    private ProjectFileService projectFileService;
 
     //Show all users projects
     @GetMapping("/projects")
@@ -96,7 +99,9 @@ public class ProjectsController {
     @GetMapping(path = "/projects/{name}")
     public String viewProject(@PathVariable("name") String name, @ModelAttribute("note") ProjectNote projectNote, Model model) {
         Project project = projectService.findByName(name);
+
         model.addAttribute("project", project);
+        model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
         return "project/view";
     }
@@ -181,6 +186,33 @@ public class ProjectsController {
     //public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
     //    return "redirect:/clients/{name}";
     //}
+
+    // Files
+
+    @PostMapping("/projects/{name}/upload")
+    public String testingUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+        Project project = projectService.findByName(name);
+        ProjectFile projectFileName = projectFileService.saveFile(project, file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/projects/" + name + "/downloads/")
+                .path(projectFileName.getProjectFileId())
+                .toUriString();
+
+        redirectAttributes.addFlashAttribute("uploaded", "File was successfully uploaded");
+
+        return "redirect:/projects/"+name;
+    }
+
+    @PostMapping("/projects/{name}/downloads/{projectFileId:.+}/delete")
+    public String deleteFile(@PathVariable String name, @PathVariable String projectFileId, RedirectAttributes redirectAttributes) {
+
+        projectFileService.deleteFile(projectFileId);
+
+        redirectAttributes.addFlashAttribute("deleted", "File was successfully deleted");
+
+        return "redirect:/projects/"+name;
+    }
 
 }
 
