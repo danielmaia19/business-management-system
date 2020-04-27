@@ -190,4 +190,40 @@ public class ClientsController {
         return "redirect:/clients";
     }
 
+    // Add note
+    @PostMapping(path = "/clients/{name}/add")
+    public String postNote(Model model, @ModelAttribute("note") @Valid ClientNote clientNote, BindingResult result, @PathVariable("name") String name) {
+
+        if(result.hasErrors()) {
+            return "redirect:/clients/{name}?error=Field cannot be empty";
+        }
+
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        Client client = clientService.findByName(name);
+        clientNote.setClient(client);
+        clientNote.setSubmittedDate(today);
+        clientNoteService.saveNote(clientNote);
+
+        model.addAttribute("client", client);
+        model.addAttribute("note", clientNote);
+
+        return "redirect:/clients/{name}";
+    }
+
+    // Delete note
+    @PostMapping(path = "/clients/{name}/note/{id}/delete")
+    public String deleteNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
+        clientNoteService.deleteNote(clientNoteService.findNoteById(id));
+
+        return "redirect:/clients/{name}";
+    }
+
+    // Edit note
+    //TODO: Allow users to edit their notes
+    @PostMapping(path = "/clients/{name}/note/{id}/edit")
+    public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
+        return "redirect:/clients/{name}";
+    }
+
 }

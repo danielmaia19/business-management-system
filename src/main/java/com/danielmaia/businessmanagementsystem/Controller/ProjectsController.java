@@ -1,9 +1,9 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.Model.Client;
-import com.danielmaia.businessmanagementsystem.Model.Project;
-import com.danielmaia.businessmanagementsystem.Model.User;
+import com.danielmaia.businessmanagementsystem.Model.*;
+import com.danielmaia.businessmanagementsystem.Repository.ProjectNoteRepository;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
+import com.danielmaia.businessmanagementsystem.Service.ProjectNoteService;
 import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,9 @@ public class ProjectsController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private ProjectNoteService projectNoteService;
 
     //Show all users projects
     @GetMapping("/projects")
@@ -90,9 +94,10 @@ public class ProjectsController {
 
     // Individual project view
     @GetMapping(path = "/projects/{name}")
-    public String viewProject(@PathVariable("name") String name, Model model) {
+    public String viewProject(@PathVariable("name") String name, @ModelAttribute("note") ProjectNote projectNote, Model model) {
         Project project = projectService.findByName(name);
         model.addAttribute("project", project);
+        model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
         return "project/view";
     }
 
@@ -138,6 +143,44 @@ public class ProjectsController {
         }
         return "redirect:/projects";
     }
+
+    // Notes for Project
+
+    // Add note
+    @PostMapping(path = "/projects/{name}/add")
+    public String postNote(Model model, @ModelAttribute("note") @Valid ProjectNote projectNote, BindingResult result, @PathVariable("name") String name) {
+
+        if(result.hasErrors()) {
+            return "redirect:/projects/{name}?error=Field cannot be empty";
+        }
+
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        Project project = projectService.findByName(name);
+        projectNote.setProject(project);
+        projectNote.setSubmittedDate(today);
+        projectNoteService.saveNote(projectNote);
+
+        model.addAttribute("client", project);
+        model.addAttribute("note", projectNote);
+
+        return "redirect:/projects/{name}";
+    }
+
+    // Delete note
+    @PostMapping(path = "/projects/{name}/note/{id}/delete")
+    public String deleteNote(Model model, @ModelAttribute("note") ProjectNote projectNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
+        projectNoteService.deleteNote(projectNoteService.findNoteById(id));
+
+        return "redirect:/projects/{name}";
+    }
+
+    // Edit note
+    //TODO: Allow users to edit their notes
+    //@PostMapping(path = "/clients/{name}/note/{id}/edit")
+    //public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
+    //    return "redirect:/clients/{name}";
+    //}
 
 }
 
