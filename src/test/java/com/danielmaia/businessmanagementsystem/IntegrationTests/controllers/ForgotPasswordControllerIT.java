@@ -35,6 +35,7 @@ public class ForgotPasswordControllerIT {
     }
 
     @Test
+    @DisplayName("User Can Reset Password")
     public void testUserCanRestPassword() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/forgot-password")
                 .param("email", "admin@gmail.com")

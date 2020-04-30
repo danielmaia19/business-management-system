@@ -35,6 +35,7 @@ public class Project {
     private Date createdOn;
     private BigDecimal quotePrice;
     private String projectManager;
+    private int timeSpent;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name="client_id", referencedColumnName = "client_id")

@@ -65,19 +65,19 @@ class ProjectsControllerIT {
                 .andExpect(view().name("projects"));
     }
 
-    @Test
-    @Disabled
-    @DisplayName("User Can View Project Page")
-    public void testViewProject() throws Exception {
-        //projectService.saveProject(project);
-        //String viewProject = controller.viewProject(client.getName(), model);
-        //
-        //mvc.perform(MockMvcRequestBuilders.get("/projects/{name}", project.getName()).with(user(userService.loadUserByUsername("admin"))))
-        //        .andExpect(status().isOk())
-        //        .andExpect(MockMvcResultMatchers.model().attribute("project", project));
-        //
-        //assertThat(viewProject).isNotNull();
-        //assertThat("project/view").isEqualToIgnoringCase(viewProject);
-    }
+    //@Test
+    //@Disabled
+    //@DisplayName("User Can View Project Page")
+    //public void testViewProject() throws Exception {
+    //    //projectService.saveProject(project);
+    //    //String viewProject = controller.viewProject(client.getName(), model);
+    //    //
+    //    //mvc.perform(MockMvcRequestBuilders.get("/projects/{name}", project.getName()).with(user(userService.loadUserByUsername("admin"))))
+    //    //        .andExpect(status().isOk())
+    //    //        .andExpect(MockMvcResultMatchers.model().attribute("project", project));
+    //    //
+    //    //assertThat(viewProject).isNotNull();
+    //    //assertThat("project/view").isEqualToIgnoringCase(viewProject);
+    //}
 
 }

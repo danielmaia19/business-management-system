@@ -67,11 +67,11 @@
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
-                                            <span class="value text-success"> £2000 </span>
+                                            <span class="value text-success" th:text="${project.getTimeSpent()} + ' hours'"></span>
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Expected Completion Date </span>
-                                            <span class="value text-success"> £20 </span>
+                                            <span class="value text-success"> 20/10/2020 </span>
                                         </li>
                                     </ul>
                                     <br/>
@@ -284,92 +284,66 @@
 
 </script>
 
-<script>
-    Highcharts.chart('container', {
+<script th:inline="javascript">
 
-        chart: {
-            type: 'lollipop'
+    /*<![CDATA[*/
+
+    var project = /*[[${project.getName()}]]*/ 'project';
+
+    /*]]>*/
+
+    $.ajax({
+        url: '/projects/' + project + '/chart',
+        success: function (result) {
+            var month = JSON.parse(result).month;
+            var count = JSON.parse(result).count;
+            drawLineChart(month, count);
         },
-
-        accessibility: {
-            point: {
-                valueDescriptionFormat: '{index}. {xDescription}, {point.y}.'
-            }
-        },
-
-        legend: {
-            enabled: false
-        },
-
-        credits: {
-            enabled: false
-        },
-
-        subtitle: {
-            text: '2020'
-        },
-
-        title: {
-            text: 'Earnings for the year of 2020'
-        },
-
-        tooltip: {
-            valuePrefix: "£",
-            shared: true,
-        },
-
-        xAxis: {
-            type: 'category'
-        },
-
-        yAxis: {
-            title: {
-                text: 'Earnings'
-            }
-        },
-
-        series: [{
-            name: 'Earnings',
-            data: [{
-                name: 'January',
-                low: 500
-            }, {
-                name: 'February',
-                low: 500
-            }, {
-                name: 'March',
-                low: 500
-            }, {
-                name: 'April',
-                low: 500
-            }, {
-                name: 'May',
-                low: 500
-            }, {
-                name: 'June',
-                low: 500
-            }, {
-                name: 'July',
-                low: 500
-            }, {
-                name: 'August',
-                low: 500
-            }, {
-                name: 'September',
-                low: 500
-            }, {
-                name: 'October',
-                low: 500
-            }, {
-                name: 'November',
-                low: 500
-            }, {
-                name: 'December',
-                low: 500
-            }]
-        }]
 
     });
+
+    function drawLineChart(month, count) {
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: month,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Worked Hours',
+                data: count
+
+            }]
+        });
+    }
 </script>
 
 </body>
