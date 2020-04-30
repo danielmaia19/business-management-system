@@ -75,9 +75,8 @@
 
                                         <div class="form-group col-md-2">
                                             <label for="timeSpent">Time Spent:</label>
-                                            <input th:field="*{timeSpent}" onKeyPress="return check(event,value)"
-                                                   onInput="checkLength()" type="number"
-                                                   class="form-control" id="timeSpent" min="0" max="100"
+                                            <input th:field="*{timeSpent}" type="number"
+                                                   class="form-control" id="timeSpent"
                                                    data-bind="value:replyNumber"/>
                                         </div>
 

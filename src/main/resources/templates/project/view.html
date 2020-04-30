@@ -67,7 +67,7 @@
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
-                                            <span class="value text-success" th:text="${project.getTimeSpent()} + ' hours'"></span>
+                                            <span class="value text-success" th:text="${daysWorked} + ' days'"></span>
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Expected Completion Date </span>
@@ -79,10 +79,10 @@
                                     <div id="mainb"></div>
                                     <figure class="highcharts-figure">
                                         <div id="container"></div>
-                                        <p class="highcharts-description">
-                                            Lollipop charts are variants of column charts, with a circle
-                                            marker for the data value and a line extending to the axis.
-                                        </p>
+<!--                                        <p class="highcharts-description">-->
+<!--                                            Lollipop charts are variants of column charts, with a circle-->
+<!--                                            marker for the data value and a line extending to the axis.-->
+<!--                                        </p>-->
                                     </figure>
                                     <div>
 
@@ -305,45 +305,46 @@
     function drawLineChart(month, count) {
         Highcharts.chart('container', {
             chart: {
-                type: 'column'
+                type: 'line'
             },
             title: {
-                text: 'Monthly Average Rainfall'
-            },
-            subtitle: {
-                text: 'Source: WorldClimate.com'
+                text: 'Monthly Days Worked'
             },
             xAxis: {
-                categories: month,
-                crosshair: true
+                title: {
+                    text: 'Months'
+                },
+                categories: month
             },
             yAxis: {
-                min: 0,
                 title: {
-                    text: 'Rainfall (mm)'
+                    text: 'Days'
                 }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
             },
             plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
                 }
             },
             series: [{
-                name: 'Worked Hours',
+                name: project,
                 data: count
-
             }]
         });
+
     }
+
 </script>
 
 </body>

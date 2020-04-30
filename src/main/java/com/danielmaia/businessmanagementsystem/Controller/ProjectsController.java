@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -50,6 +51,9 @@ public class ProjectsController {
 
     @Autowired
     private ProjectFileService projectFileService;
+
+    @Autowired
+    private HoursWorkedService hoursWorkedService;
 
     //Show all users projects
     @GetMapping("/projects")
@@ -87,13 +91,14 @@ public class ProjectsController {
     public String createClient(@RequestParam("client") String client, @ModelAttribute("project") @Valid Project project, BindingResult bindingResult, Authentication authentication) {
         Client selectedClient = clientService.findByName(client);
 
-        System.out.println(selectedClient.getName());
-
-        project.setCreatedOn(new Date());
-
         //project.setUser(currentUser);
         project.setClient(selectedClient);
         projectService.saveProject(project);
+
+        HoursWorked hoursWorked = new HoursWorked();
+        hoursWorked.setHours(project.getTimeSpent());
+        hoursWorked.setProject(project);
+        hoursWorked.setTimestamp(new DateTime().toDate());
 
         return "redirect:/projects";
     }
@@ -103,7 +108,16 @@ public class ProjectsController {
     public String viewProject(@PathVariable("name") String name, @ModelAttribute("note") ProjectNote projectNote, Model model) {
         Project project = projectService.findByName(name);
 
+        int count = 0;
+
+        for (HoursWorked hoursWorked : project.getHoursWorked()) {
+            count += hoursWorked.getHours();
+        }
+
+        int days = (int) TimeUnit.HOURS.toDays(count);
+
         model.addAttribute("project", project);
+        model.addAttribute("daysWorked", days);
         model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
         return "project/view";
@@ -135,7 +149,14 @@ public class ProjectsController {
         foundProject.setContactPerson(project.getContactPerson());
         foundProject.setQuotePrice(project.getQuotePrice());
         foundProject.setClient(project.getClient());
-        foundProject.setTimeSpent(project.getTimeSpent());
+
+        HoursWorked hoursWorked = new HoursWorked();
+        hoursWorked.setHours(project.getTimeSpent());
+        hoursWorked.setProject(foundProject);
+        hoursWorked.setTimestamp(new DateTime().toDate());
+
+        hoursWorkedService.saveHoursWorked(hoursWorked);
+
         projectService.saveProject(foundProject);
 
         return "redirect:/projects";
@@ -222,33 +243,55 @@ public class ProjectsController {
     @ResponseBody
     public String lineChart(@PathVariable("name") String name) {
         Project project = projectService.findByName(name);
-        //LinkedHashMap<String, Integer> prevTwelveMonths = new LinkedHashMap<>();
-        NavigableMap<DateTime, Integer> prevTwelveMonths = new TreeMap<>();
-        DateTime dateTime = DateTime.now();
+        List<HoursWorked> hoursWorked = hoursWorkedService.findAllByProject(project);
+        LinkedHashMap<String, Integer> prevTwelveMonths = new LinkedHashMap<>();
 
         JsonArray jsonMonth = new JsonArray();
-        JsonArray jsonProjectHours = new JsonArray();
+        JsonArray jsonHoursWorkedCount = new JsonArray();
         JsonObject json = new JsonObject();
-        
-        prevTwelveMonths.put(dateTime.minusMonths(1).monthOfYear().getDateTime(), project.getTimeSpent());
-        prevTwelveMonths.put(dateTime.minusMonths(2).monthOfYear().getDateTime(), project.getTimeSpent());
-        prevTwelveMonths.put(dateTime.minusMonths(3).monthOfYear().getDateTime(), project.getTimeSpent());
-        prevTwelveMonths.put(dateTime.minusMonths(4).monthOfYear().getDateTime(), project.getTimeSpent());
 
-        //System.out.println(dateTime.minusMonths(1).monthOfYear().getDateTime());
+        // Sorts the projects by date
+        hoursWorked.sort(new Comparator<HoursWorked>() {
 
-        for (Map.Entry<DateTime, Integer> date1 : prevTwelveMonths.entrySet()) {
-            System.out.println("Sorted : " + new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(date1));
+            @Override
+            public int compare(HoursWorked o1, HoursWorked o2) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMMM");
+                    return sdf.parse(o1.getTimestamp().toString()).compareTo(sdf.parse(o2.getTimestamp().toString()));  //sdf.parse returns date - So, Compare Date with date
+                } catch (ParseException ex) {
+                    return o1.getTimestamp().toString().compareTo(o2.getTimestamp().toString());
+                }
+            }
+        });
+
+        for(HoursWorked hoursWorked1 : hoursWorked) {
+            Date hoursWorkedDate = hoursWorked1.getTimestamp();
+            LocalDate date = new LocalDate(hoursWorkedDate);
+            String month = date.monthOfYear().getAsText();
+
+            if(prevTwelveMonths.size() < 12) {
+                if(!prevTwelveMonths.containsKey(month)) {
+                    prevTwelveMonths.put(month,hoursWorked1.getHours());
+                } else {
+                    prevTwelveMonths.replace(month, prevTwelveMonths.get(month)+hoursWorked1.getHours());
+                }
+            } else {
+                // Removes the first month when the 12 month has been reached
+                System.out.println(prevTwelveMonths.entrySet().toArray()[0]);
+            }
         }
 
+        prevTwelveMonths.forEach((key, value) -> {
+            jsonMonth.add(key);
 
-        //prevTwelveMonths.forEach((key, value) -> {
-        //    jsonMonth.add(key);
-        //    jsonProjectHours.add(value);
-        //});
+            // Convert hours to days
+            int days = (int) TimeUnit.HOURS.toDays(value);
+            jsonHoursWorkedCount.add(days);
+
+        });
 
         json.add("month", jsonMonth);
-        json.add("count", jsonProjectHours);
+        json.add("count", jsonHoursWorkedCount);
         return json.toString();
     }
 
