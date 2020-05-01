@@ -63,8 +63,7 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Project Quote </span>
-<!--                                            <span class="value text-success" th:text="${quotedPrice}"> </span>-->
-                                            <span class="value text-success" th:text="${quotedPrice.matches('£null')}?'N.A.': ${quotedPrice}"></span>
+                                            <span class="value text-success" th:text="'£'+${project.getQuotePrice()}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
@@ -294,13 +293,14 @@
         url: '/projects/' + project + '/chart',
         success: function (result) {
             var month = JSON.parse(result).month;
-            var count = JSON.parse(result).count;
-            drawLineChart(month, count);
+            var days = JSON.parse(result).days;
+            var hours = JSON.parse(result).hours;
+            drawLineChart(month, days, hours);
         },
 
     });
 
-    function drawLineChart(month, count) {
+    function drawLineChart(month, days, hours) {
         Highcharts.chart('container', {
             chart: {
                 type: 'line'
@@ -317,27 +317,28 @@
             yAxis: {
                 title: {
                     text: 'Days'
-                }
+                },
+                tickPixelInterval: 20
             },
             tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
+                formatter: function() {
+                    return this.y + ' ' +  this.series.name + ' worked in <b>' + this.x;
+                }
             },
             plotOptions: {
                 line: {
                     dataLabels: {
                         enabled: true
                     },
-                    enableMouseTracking: false
+                    enableMouseTracking: true
                 }
             },
             series: [{
-                name: project,
-                data: count
+                name: 'Day(s)',
+                data: days
+            },{
+                name: 'Hours',
+                data: hours
             }]
         });
 

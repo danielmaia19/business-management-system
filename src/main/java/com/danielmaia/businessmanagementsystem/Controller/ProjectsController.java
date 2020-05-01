@@ -92,6 +92,11 @@ public class ProjectsController {
         Client selectedClient = clientService.findByName(client);
 
         //project.setUser(currentUser);
+
+        if(project.getQuotePrice() == null) {
+            project.setQuotePrice(new BigDecimal(0));
+        }
+
         project.setClient(selectedClient);
         project.setCreatedOn(new DateTime().toDate());
         projectService.saveProject(project);
@@ -134,7 +139,7 @@ public class ProjectsController {
 
         model.addAttribute("project", project);
         model.addAttribute("timeSpent", timeSpentString);
-        model.addAttribute("quotedPrice", "£" + project.getQuotePrice());
+        model.addAttribute("quotedPrice", project.getQuotePrice());
         model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
         return "project/view";
@@ -164,24 +169,27 @@ public class ProjectsController {
         foundProject.setDescription(project.getDescription());
         foundProject.setProjectManager(project.getProjectManager());
         foundProject.setContactPerson(project.getContactPerson());
-        foundProject.setQuotePrice(project.getQuotePrice());
         foundProject.setClient(project.getClient());
         foundProject.setExpectedCompletionDate(project.getExpectedCompletionDate());
 
+        if (project.getQuotePrice() == null) {
+            foundProject.setQuotePrice(new BigDecimal(0));
+        } else {
+            foundProject.setQuotePrice(project.getQuotePrice());
+        }
+
         HoursWorked hoursWorked = new HoursWorked();
 
-        if(project.getTimeSpent() > 0) {
+        if(project.getTimeSpent() != 0) {
             hoursWorked.setProject(foundProject);
             hoursWorked.setTimestamp(new DateTime().toDate());
             hoursWorked.setHours(project.getTimeSpent());
             hoursWorkedService.saveHoursWorked(hoursWorked);
         }
 
-
-
         projectService.saveProject(foundProject);
 
-        return "redirect:/projects";
+        return "redirect:/projects/"+name;
     }
 
     @PostMapping("/projects/{name}/delete")
@@ -269,6 +277,7 @@ public class ProjectsController {
         LinkedHashMap<String, Integer> prevTwelveMonths = new LinkedHashMap<>();
 
         JsonArray jsonMonth = new JsonArray();
+        JsonArray jsonDaysWorkedCount = new JsonArray();
         JsonArray jsonHoursWorkedCount = new JsonArray();
         JsonObject json = new JsonObject();
 
@@ -308,12 +317,13 @@ public class ProjectsController {
 
             // Convert hours to days
             int days = (int) TimeUnit.HOURS.toDays(value);
-            jsonHoursWorkedCount.add(days);
-
+            jsonDaysWorkedCount.add(days);
+            jsonHoursWorkedCount.add(value);
         });
 
         json.add("month", jsonMonth);
-        json.add("count", jsonHoursWorkedCount);
+        json.add("days", jsonDaysWorkedCount);
+        json.add("hours", jsonHoursWorkedCount);
         return json.toString();
     }
 

@@ -56,7 +56,14 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2 th:text="${client.getName()}"></h2>
-                                <button style="float:right" type="button" class="btn btn-danger btn-sm"
+
+                                <button style="float:right" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".payment-modal-sm">Payment Amount
+                                </button>
+
+
+                                <button style="float:right;" type="button" class="btn btn-danger btn-sm"
                                         data-toggle="modal"
                                         data-target=".bd-example-modal-sm">Delete Client
                                 </button>
@@ -75,15 +82,17 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Total Quoted </span>
-                                            <span class="value text-success" th:text="'£'+ ${totalQuoted}"></span>
+                                            <span class="value text-success" th:text="'£'+${totalQuoted}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Total amount Paid </span>
-                                            <span class="value text-success"> £0.00 </span>
+<!--                                            <span class="value text-success" th:text="'£' + ${client.getTotalAmountPaid()}"></span>-->
+                                            <span class="value text-success" th:text="${client.getTotalAmountPaid() == null}?'£0.00': '£' + ${client.getTotalAmountPaid()}"></span>
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Remaining Balance </span>
-                                            <span class="value text-success"> £0.00 </span>
+                                            <span class="value text-success" th:text="${remainingBalance == 0.00} ? '£0.00' : '£' + ${remainingBalance}"></span>
+<!--                                            <span class="value text-success" th:if="${totalQuoted == null}?'test':'nothing'"></span>-->
                                         </li>
                                     </ul>
                                     <br/>
@@ -409,6 +418,55 @@
             </div>
         </div>
 
+        <!--Modal to confirm the user wants to delete client-->
+        <div class="modal fade payment-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form class="form-horizontal" onsubmit="return validateForm()" name="payment" th:action="@{/clients/{name}/payment(name = ${client.getName()})}"
+                          th:object="${client}" method="POST" modelAttribute="client" enctype="UTF8">
+                        <div class="modal-header">
+                            <!--                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>-->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="form-group row ">
+                                <label for="quotePrice">Add amount paid:</label>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">£</span>
+                                    </div>
+                                    <input th:field="*{totalAmountPaid}" type="number" class="form-control"
+                                           id="quotePrice" name="quotePrice" min="0"
+                                           data-bind="value:replyNumber" step=".01"
+                                           aria-label="Amount (to the nearest pound)">
+                                    <br>
+                                </div>
+
+                                <span style="float:left; color: red; text-align: left; display: none" id="error-validPayment" class="error-validPayment" name="error-validPayment">Cannot be empty</span>
+                                <span style="float:left; color: red; text-align: left; display: none" id="error-validTotalQuoted0" class="error-validTotalQuoted0" name="error-validTotalQuoted0">Total quoted amount is 0.</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success btn-sm">Add Amount</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -570,6 +628,38 @@
 
             }]
         });
+    }
+
+</script>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var totalQuoted = /*[[${totalQuoted}]]*/ 'totalQuoted';
+
+    /*]]>*/
+
+    function validateForm() {
+        var x = document.forms["payment"]["quotePrice"].value;
+
+        if (x === "") {
+            $('#error-validPayment').show();
+            $('#error-validTotalQuoted0').hide();
+            return false;
+        } else {
+            $('#error-validPayment').hide();
+        }
+
+        if(x > 0 && totalQuoted === 0) {
+            $('#error-validTotalQuoted0').show();
+            return false;
+        }
+
+        if(x > 0 && totalQuoted > 0) {
+            return true;
+        }
+
     }
 
 </script>

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -35,6 +36,7 @@ public class Client {
     private String description;
     private String contactPerson;
     private String contactPersonEmail;
+    private BigDecimal totalAmountPaid;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name="user_id", referencedColumnName = "user_id")

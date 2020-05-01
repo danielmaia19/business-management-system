@@ -88,11 +88,17 @@ public class ClientsController {
         List<Project> projects = projectService.findAllByClient(client);
         
         BigDecimal totalQuoted = new BigDecimal(0);
+        BigDecimal remainingBalance = new BigDecimal(0);
 
-        for(Project project : projects) {
+        for (Project project : projects) {
             totalQuoted = totalQuoted.add(project.getQuotePrice());
         }
 
+        if(client.getTotalAmountPaid() != null) {
+            remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
+        }
+
+        model.addAttribute("remainingBalance", remainingBalance);
         model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
         model.addAttribute("client", client);
@@ -192,6 +198,27 @@ public class ClientsController {
         clientService.deleteClient(clientService.findByName(client.getName()));
         return "redirect:/clients";
     }
+
+    // Add Payment client
+    @PostMapping(value = "/clients/{name}/payment")
+    public String addPayment(@PathVariable("name") String name, @ModelAttribute("client") @Valid Client client, Authentication authentication) {
+
+        Client updatedClient = clientService.findByName(name);
+        List<Project> projects = projectService.findAllByClient(updatedClient);
+
+        BigDecimal totalQuoted = new BigDecimal(0);
+
+        for (Project project : projects) {
+            totalQuoted = totalQuoted.add(project.getQuotePrice());
+        }
+
+        updatedClient.setTotalAmountPaid(client.getTotalAmountPaid());
+
+        clientService.saveClient(updatedClient);
+
+        return "redirect:/clients/" + updatedClient.getName();
+    }
+
 
     // Add note
     @PostMapping(path = "/clients/{name}/add")
