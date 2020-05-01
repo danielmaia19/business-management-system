@@ -36,6 +36,7 @@ public class Project {
     private Date createdOn;
     private BigDecimal quotePrice;
     private String projectManager;
+    private String expectedCompletionDate;
 
     @Transient
     private int timeSpent;
@@ -44,7 +45,7 @@ public class Project {
     @JoinColumn(name="client_id", referencedColumnName = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<HoursWorked> hoursWorked = new ArrayList<>();
 
     public Project() {

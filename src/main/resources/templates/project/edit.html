@@ -74,16 +74,23 @@
                                         </div>
 
                                         <div class="form-group col-md-2">
-                                            <label for="timeSpent">Time Spent:</label>
+                                            <label for="timeSpent">Time Spent (hours):</label>
                                             <input th:field="*{timeSpent}" type="number"
                                                    class="form-control" id="timeSpent"
                                                    data-bind="value:replyNumber"/>
                                         </div>
 
                                         <div class="form-group col-md-2">
-                                            <label for="project-manager">Quoted Price:</label>
-                                            <input th:field="*{quotePrice}" type="number" class="form-control"
-                                                   id="quotePrice" min="0" data-bind="value:replyNumber"/>
+                                            <label for="quotePrice">Quoted Price:</label>
+
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">£</span>
+                                                </div>
+                                                <input th:field="*{quotePrice}" type="number" class="form-control"
+                                                       id="quotePrice" min="0" data-bind="value:replyNumber"/>
+                                            </div>
+
                                         </div>
 
                                         <div class="form-group col-md-2">
@@ -94,6 +101,12 @@
                                                 <option th:value="Completed">Completed</option>
                                             </select>
                                         </div>
+
+                                        <div class="form-group col-md-2">
+                                            <label for="datepicker">Expected Completion Date:</label>
+                                            <input th:field="*{expectedCompletionDate}" type="text" class="form-control" id="datepicker">
+                                        </div>
+
                                     </div>
 
                                     <div class="form-row">
@@ -103,6 +116,7 @@
                                                       class="form-control" id="project-description"
                                                       placeholder=""></textarea>
                                         </div>
+
                                     </div>
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </form>
@@ -118,10 +132,19 @@
     </div>
 </div>
 
+
 <div th:insert="components/footer"></div>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="/js/custom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 <script>
+    $( function() {
+        $( "#datepicker" ).datepicker();
+    } );
+
 
     $(document).ready(function(){
         $("#editProject").validate({

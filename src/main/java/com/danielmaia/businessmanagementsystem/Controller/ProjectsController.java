@@ -93,6 +93,7 @@ public class ProjectsController {
 
         //project.setUser(currentUser);
         project.setClient(selectedClient);
+        project.setCreatedOn(new DateTime().toDate());
         projectService.saveProject(project);
 
         HoursWorked hoursWorked = new HoursWorked();
@@ -114,10 +115,26 @@ public class ProjectsController {
             count += hoursWorked.getHours();
         }
 
-        int days = (int) TimeUnit.HOURS.toDays(count);
+        int minute = (int) TimeUnit.HOURS.toMinutes(count);
+        StringBuilder timeSpentString=new StringBuilder();
+
+        int day=minute/1440;
+        int rem=minute%1440;
+        int hour=rem/60;
+        int Minute=rem%60;
+
+        if(day>0)
+            timeSpentString.append(day+" day ");
+
+        if(hour>0)
+            timeSpentString.append(hour+" hour ");
+
+        if(Minute>0)
+            timeSpentString.append(Minute+" minute");
 
         model.addAttribute("project", project);
-        model.addAttribute("daysWorked", days);
+        model.addAttribute("timeSpent", timeSpentString);
+        model.addAttribute("quotedPrice", "£" + project.getQuotePrice());
         model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
         return "project/view";
@@ -149,13 +166,18 @@ public class ProjectsController {
         foundProject.setContactPerson(project.getContactPerson());
         foundProject.setQuotePrice(project.getQuotePrice());
         foundProject.setClient(project.getClient());
+        foundProject.setExpectedCompletionDate(project.getExpectedCompletionDate());
 
         HoursWorked hoursWorked = new HoursWorked();
-        hoursWorked.setHours(project.getTimeSpent());
-        hoursWorked.setProject(foundProject);
-        hoursWorked.setTimestamp(new DateTime().toDate());
 
-        hoursWorkedService.saveHoursWorked(hoursWorked);
+        if(project.getTimeSpent() > 0) {
+            hoursWorked.setProject(foundProject);
+            hoursWorked.setTimestamp(new DateTime().toDate());
+            hoursWorked.setHours(project.getTimeSpent());
+            hoursWorkedService.saveHoursWorked(hoursWorked);
+        }
+
+
 
         projectService.saveProject(foundProject);
 
@@ -294,7 +316,6 @@ public class ProjectsController {
         json.add("count", jsonHoursWorkedCount);
         return json.toString();
     }
-
 
 }
 

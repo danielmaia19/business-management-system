@@ -63,15 +63,18 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Project Quote </span>
-                                            <span class="value text-success"> £2300 </span>
+<!--                                            <span class="value text-success" th:text="${quotedPrice}"> </span>-->
+                                            <span class="value text-success" th:text="${quotedPrice.matches('£null')}?'N.A.': ${quotedPrice}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
-                                            <span class="value text-success" th:text="${daysWorked} + ' days'"></span>
+                                            <span class="value text-success" th:text="${timeSpent}"></span>
+                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Expected Completion Date </span>
-                                            <span class="value text-success"> 20/10/2020 </span>
+                                            <span class="value text-success" th:text="${project.expectedCompletionDate}"> </span>
+                                            <span class="value text-success" th:if="${project.expectedCompletionDate == ''}">N.A.</span>
                                         </li>
                                     </ul>
                                     <br/>
@@ -79,13 +82,8 @@
                                     <div id="mainb"></div>
                                     <figure class="highcharts-figure">
                                         <div id="container"></div>
-<!--                                        <p class="highcharts-description">-->
-<!--                                            Lollipop charts are variants of column charts, with a circle-->
-<!--                                            marker for the data value and a line extending to the axis.-->
-<!--                                        </p>-->
                                     </figure>
                                     <div>
-
 
                                         <h4>Notes:</h4>
                                         <div th:if="${param.error}" class="alert alert-danger">
