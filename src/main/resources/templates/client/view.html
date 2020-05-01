@@ -82,7 +82,7 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Total Quoted </span>
-                                            <span class="value text-success" th:text="'£'+${totalQuoted}"></span>
+                                            <span class="value text-success" th:text="'£'+${totalQuoted == 0}?'£0.00'"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Total amount Paid </span>
@@ -177,7 +177,11 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
-                                            <!--<h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>-->
+                                            <div th:if="${fileExists}">
+                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{name}/logo.png (name = ${client.name})}">
+                                                <br/>
+                                                <br/>
+                                            </div>
 
                                             <p th:text="${client.description}"></p>
 
@@ -281,7 +285,7 @@
 
                         <form class="form-horizontal" name="editClient" id="editClient"
                               th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}"
-                              method="POST" modelAttribute="client" enctype="UTF8">
+                              method="POST" modelAttribute="client" enctype="multipart/form-data">
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
@@ -371,6 +375,19 @@
                                     </textarea>
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validDescription">Cannot be empty</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input style="cursor: pointer" type="file" name="imageFile"
+                                                   class="custom-file-input" id="my_file"
+                                                   aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" id="filename" for="my_file">Upload Client logo</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -483,6 +500,11 @@
     }, 3000); // <-- time in milliseconds
 
     $("input[id='my_file']").change(function (e) {
+        var $this = $(this);
+        $this.next().html($this.val().split('\\').pop());
+    });
+
+    $("input[id='imageFile']").change(function (e) {
         var $this = $(this);
         $this.next().html($this.val().split('\\').pop());
     });

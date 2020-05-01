@@ -4,6 +4,7 @@ import com.danielmaia.businessmanagementsystem.Model.*;
 import com.danielmaia.businessmanagementsystem.Service.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.commons.io.FileUtils;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,8 +18,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,13 +55,19 @@ public class ClientsController {
 
         List<Client> clients = clientService.findAllByUser(currentUser);
         List<Project> projects = new ArrayList<>();
+        Map<Client, Boolean> clientsAndLogos = new HashMap<>();
 
         for(Client userClient : clients) {
             projects.addAll(userClient.getProjects());
+
+            Path path = Paths.get("src/main/resources/static/logos/" + userClient.getName());
+
+            // Checks if the directory exists
+            clientsAndLogos.put(userClient, Files.exists(path));
         }
 
         model.addAttribute("projects", projects);
-        model.addAttribute("clients", clientService.findAllByUser(currentUser));
+        model.addAttribute("clients", clientsAndLogos);
         model.addAttribute("name", currentUser.getFullName());
 
         return "clients";
@@ -64,19 +75,30 @@ public class ClientsController {
 
     // Save client created by user
     @PostMapping(path = "/clients")
-    public String createClient(Model model, @ModelAttribute("client") Client client, RedirectAttributes redirectAttributes, Authentication authentication) {
+    public String createClient(Model model, @ModelAttribute("client") Client client, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes, Authentication authentication) throws Exception {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
-            if(clientService.existsByName(client.getName())) {
-                System.out.println("Client already exists");
-                redirectAttributes.addFlashAttribute("error", "client already exists");
-                return "redirect:/clients";
-            } else {
-                client.setUser(currentUser);
-                clientService.saveClient(client);
-                return "redirect:/clients";
+        if (clientService.existsByName(client.getName())) {
+            System.out.println("Client already exists");
+            redirectAttributes.addFlashAttribute("error", "client already exists");
+            return "redirect:/clients";
+        } else {
+            client.setUser(currentUser);
+
+            if (!imageFile.isEmpty()) {
+                if(imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
+                    clientService.saveImage(client.getName(), imageFile);
+                } else {
+                    // Not a image file
+                    System.out.println("There was an error");
+                }
+                
             }
+
+            clientService.saveClient(client);
+            return "redirect:/clients";
+        }
     }
 
     // View selected client, its information and all the notes.
@@ -90,14 +112,24 @@ public class ClientsController {
         BigDecimal totalQuoted = new BigDecimal(0);
         BigDecimal remainingBalance = new BigDecimal(0);
 
-        for (Project project : projects) {
-            totalQuoted = totalQuoted.add(project.getQuotePrice());
-        }
-
         if(client.getTotalAmountPaid() != null) {
+
+            for (Project project : projects) {
+                totalQuoted = totalQuoted.add(project.getQuotePrice());
+            }
+
             remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
         }
 
+        boolean fileExists = false;
+        Path path = Paths.get("src/main/resources/static/logos/" + name);
+
+        // Checks if the directory exists
+        if(Files.exists(path)) {
+            fileExists = true;
+        }
+
+        model.addAttribute("fileExists", fileExists);
         model.addAttribute("remainingBalance", remainingBalance);
         model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
@@ -161,7 +193,7 @@ public class ClientsController {
 
     // Edit client
     @PostMapping(value = "/clients/{name}/edit")
-    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, RedirectAttributes redirectAttributes, Authentication authentication){
+    public String deleteClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes, Authentication authentication) throws Exception {
 
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
@@ -186,6 +218,17 @@ public class ClientsController {
             updatedClient.setContactPersonEmail(client.getContactPersonEmail());
             updatedClient.setUser(currentUser);
 
+            if (!imageFile.isEmpty()) {
+                if(imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
+                    FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + name));
+                    clientService.saveImage(client.getName(), imageFile);
+                } else {
+                    // Not a image file
+                    System.out.println("There was an error");
+                }
+
+            }
+
             clientService.saveClient(updatedClient);
 
             return "redirect:/clients/" + updatedClient.getName();
@@ -194,7 +237,8 @@ public class ClientsController {
 
     // Delete client
     @RequestMapping(value = "/clients/{name}/delete")
-    public String updateClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client){
+    public String deleteClient(@PathVariable("name") String name, @ModelAttribute("editClient") @Valid Client client) throws IOException {
+        FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + name));
         clientService.deleteClient(clientService.findByName(client.getName()));
         return "redirect:/clients";
     }
@@ -218,7 +262,6 @@ public class ClientsController {
 
         return "redirect:/clients/" + updatedClient.getName();
     }
-
 
     // Add note
     @PostMapping(path = "/clients/{name}/add")
@@ -257,7 +300,7 @@ public class ClientsController {
     }
 
     @PostMapping("/clients/{name}/upload")
-    public String testingUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+    public String fileUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         Client client = clientService.findByName(name);
         ClientFile clientFileName = clientFileService.saveFile(client, file);
 
