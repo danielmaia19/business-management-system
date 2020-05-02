@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -70,7 +71,7 @@ public class ClientsController {
         for(Client userClient : clients) {
             projects.addAll(userClient.getProjects());
 
-            Path path = Paths.get("src/main/resources/static/logos/" + userClient.getName());
+            Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + userClient.getName());
 
             // Checks if the directory exists
             clientsAndLogos.put(userClient, Files.exists(path));
@@ -78,7 +79,9 @@ public class ClientsController {
 
         model.addAttribute("projects", projects);
         model.addAttribute("clients", clientsAndLogos);
+        model.addAttribute("clientsList", clients);
         model.addAttribute("name", currentUser.getFullName());
+        model.addAttribute("username", currentUser.getUsername());
 
         return "clients";
     }
@@ -98,7 +101,19 @@ public class ClientsController {
             User user = (User) authentication.getPrincipal();
             User currentUser = userService.findByUsername(user.getUsername());
 
-        if (clientService.existsByName(client.getName())) {
+        List<Client> clients = clientService.findAllByUser(currentUser);
+
+        boolean clientForUserExists = false;
+
+        for(Client client1 : clients) {
+            if(client1.getName().equals(client.getName())) {
+                clientForUserExists = true;
+            } else {
+                clientForUserExists = false;
+            }
+        }
+
+        if (clientForUserExists) {
             redirectAttributes.addFlashAttribute("error", "client already exists");
             return "redirect:/clients";
         } else {
@@ -106,7 +121,7 @@ public class ClientsController {
 
             if (!imageFile.isEmpty()) {
                 if(imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
-                    clientService.saveImage(client.getName(), imageFile);
+                    clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file
                     System.out.println("There was an error");
@@ -128,6 +143,9 @@ public class ClientsController {
      */
     @GetMapping(path = "/clients/{name}")
     public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") ClientNote clientNote, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
         Client client = clientService.findByName(name);
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
@@ -145,7 +163,7 @@ public class ClientsController {
         }
 
         boolean fileExists = false;
-        Path path = Paths.get("src/main/resources/static/logos/" + name);
+        Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name);
 
         // Checks if the directory exists
         if(Files.exists(path)) {
@@ -157,6 +175,8 @@ public class ClientsController {
         model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
         model.addAttribute("client", client);
+        model.addAttribute("username", currentUser.getUsername());
+        System.out.println(currentUser.getUsername());
         model.addAttribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
@@ -238,8 +258,20 @@ public class ClientsController {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
-        if (!client.getName().equals(name) && clientService.existsByName(client.getName())) {
-            System.out.println("the client already exists");
+        List<Client> clients = clientService.findAllByUser(currentUser);
+
+        boolean clientForUserExists = false;
+
+        for(Client client1 : clients) {
+            if(client1.getName().equals(client.getName())) {
+                clientForUserExists = true;
+            } else {
+                clientForUserExists = false;
+            }
+        }
+
+
+        if (clientForUserExists) {
             redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
             return "redirect:/clients/" + name;
         } else {
@@ -259,8 +291,8 @@ public class ClientsController {
 
             if (!imageFile.isEmpty()) {
                 if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
-                    FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + name));
-                    clientService.saveImage(client.getName(), imageFile);
+                    FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
+                    clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file, it was somehting else .txt etc...
                     System.out.println("There was an error");
@@ -282,8 +314,10 @@ public class ClientsController {
      * @throws IOException
      */
     @RequestMapping(value = "/clients/{name}/delete")
-    public String deleteClient(@PathVariable String name, @ModelAttribute("editClient") @Valid Client client) throws IOException {
-        FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + name));
+    public String deleteClient(@PathVariable String name, @ModelAttribute("editClient") @Valid Client client, Authentication authentication) throws IOException {
+        User user = (User) authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
+        FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
         clientService.deleteClient(clientService.findByName(client.getName()));
         return "redirect:/clients";
     }
