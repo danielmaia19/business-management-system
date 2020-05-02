@@ -57,12 +57,6 @@
                             <div class="x_title">
                                 <h2 th:text="${client.getName()}"></h2>
 
-                                <button style="float:right" type="button" class="btn btn-outline-success btn-sm"
-                                        data-toggle="modal"
-                                        data-target=".payment-modal-sm">Payment Amount
-                                </button>
-
-
                                 <button style="float:right;" type="button" class="btn btn-danger btn-sm"
                                         data-toggle="modal"
                                         data-target=".bd-example-modal-sm">Delete Client
@@ -70,6 +64,11 @@
                                 <button style="float:right" type="button" class="btn btn-primary btn-sm"
                                         data-toggle="modal"
                                         data-target="#exampleModalCenter">Edit Client
+                                </button>
+
+                                <button style="float:right" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".payment-modal-sm">Amount Paid
                                 </button>
 
                                 <div class="clearfix"></div>
@@ -82,17 +81,15 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Total Quoted </span>
-                                            <span class="value text-success" th:text="'£'+${totalQuoted == 0}?'£0.00'"></span>
+                                            <span class="value text-success" th:text="'£'+${totalQuoted}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Total amount Paid </span>
-<!--                                            <span class="value text-success" th:text="'£' + ${client.getTotalAmountPaid()}"></span>-->
                                             <span class="value text-success" th:text="${client.getTotalAmountPaid() == null}?'£0.00': '£' + ${client.getTotalAmountPaid()}"></span>
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Remaining Balance </span>
                                             <span class="value text-success" th:text="${remainingBalance == 0.00} ? '£0.00' : '£' + ${remainingBalance}"></span>
-<!--                                            <span class="value text-success" th:if="${totalQuoted == null}?'test':'nothing'"></span>-->
                                         </li>
                                     </ul>
                                     <br/>
@@ -614,7 +611,7 @@
                 type: 'column'
             },
             title: {
-                text: 'Yearly Projects'
+                text: 'No. of Monthly Projects'
             },
             subtitle: {
                 text: 'The number of projects for ' + client + ' over the last twelve months',

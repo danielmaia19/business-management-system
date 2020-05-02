@@ -195,6 +195,7 @@ public class ProjectsController {
     @PostMapping("/projects/{name}/delete")
     public String projectDelete(@PathVariable String name, Model model, RedirectAttributes redirectAttributes) {
         try {
+            hoursWorkedService.deleteAllHoursWorked(projectService.findByName(name));
             projectService.deleteProjectByName(name);
             redirectAttributes.addFlashAttribute("successDeletion", "Successfully removed the project");
         } catch (Exception e) {

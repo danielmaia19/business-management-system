@@ -121,6 +121,10 @@ public class ClientsController {
             remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
         }
 
+        for (Project project : projects) {
+            totalQuoted = totalQuoted.add(project.getQuotePrice());
+        }
+
         boolean fileExists = false;
         Path path = Paths.get("src/main/resources/static/logos/" + name);
 

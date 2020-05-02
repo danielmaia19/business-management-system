@@ -22,4 +22,8 @@ public class HoursWorkedService {
         return hoursWorkedRepository.findAllByProject(project);
     }
 
+    public void deleteAllHoursWorked(Project project) {
+        hoursWorkedRepository.deleteAll(hoursWorkedRepository.findAllByProject(project));
+    }
+
 }
