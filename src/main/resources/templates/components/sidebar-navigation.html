@@ -1,8 +1,9 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
         <h3>General</h3>
         <ul class="nav side-menu">
-            <li><a href="/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li><a href="/dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
             <li><a href="/clients"><i class="fa fa-users"></i> Clients</a></li>
             <li><a href="/projects"><i class="fa fa-folder"></i> Projects</a></li>
             <li><a href="/reports"><i class="fa fa-bar-chart-o"></i> Reports </a></li>
@@ -15,6 +16,13 @@
             <li><a href="/invoices"><i class="fa fa-file-o"></i> Invoices </a></li>
             <li><a href="/expenses"><i class="fa fa-money"></i> Expenses </a></li>
             <li><a href="/timesheets"><i class="fa fa-clock-o"></i> Timesheets </a></li>
+        </ul>
+    </div>
+
+    <div class="menu_section" sec:authorize="hasRole('ROLE_SUPER_ADMIN')">
+        <h3>Super Admin</h3>
+        <ul class="nav side-menu">
+            <li><a href="/loggedUsers"><i class="fa fa-dashboard"></i> Total Active Users </a></li>
         </ul>
     </div>
 

@@ -16,6 +16,14 @@ import javax.servlet.http.HttpSession;
 public class LogoutController {
 
     // Show login page when this is called
+
+    /**
+     * Show login page when user logs out.
+     * @param request
+     * @param response
+     * @param authentication
+     * @return Redirected to the login page with a message of success.
+     */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         if (authentication != null) { new SecurityContextLogoutHandler().logout(request, response, authentication); }

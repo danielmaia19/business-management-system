@@ -30,8 +30,12 @@ public class DashboardController {
     @Autowired
     private ProjectService projectService;
 
-    // If navigated to the /dashboard URI
-    // Then the user will see the dashboard page
+    /**
+     * The user will see the dashboard page if they are currently logged in.
+     * The user will be able to the number of active projects, project count and clients count.
+     * @param model to pass the data from the method to the view
+     * @return The dashboard view
+     */
     @GetMapping("/dashboard")
     public String index(ModelMap model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,8 +58,6 @@ public class DashboardController {
                 projectsCount++;
             }
         }
-
-        //projectService.countProjectsByStatusEqualsOrStatusEquals("To Do", "In Progress")
 
         model.addAttribute("activeProjects", projectsCount);
         model.addAttribute("projectsCount", count);

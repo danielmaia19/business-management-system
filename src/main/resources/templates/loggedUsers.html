@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <link rel="stylesheet" type="text/css" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.1/css/font-awesome.min.css" />
+    <meta charset="UTF-8">
+    <title>Total of Logged In Users</title>
+
+    <style>
+        .center-div {
+            position: absolute;
+            top: 50%;
+            left: 40%;
+            margin-top: -50px;
+            margin-left: -50px;
+            width: 500px;
+            height: 100px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<!-- Earnings (Monthly) Card Example -->
+<div class="col-xl-3 col-md-6 mb-4 center-div">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Active Sessions</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800 total-users" th:text="${numberOfActiveUsers}"></div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-users fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script   src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="   crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+
+    setInterval(function () {
+        $.ajax({
+            url: '/loggedUsers/total',
+            success: function (result) {
+                var users = JSON.parse(result).activeUsers;
+                $('.total-users').html(users);
+            },
+
+        });
+    }, 2000); // will refresh every 5 seconds = 5000 ms
+
+
+</script>
+
+</body>
+</html>

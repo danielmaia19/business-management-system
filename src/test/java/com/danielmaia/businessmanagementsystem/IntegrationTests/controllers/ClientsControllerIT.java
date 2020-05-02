@@ -15,18 +15,23 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -70,9 +75,18 @@ class ClientsControllerIT {
     @Test
     @DisplayName("Client Page View OK?")
     void index() throws Exception {
+        Map<Client, Boolean> clientsAndLogo = new HashMap<>();
+
+        for(Client client : clientService.findAllByUser(userService.findByUsername("admin"))) {
+            Path path = Paths.get("src/main/resources/static/logos/" + client.getName());
+
+            // Checks if the directory exists
+            clientsAndLogo.put(client, Files.exists(path));
+        }
+
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientService.findAllByUser((User) userService.loadUserByUsername("admin"))))
+                .andExpect(MockMvcResultMatchers.model().attribute("clients", clientsAndLogo))
                 .andExpect(MockMvcResultMatchers.model().attribute("name", ((User) userService.loadUserByUsername("admin")).getFullName()))
                 .andExpect(view().name("clients"));
     }
@@ -80,7 +94,9 @@ class ClientsControllerIT {
     @Test
     @DisplayName("User Can Create Client")
     public void testUserCanCreatClient() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/clients")
+        MockMultipartFile image = new MockMultipartFile("imageFile", "", "image/png", "{\"image\": src/main/resources/static/logos/logo.png}".getBytes());
+
+        mvc.perform(MockMvcRequestBuilders.multipart("/clients").file(image)
                 .with(user(userService.loadUserByUsername("admin")))
                 .param("name", "name")
                 .param("addressLineOne", "address line 1")

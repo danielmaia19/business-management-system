@@ -17,9 +17,14 @@ public class ReportsController {
     private UserService userService;
 
     // Show reports page
+
+    /**
+     * Displays the reports page if the user is authenticated.
+     * @param model used to add the attribute of the users full name
+     * @return Reports view is shown
+     */
     @GetMapping("/reports")
     public String index(ModelMap model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();

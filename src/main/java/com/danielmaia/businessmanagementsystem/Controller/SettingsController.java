@@ -1,6 +1,5 @@
 package com.danielmaia.businessmanagementsystem.Controller;
 
-import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,11 @@ public class SettingsController {
     @Autowired
     private UserService userService;
 
-    // Show settings page
+    /**
+     * Displays the settings page if the user is authenticated.
+     * @param model used to pass the users full name as a attribute to the view.
+     * @return Settings view page.
+     */
     @GetMapping("/settings")
     public String index(ModelMap model) {
 

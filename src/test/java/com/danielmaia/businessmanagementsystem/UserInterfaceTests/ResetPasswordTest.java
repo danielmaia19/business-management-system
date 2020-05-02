@@ -31,7 +31,7 @@ public class ResetPasswordTest {
     public void testTokenRequestParamRedirects() throws Exception {
 
         LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-        requestParams.add("token", "1");
+        requestParams.add("token", "dgf345fgh4356rh34fgh4356");
 
         mockMvc.perform(MockMvcRequestBuilders.get("/reset").params(requestParams)).andExpect(status().is3xxRedirection());
 

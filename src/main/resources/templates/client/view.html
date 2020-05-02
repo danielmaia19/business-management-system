@@ -23,6 +23,11 @@
                 The project was uploaded successfully
             </div>
 
+            <div style="float:right; width:100%; text-align: center" th:if="${duplicateClient}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                A client already exists with that name.
+            </div>
+
             <div style="float:right; width:100%; text-align: center" th:if="${deleted}" id="mydiv"
                  class="alert alert-info alert-dismissible fade show">
                 Your file was deleted successfully
@@ -31,21 +36,40 @@
                 </button>
             </div>
 
+            <div style="float:right; width:100%; text-align: center" th:if="${error}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                Client with that name already exists
+            </div>
+
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
                         <h3>Client Details</h3>
                     </div>
+
                 </div>
 
                 <div class="clearfix"></div>
-
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2 th:text="${name}"></h2>
+                                <h2 th:text="${client.getName()}"></h2>
+
+                                <button style="float:right;" type="button" class="btn btn-danger btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".bd-example-modal-sm">Delete Client
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-primary btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#exampleModalCenter">Edit Client
+                                </button>
+
+                                <button style="float:right" type="button" class="btn btn-outline-success btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".payment-modal-sm">Amount Paid
+                                </button>
 
                                 <div class="clearfix"></div>
                             </div>
@@ -57,18 +81,17 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Total Quoted </span>
-                                            <span class="value text-success" th:text="'£'+ ${totalQuoted}"></span>
+                                            <span class="value text-success" th:text="'£'+${totalQuoted}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Total amount Paid </span>
-                                            <span class="value text-success"> £0.00 </span>
+                                            <span class="value text-success" th:text="${client.getTotalAmountPaid() == null}?'£0.00': '£' + ${client.getTotalAmountPaid()}"></span>
                                         </li>
                                         <li class="hidden-phone">
-                                            <span class="name"> Estimated project duration </span>
-                                            <span class="value text-success"> £0.00 </span>
+                                            <span class="name"> Remaining Balance </span>
+                                            <span class="value text-success" th:text="${remainingBalance == 0.00} ? '£0.00' : '£' + ${remainingBalance}"></span>
                                         </li>
                                     </ul>
-
                                     <br/>
 
                                     <div id="container" style="width: 100%; height:400px;"></div>
@@ -84,7 +107,7 @@
                                           th:action="@{/clients/{name}/add(name = ${client.getName()})}"
                                           th:object="${note}" method="POST" enctype="UTF8">
                                         <div class="form-group row">
-                                            <div class="col-md-12">
+                                            <div style="padding-left:0px;" class="col-md-12">
                                                 <textarea th:field="*{user_note}" id="user_note" name="user_note"
                                                           class="resizable_textarea form-control"
                                                           placeholder="Enter a note...."></textarea>
@@ -92,7 +115,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-12" style="padding-left: 0px">
                                                 <button type="submit" class="btn btn-primary btn-sm">Save Note</button>
                                             </div>
                                         </div>
@@ -137,6 +160,7 @@
 
                                         </ul>
                                         <!-- end of user messages -->
+
                                     </div>
                                 </div>
 
@@ -150,7 +174,11 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
-                                            <!--<h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>-->
+                                            <div th:if="${fileExists}">
+                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{name}/logo.png (name = ${client.name})}">
+                                                <br/>
+                                                <br/>
+                                            </div>
 
                                             <p th:text="${client.description}"></p>
 
@@ -168,8 +196,9 @@
                                                 <h5 class="title">Client Address</h5>
                                                 <span th:text="${client.getAddressLineOne()}"></span>
                                                 <br/>
-                                                <span th:text="${client.getAddressLineTwo()}"></span>
-                                                <br/>
+                                                <span id="addressLineTwo" class="addressLineTwo"
+                                                      th:text="${client.getAddressLineTwo()}"></span>
+                                                <br id="addressLineTwoBR"/>
                                                 <span th:text="${client.getCity()}"></span>
                                                 <br/>
                                                 <span th:text="${client.getRegion()}"></span>
@@ -222,26 +251,18 @@
                                             <br/>
                                             <br/>
 
-                                            <div class="text-left mtop20">
-
-                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                        data-target="#exampleModalCenter">Edit Client
-                                                </button>
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                        data-target=".bd-example-modal-sm">Delete Client
-                                                </button>
-
-                                            </div>
                                         </div>
 
                                     </section>
 
                                 </div>
                                 <!-- end project-detail sidebar -->
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!-- /page content -->
@@ -259,13 +280,13 @@
                     </div>
                     <div class="modal-body">
 
-                        <form class="form-horizontal" name="signup"
+                        <form class="form-horizontal" name="editClient" id="editClient"
                               th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}"
-                              method="POST" modelAttribute="client" enctype="UTF8">
+                              method="POST" modelAttribute="client" enctype="multipart/form-data">
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <input th:field="*{name}" id="name" name="name" type="text" required
+                                    <input th:field="*{name}" id="name" name="name" type="text"
                                            class="form-control" placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validName">Cannot be empty</span>
@@ -275,7 +296,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{addressLineOne}" id="addressLineOne" name="addressLineOne"
-                                           required type="text" class="form-control" placeholder="Address Line 1">
+                                            type="text" class="form-control" placeholder="Address Line 1">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validAddressOne">Cannot be empty</span>
                                 </div>
@@ -289,14 +310,14 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{city}" id="city" name="city" type="text" class="form-control"
-                                           required placeholder="City / Town">
+                                            placeholder="City / Town">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCity">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{region}" id="region" name="region" type="text"
-                                           class="form-control" required placeholder="State/Province/Region">
+                                           class="form-control" placeholder="State/Province/Region">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validRegion">Cannot be empty</span>
                                 </div>
@@ -306,14 +327,14 @@
                             <div class="form-group row ">
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{postCode}" id="postCode" name="postCode" type="text"
-                                           class="form-control" required placeholder="Zip / Postal Code">
+                                           class="form-control" placeholder="Zip / Postal Code">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validPostCode">Cannot be empty</span>
                                 </div>
 
                                 <div class="col-md-6 col-sm-6  form-group">
                                     <input th:field="*{country}" id="country" name="country" type="text"
-                                           class="form-control" required placeholder="Country">
+                                           class="form-control" placeholder="Country">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validCountry">Cannot be empty</span>
                                 </div>
@@ -322,7 +343,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
                                     <input th:field="*{contactPerson}" id="contactPerson" name="contactPerson"
-                                           type="text" required class="form-control" placeholder="Contact Person">
+                                           type="text" class="form-control" placeholder="Contact Person">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validContactPerson">Cannot be empty</span>
                                 </div>
@@ -331,7 +352,7 @@
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
                                     <input th:field="*{contactPersonEmail}" id="contactPersonEmail"
-                                           name="contactPersonEmail" required type="text" class="form-control"
+                                           name="contactPersonEmail" type="text" class="form-control"
                                            placeholder="Contact Person Email">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validEmail">Cannot be empty</span>
@@ -340,10 +361,11 @@
 
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <textarea th:field="*{description}" id="description" required class="form-control"
+                                    <textarea th:field="*{description}" id="description" class="form-control"
                                               name="description" data-parsley-trigger="keyup"
                                               data-parsley-minlength="20"
                                               data-parsley-maxlength="100"
+                                              rows="5"
                                               data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
                                               data-parsley-validation-threshold="10"
                                               placeholder="Description">
@@ -353,10 +375,23 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row ">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input style="cursor: pointer" type="file" name="imageFile"
+                                                   class="custom-file-input" id="my_file"
+                                                   aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" id="filename" for="my_file">Upload Client logo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close
                                 </button>
-                                <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                                <button type="submit" id="btnSubmit" class="btn btn-primary btn-sm">Save changes</button>
                             </div>
 
                         </form>
@@ -371,15 +406,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <p>Are you sure you want to delete: <span style="font-weight: bold"
-                                                                  th:text=" ${client.getName()}"></span></p>
+                        <p class="text text-danger">If you confirm to delete this client, you will also be deleting all the projects associated to this client.</p>
+
+                        <h6 class="text text-danger">Are you sure you want to delete: <span style="font-weight: bold"
+                                                                                           th:text=" ${client.getName()}"></span></h6>
                     </div>
 
                     <div class="modal-footer">
@@ -395,12 +432,65 @@
             </div>
         </div>
 
+        <!--Modal to confirm the user wants to delete client-->
+        <div class="modal fade payment-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <form class="form-horizontal" onsubmit="return validateForm()" name="payment" th:action="@{/clients/{name}/payment(name = ${client.getName()})}"
+                          th:object="${client}" method="POST" modelAttribute="client" enctype="UTF8">
+                        <div class="modal-header">
+                            <!--                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>-->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="form-group row ">
+                                <label for="quotePrice">Add amount paid:</label>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">£</span>
+                                    </div>
+                                    <input th:field="*{totalAmountPaid}" type="number" class="form-control"
+                                           id="quotePrice" name="quotePrice" min="0"
+                                           data-bind="value:replyNumber" step=".01"
+                                           aria-label="Amount (to the nearest pound)">
+                                    <br>
+                                </div>
+
+                                <span style="float:left; color: red; text-align: left; display: none" id="error-validPayment" class="error-validPayment" name="error-validPayment">Cannot be empty</span>
+                                <span style="float:left; color: red; text-align: left; display: none" id="error-validTotalQuoted0" class="error-validTotalQuoted0" name="error-validTotalQuoted0">Total quoted amount is 0.</span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success btn-sm">Add Amount</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <div th:insert="components/footer"></div>
+<script src="/js/custom.min.js"></script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 <script>
     setTimeout(function () {
         $('#mydiv').fadeOut('slow');
@@ -411,74 +501,73 @@
         $this.next().html($this.val().split('\\').pop());
     });
 
-    <!-- Field Validation -->
-    $("#btnSubmit").click(function () {
-        var nameField = $("#name").val();
-        var addressOne = $("#addressLineOne").val();
-        var city = $("#city").val();
-        var region = $("#region").val();
-        var postcode = $("#postCode").val();
-        var country = $("#country").val();
-        var contactPerson = $("#contactPerson").val();
-        var description = $("#description").val();
-        var emailField = $("#contactPersonEmail").val();
+    $("input[id='imageFile']").change(function (e) {
+        var $this = $(this);
+        $this.next().html($this.val().split('\\').pop());
+    });
 
-        console.log(contactPerson);
-
-        if (nameField == "") {
-            document.getElementById("error-validName").style.display = "block";
-        } else {
-            document.getElementById("error-validName").style.display = "none";
-        }
-
-        if (addressOne == "") {
-            document.getElementById("error-validAddressOne").style.display = "block";
-        } else {
-            document.getElementById("error-validAddressOne").style.display = "none";
-        }
-
-        if (city == "") {
-            document.getElementById("error-validCity").style.display = "block";
-        } else {
-            document.getElementById("error-validCity").style.display = "none";
-        }
-
-        if (region == "") {
-            document.getElementById("error-validRegion").style.display = "block";
-        } else {
-            document.getElementById("error-validRegion").style.display = "none";
-        }
-
-        if (postcode == "") {
-            document.getElementById("error-validPostcode").style.display = "block";
-        } else {
-            document.getElementById("error-validPostcode").style.display = "none";
-        }
-
-        if (country == "") {
-            document.getElementById("error-validCountry").style.display = "block";
-        } else {
-            document.getElementById("error-validCountry").style.display = "none";
-        }
-
-        if (contactPerson == "") {
-            document.getElementById("error-validContactPerson").style.display = "block";
-        } else {
-            document.getElementById("error-validContactPerson").style.display = "none";
-        }
-
-        if (description == "") {
-            document.getElementById("error-validDescription").style.display = "block";
-        } else {
-            document.getElementById("error-validDescription").style.display = "none";
-        }
-
-        if (emailField == "") {
-            document.getElementById("error-validEmail").style.display = "block";
-        } else {
-            document.getElementById("error-validEmail").style.display = "none";
-        }
-
+    $(document).ready(function(){
+        $("#editClient").validate({
+            rules :{
+                "name" : {
+                    required : true
+                },
+                "addressLineOne" : {
+                    required : true
+                },
+                "city" : {
+                    required : true
+                },
+                "region" : {
+                    required : true
+                },
+                "postCode" : {
+                    required : true
+                },
+                "country" : {
+                    required : true
+                },
+                "contactPerson" : {
+                    required : true
+                },
+                "contactPersonEmail" : {
+                    required : true,
+                    email : true
+                },
+                "description" : {
+                    required : true
+                }
+            },
+            messages :{
+                "name" : {
+                    required : 'Enter a Client Name'
+                },
+                "addressLineOne" : {
+                    required : 'Address Line One Cannot be Empty',
+                },
+                "city" : {
+                    required : 'City Cannot be Empty'
+                },
+                "region" : {
+                    required : 'Region Cannot be Empty'
+                },
+                "postCode" : {
+                    required : 'Postcode Cannot be Empty'
+                },
+                "country" : {
+                    required : 'Country Cannot be Empty'
+                },
+                "contactPerson" : {
+                    required : 'Contact Person Cannot be Empty '
+                },
+                "contactPersonEmail" : {
+                    required : 'Contact Person Email Cannot be Empty'
+                },
+                "description" : {
+                    required : 'Enter a valid address line one'
+                },
+            }
+        });
     });
 
     var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua &amp; Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia &amp; Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cruise Ship", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyz Republic", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre &amp; Miquelon", "Samoa", "San Marino", "Satellite", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "St Kitts &amp; Nevis", "St Lucia", "St Vincent", "St. Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad &amp; Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks &amp; Caicos", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
@@ -486,6 +575,15 @@
     $('#country').autocomplete({
         lookup: countries,
     });
+
+    if ($('#addressLineTwo').text() == "") {
+        $('span.addressLineTwo').hide();
+        $('#addressLineTwoBR').hide();
+    } else {
+        $('span.addressLineTwo').show();
+        $('#addressLineTwoBR').show();
+    }
+
 </script>
 
 <!--Bar Chart-->
@@ -507,17 +605,13 @@
 
     });
 
-    // setInterval(function() {
-    //     $('#container').load('/clients/' + client)
-    // }, 5000);
-
     function drawLineChart(month, count) {
         Highcharts.chart('container', {
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Yearly Projects'
+                text: 'No. of Monthly Projects'
             },
             subtitle: {
                 text: 'The number of projects for ' + client + ' over the last twelve months',
@@ -553,6 +647,38 @@
 
             }]
         });
+    }
+
+</script>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var totalQuoted = /*[[${totalQuoted}]]*/ 'totalQuoted';
+
+    /*]]>*/
+
+    function validateForm() {
+        var x = document.forms["payment"]["quotePrice"].value;
+
+        if (x === "") {
+            $('#error-validPayment').show();
+            $('#error-validTotalQuoted0').hide();
+            return false;
+        } else {
+            $('#error-validPayment').hide();
+        }
+
+        if(x > 0 && totalQuoted === 0) {
+            $('#error-validTotalQuoted0').show();
+            return false;
+        }
+
+        if(x > 0 && totalQuoted > 0) {
+            return true;
+        }
+
     }
 
 </script>

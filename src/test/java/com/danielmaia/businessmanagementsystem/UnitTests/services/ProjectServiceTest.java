@@ -6,6 +6,7 @@ import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ProjectRepository;
 import com.danielmaia.businessmanagementsystem.Service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Project Service - Unit Test")
 public class ProjectServiceTest {
 
     @Mock
@@ -48,6 +50,7 @@ public class ProjectServiceTest {
     }
 
     @Test
+    @DisplayName("Find All by Client Test")
     public void testFindAllByClient() {
         // When
         when(repository.findAllByClient(client)).thenReturn(projects);
@@ -61,6 +64,7 @@ public class ProjectServiceTest {
     }
 
     @Test
+    @DisplayName("Save Project Test")
     public void testSaveProject() {
         service.saveProject(project);
         verify(repository).save(any(Project.class));

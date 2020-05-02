@@ -17,6 +17,20 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
+
+            <div style="float:right; width:100%; text-align: center" th:if="${uploaded}" id="mydiv"
+                 class="alert alert-success alert-dismissible fade show">
+                The project was uploaded successfully
+            </div>
+
+            <div style="float:right; width:100%; text-align: center" th:if="${deleted}" id="mydiv"
+                 class="alert alert-info alert-dismissible fade show">
+                Your file was deleted successfully
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
@@ -32,20 +46,13 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2 th:text="${project.getName()}"></h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                           aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">Settings 1</a>
-                                            <a class="dropdown-item" href="#">Settings 2</a>
-                                        </div>
-                                    </li>
-                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                    </li>
-                                </ul>
+                                <button style="float:right" type="button" class="btn btn-danger btn-sm"
+                                        data-toggle="modal"
+                                        data-target=".bd-example-modal-sm">Delete Project
+                                </button>
+                                <button style="float:right" type="button" class="btn btn-primary btn-sm">
+                                    <a th:href="@{/projects/{name}/edit (name= ${project.getName()})}" style="color: white">Edit Project</a>
+                                </button>
                                 <div class="clearfix"></div>
                             </div>
 
@@ -55,16 +62,18 @@
 
                                     <ul class="stats-overview">
                                         <li>
-                                            <span class="name"> Estimated budget </span>
-                                            <span class="value text-success"> £2300 </span>
+                                            <span class="name"> Project Quote </span>
+                                            <span class="value text-success" th:text="${project.getQuotePrice() == null} ? '£0.00' : '£' + ${project.getQuotePrice()}"></span>
                                         </li>
                                         <li>
-                                            <span class="name"> Total amount spent </span>
-                                            <span class="value text-success"> £2000 </span>
+                                            <span class="name"> Time Spent </span>
+                                            <span class="value text-success" th:text="${count == ''}?0:${count}">0</span>
+<!--                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>-->
                                         </li>
                                         <li class="hidden-phone">
-                                            <span class="name"> Estimated project duration </span>
-                                            <span class="value text-success"> £20 </span>
+                                            <span class="name"> Expected Completion Date </span>
+                                            <span class="value text-success" th:text="${project.expectedCompletionDate}"> </span>
+                                            <span class="value text-success" th:if="${project.expectedCompletionDate == ''}">N.A.</span>
                                         </li>
                                     </ul>
                                     <br/>
@@ -72,39 +81,67 @@
                                     <div id="mainb"></div>
                                     <figure class="highcharts-figure">
                                         <div id="container"></div>
-                                        <p class="highcharts-description">
-                                            Lollipop charts are variants of column charts, with a circle
-                                            marker for the data value and a line extending to the axis.
-                                        </p>
                                     </figure>
                                     <div>
+
+                                        <h4>Notes:</h4>
+                                        <div th:if="${param.error}" class="alert alert-danger">
+                                            Notes cannot be empty
+                                        </div>
+
+                                        <form class="form-horizontal"
+                                              th:action="@{/projects/{name}/add(name = ${project.getName()})}"
+                                              th:object="${note}" method="POST" enctype="UTF8">
+                                            <div class="form-group row">
+                                                <div style="padding-left:0px;" class="col-md-12">
+                                                <textarea th:field="*{project_note}" id="user_note" name="user_note"
+                                                          class="resizable_textarea form-control"
+                                                          placeholder="Enter a note...."></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-12" style="padding-left: 0px">
+                                                    <button type="submit" class="btn btn-primary btn-sm">Save Note</button>
+                                                </div>
+                                            </div>
+
+                                        </form>
 
 
                                         <h4>Recent Activity</h4>
 
+                                        <div th:if="${#lists.isEmpty(notes)}">
+                                            There are no notes!
+                                        </div>
+
                                         <!-- end of user messages -->
                                         <ul class="messages">
-                                            <li>
+                                            <li th:each="note : ${notes}">
                                                 <img src="/images/img.jpg" class="avatar" alt="Avatar">
                                                 <div class="message_date">
-                                                    <h3 class="date text-info">24</h3>
-                                                    <p class="month">May</p>
+                                                    <h3 class="date text-info"
+                                                        th:text="${note.getSubmittedDate().getDayOfMonth()}"></h3>
+                                                    <p class="month"
+                                                       th:text="${note.getSubmittedDate().getMonth()}"></p>
                                                 </div>
+
                                                 <div class="message_wrapper">
-                                                    <h4 class="heading">Desmond Davison</h4>
-                                                    <blockquote class="message">Raw denim you probably haven't heard of
-                                                        them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher
-                                                        retro keffiyeh dreamcatcher synth.
-                                                    </blockquote>
-                                                    <br/>
-                                                    <p class="url">
-                                                        <span class="fs1 text-info" aria-hidden="true"
-                                                              data-icon=""></span>
-                                                        <a href="#"><i class="fa fa-paperclip"></i> User Acceptance
-                                                            Test.doc </a>
-                                                    </p>
+                                                    <h4 class="heading"
+                                                        th:text="${note.getProject().getClient().getUser().getFullName()}"></h4>
+                                                    <blockquote class="message"
+                                                                th:text="${note.getProject_note()}"></blockquote>
                                                 </div>
+                                                <form class="form-horizontal"
+                                                      th:action="@{/projects/{name}/note/{id}/delete(name = ${project.getName()}, id=${note.getId()})}"
+                                                      th:object="${note}" method="POST" modelAttribute="note"
+                                                      enctype="UTF8">
+                                                    <button type="submit" style="color: red" class="btn btn-link btn-sm"
+                                                            onclick="return confirm('Are you sure you want to delete this note')">
+                                                        <i class="fa fa-trash"></i></button>
+                                                </form>
                                             </li>
+
                                         </ul>
                                         <!-- end of user messages -->
                                     </div>
@@ -120,7 +157,7 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
-                                            <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>
+<!--                                            <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>-->
 
                                             <p th:text="${project.description}"></p>
                                             <br/>
@@ -133,16 +170,45 @@
                                             <br/>
                                             <h5>Project files</h5>
                                             <ul class="list-unstyled project_files">
-                                                <li><a href=""><i class="fa fa-file-word-o"></i>
-                                                    Functional-requirements.docx</a>
+                                                <li th:each="file : ${projectsFiles}" style="margin-bottom: -13px;">
+                                                    <form class="form-horizontal"
+                                                          th:action="@{/projects/{name}/downloads/{projectFileId}/delete (name = ${project.getName()}, projectFileId = ${file.getProjectFileId()} ) }"
+                                                          method="POST" modelAttribute="note" enctype="UTF8">
+                                                        <i class="fa fa-file"></i>
+                                                        <a th:href="@{/projects/{name}/downloads/{projectFileId} (name = ${project.getName()}, clientFileId = ${file.getProjectFileId()} ) }"
+                                                           th:text="${file.getFilename()}"></a>
+                                                        <button style="color: red" type="submit"
+                                                                class="btn btn-link btn-sm"
+                                                                onclick="return confirm('Are you sure you want to delete this file')">
+                                                            <i class="fa fa-trash"></i></button>
+                                                    </form>
                                                 </li>
                                             </ul>
+
                                             <br/>
 
-                                            <div class="text-left mtop20">
-                                                <a href="#" class="btn btn-sm btn-primary">Add files</a>
-                                                <a href="#" class="btn btn-sm btn-warning">Report contact</a>
-                                            </div>
+                                            <form th:action="@{/projects/{name}/upload(name = ${project.getName()})}"
+                                                  enctype="multipart/form-data" th:method="post">
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input style="cursor: pointer" type="file" name="file"
+                                                               class="custom-file-input" id="my_file"
+                                                               aria-describedby="inputGroupFileAddon01">
+                                                        <label class="custom-file-label" id="filename" for="my_file">Choose
+                                                            file</label>
+                                                    </div>
+                                                    <div class="input-group-prepend">
+                                                        <button type="submit" style="font-size: inherit"
+                                                                class="input-group-text" id="inputGroupFileAddon01">
+                                                            Upload
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <br/>
+                                            <br/>
+
                                         </div>
 
                                     </section>
@@ -159,6 +225,38 @@
         </div>
         <!-- /page content -->
 
+        <!--Modal to confirm the user wants to delete client-->
+        <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <h6 class="text text-danger">Are you sure you want to delete: <span style="font-weight: bold"
+                                                                                            th:text=" ${project.getName()}"></span></h6>
+                    </div>
+
+                    <div class="modal-footer">
+                        <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.getName()})}"
+                              th:object="${project}" method="POST" modelAttribute="client" enctype="UTF8">
+                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </div>
 
@@ -170,92 +268,199 @@
 <script src="https://code.highcharts.com/modules/dumbbell.js"></script>
 <script src="https://code.highcharts.com/modules/lollipop.js"></script>
 
+
 <script>
-    Highcharts.chart('container', {
+    setTimeout(function () {
+        $('#mydiv').fadeOut('slow');
+    }, 3000); // <-- time in milliseconds
 
-        chart: {
-            type: 'lollipop'
+    $("input[id='my_file']").change(function (e) {
+        var $this = $(this);
+        $this.next().html($this.val().split('\\').pop());
+    });
+
+</script>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var project = /*[[${project.getName()}]]*/ 'project';
+
+    /*]]>*/
+
+    $.ajax({
+        url: '/projects/' + project + '/chart',
+        success: function (result) {
+            var month = JSON.parse(result).month;
+            var days = JSON.parse(result).days;
+            var hours = JSON.parse(result).hours;
+            drawLineChart(month, days, hours);
         },
-
-        accessibility: {
-            point: {
-                valueDescriptionFormat: '{index}. {xDescription}, {point.y}.'
-            }
-        },
-
-        legend: {
-            enabled: false
-        },
-
-        credits: {
-            enabled: false
-        },
-
-        subtitle: {
-            text: '2020'
-        },
-
-        title: {
-            text: 'Earnings for the year of 2020'
-        },
-
-        tooltip: {
-            valuePrefix: "£",
-            shared: true,
-        },
-
-        xAxis: {
-            type: 'category'
-        },
-
-        yAxis: {
-            title: {
-                text: 'Earnings'
-            }
-        },
-
-        series: [{
-            name: 'Earnings',
-            data: [{
-                name: 'January',
-                low: 500
-            }, {
-                name: 'February',
-                low: 500
-            }, {
-                name: 'March',
-                low: 500
-            }, {
-                name: 'April',
-                low: 500
-            }, {
-                name: 'May',
-                low: 500
-            }, {
-                name: 'June',
-                low: 500
-            }, {
-                name: 'July',
-                low: 500
-            }, {
-                name: 'August',
-                low: 500
-            }, {
-                name: 'September',
-                low: 500
-            }, {
-                name: 'October',
-                low: 500
-            }, {
-                name: 'November',
-                low: 500
-            }, {
-                name: 'December',
-                low: 500
-            }]
-        }]
 
     });
+
+
+    // function drawLineChart(month, days, hours) {
+    //     Highcharts.chart('container', {
+    //
+    //         chart: {
+    //             scrollablePlotArea: {
+    //                 minWidth: 700
+    //             }
+    //         },
+    //
+    //         data: {
+    //             csvURL: 'https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/analytics.csv',
+    //             beforeParse: function (csv) {
+    //                 return csv.replace(/\n\n/g, '\n');
+    //             }
+    //         },
+    //
+    //         title: {
+    //             text: 'Daily sessions at www.highcharts.com'
+    //         },
+    //
+    //         subtitle: {
+    //             text: 'Source: Google Analytics'
+    //         },
+    //
+    //         xAxis: {
+    //             tickInterval: 7 * 24 * 3600 * 1000, // one week
+    //             tickWidth: 0,
+    //             gridLineWidth: 3,
+    //             labels: {
+    //                 align: 'left',
+    //                 x: 3,
+    //                 y: -3
+    //             },
+    //             title: {
+    //                 text: 'Months'
+    //             },
+    //             categories: month
+    //         },
+    //
+    //         yAxis: [{ // left y axis
+    //             title: {
+    //                 text: null
+    //             },
+    //             labels: {
+    //                 align: 'left',
+    //                 x: 3,
+    //                 y: 16,
+    //                 format: '{value:.,0f}'
+    //             },
+    //             showFirstLabel: false
+    //         }, { // right y axis
+    //             linkedTo: 0,
+    //             gridLineWidth: 0,
+    //             opposite: true,
+    //             title: {
+    //                 text: null
+    //             },
+    //             labels: {
+    //                 align: 'right',
+    //                 x: -3,
+    //                 y: 16,
+    //                 format: '{value:.,0f}'
+    //             },
+    //             showFirstLabel: false
+    //         }],
+    //
+    //         legend: {
+    //             align: 'left',
+    //             verticalAlign: 'top',
+    //             borderWidth: 0
+    //         },
+    //
+    //         tooltip: {
+    //             shared: true,
+    //             crosshairs: true
+    //         },
+    //
+    //         plotOptions: {
+    //             series: {
+    //                 cursor: 'pointer',
+    //                 point: {
+    //                     events: {
+    //                         click: function (e) {
+    //                             hs.htmlExpand(null, {
+    //                                 pageOrigin: {
+    //                                     x: e.pageX || e.clientX,
+    //                                     y: e.pageY || e.clientY
+    //                                 },
+    //                                 headingText: this.series.name,
+    //                                 maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) + ':<br/> ' +
+    //                                     this.y + ' sessions',
+    //                                 width: 200
+    //                             });
+    //                         }
+    //                     }
+    //                 },
+    //                 marker: {
+    //                     lineWidth: 1
+    //                 }
+    //             }
+    //         },
+    //
+    //         series: [{
+    //             name: 'No. Hours',
+    //             data: hours
+    //         }]
+    //     });
+    //
+    // }
+
+
+    function drawLineChart(month, days, hours) {
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Monthly Hours Worked'
+            },
+            subtitle: {
+                text: 'The number of hours worked for ' + project + ' over the last twelve months',
+            },
+            xAxis: {
+                title: {
+                    text: 'Months'
+                },
+                categories: month
+            },
+            yAxis: {
+                title: {
+                    text: 'Hours'
+                },
+                tickPixelInterval: 20
+            },
+            tooltip: {
+                formatter: function() {
+                    return this.y + ' ' +  this.series.name + ' worked in <b>' + this.x;
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: [
+            //     {
+            //     name: 'Day(s)',
+            //     data: days
+            // },
+                {
+                name: 'Hours',
+                data: hours
+            }]
+        });
+
+    }
+
 </script>
 
 </body>

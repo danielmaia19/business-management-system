@@ -5,6 +5,7 @@ import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.UserRepository;
 import com.danielmaia.businessmanagementsystem.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("User Service Test - Unit Test")
 public class UserServiceTest {
 
     @Mock
@@ -33,6 +35,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Find by Email Test")
     public void testFindByEmail() {
         //When
         when(repository.findByEmail("dmaia@gmail.com")).thenReturn(user);
@@ -46,6 +49,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Find by Username Test")
     public void testFindByUsername() {
         //When
         when(repository.findByUsername("dmaia")).thenReturn(user);
@@ -60,6 +64,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Save User Test")
     void testSaveUser() {
         service.saveUser(user);
         verify(repository).save(any(User.class));

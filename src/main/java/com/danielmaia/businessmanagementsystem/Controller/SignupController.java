@@ -27,15 +27,27 @@ public class SignupController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // Show signup page
+    /**
+     * Displays the sign up page for users to register an account.
+     * @param user Passed to the view for the handling of the form to create an account.
+     * @return Signup view page.
+     */
     @GetMapping("/signup")
-    public String index(ModelAndView modelAndView, User user) {
+    public String index(User user) {
         return "signup";
     }
 
     // Add new signup user
+
+    /**
+     * The user will be shown either the signup page if they are unsuccessful or their dashboard is shown if successful.
+     * @param user Information from the user to create the account.
+     * @param bindingResult To show errors if there are any.
+     * @param request
+     * @return Either the dashboard or login depending if there are successful or not.
+     */
     @PostMapping(path = "/signup")
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
+    public String create(@ModelAttribute @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
 
         User usernameExists = userService.findByUsername(user.getUsername());
         User emailExists = userService.findByEmail(user.getEmail());

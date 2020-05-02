@@ -4941,3 +4941,12 @@ table.dataTable.no-footer {
   padding: 5px 5px;
 
 }
+
+.form-group {
+  margin-bottom: 5px !important;
+}
+
+.error {
+  color:red;
+  margin:0;
+}

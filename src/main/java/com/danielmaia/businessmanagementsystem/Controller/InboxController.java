@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class InboxController {
 
-    // Show the inbox page
+    /**
+     * Displays the inbox view
+     * @return inbox view
+     */
     @GetMapping("/inbox")
     public String index(){
         return "inbox";

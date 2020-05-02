@@ -301,12 +301,14 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -328,27 +330,12 @@
             <artifactId>jQuery-Autocomplete</artifactId>
             <version>1.4.10</version>
         </dependency>
-
-
-
-
-
-        <!--   REDUNDANT REMOVE THEM AFTER 60 DAYS (7/03/2020)     -->
-
-        <!--        &lt;!&ndash; JUnit - v4.12 &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>junit</groupId>-->
-        <!--            <artifactId>junit</artifactId>-->
-        <!--            <version>4.12</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-
-        <!-- Switchery Web Jar - v0.8.1 -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.webjars.bower</groupId>-->
-        <!--            <artifactId>switchery</artifactId>-->
-        <!--            <version>0.8.1</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
@@ -411,6 +398,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.0.0-M4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
