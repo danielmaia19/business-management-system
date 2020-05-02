@@ -50,16 +50,18 @@
 
 
                             <div class="x_content">
-                                <div th:if="${#lists.isEmpty(clients)}">
+
+                                <div th:if="${#lists.isEmpty(clientsList)}">
                                     There are no clients!
                                 </div>
+
                                 <div class="col-md-55" th:each="client : ${clients.entrySet()}">
                                     <div class="thumbnail client-item">
                                         <a href="/clients/{name}"
                                            th:href="@{/clients/{name}(name = ${client.getKey().getName()})}">
                                             <div class="image view view-first">
                                                 <img style="width: 100%; display: block;" th:if="${client.getValue() == false}" src="images/media.jpg" alt="image"/>
-                                                <img style="width: 100%; height: 100%; display: block;" alt="image" th:if="${client.getValue() == true}" th:src="@{/logos/{name}/logo.png (name = ${client.getKey().getName()})}"/>
+                                                <img style="width: 100%; height: 100%; display: block;" alt="image" th:if="${client.getValue() == true}" th:src="@{/logos/{username}/{name}/logo.png (username = ${username}, name = ${client.getKey().getName()})}"/>
                                             </div>
 
                                             <div class="caption">

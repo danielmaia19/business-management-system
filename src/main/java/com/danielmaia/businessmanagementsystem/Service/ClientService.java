@@ -53,11 +53,11 @@ public class ClientService {
         return clientRepository.existsByName(name);
     }
 
-    public void saveImage(String clientName, MultipartFile imageFile) throws Exception {
+    public void saveImage(String username, String clientName, MultipartFile imageFile) throws Exception {
 
-        Files.createDirectories(Paths.get("src/main/resources/static/logos/" + clientName));
+        Files.createDirectories(Paths.get("src/main/resources/static/logos/" + username + "/" + clientName));
 
-        String folder = "src/main/resources/static/logos/" + clientName + "/";
+        String folder = "src/main/resources/static/logos/" + username + "/" + clientName + "/";
         byte[] bytes = imageFile.getBytes();
         String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
         String filename = "logo."+extension;

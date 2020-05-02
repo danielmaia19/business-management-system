@@ -175,7 +175,8 @@
                                         </div>
                                         <div class="panel-body">
                                             <div th:if="${fileExists}">
-                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{name}/logo.png (name = ${client.name})}">
+<!--                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{name}/logo.png (name = ${client.name})}">-->
+                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{username}/{name}/logo.png (username = ${username}, name = ${client.getName()})}">
                                                 <br/>
                                                 <br/>
                                             </div>
