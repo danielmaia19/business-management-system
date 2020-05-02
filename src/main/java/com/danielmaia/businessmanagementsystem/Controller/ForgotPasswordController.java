@@ -40,24 +40,39 @@ public class ForgotPasswordController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // Display forgotPassword page
+    /**
+     * Displays the the forgot password page
+     * @return Displays the forgot-password view
+     */
     @GetMapping(value = "/forgot-password")
     public ModelAndView displayForgotPasswordPage() {
         return new ModelAndView("forgot-password");
     }
 
     // Process form submission from forgotPassword page
+
+    /**
+     * Proces the form submission by receiving the email from the user and then checking the user exists. If they it does
+     * a reset link is sent to the that email address.
+     * @param modelAndView Passes the views
+     * @param email The email address supplied by the user
+     * @param request Used to get the get the scheme and server name to generate the URL to be sent to the users.
+     * @param redirectAttributes To pass success or error messages to the view
+     * @return Redirects the users to the same page of forgot page view.
+     * @throws ParseException
+     * @throws MessagingException
+     * @throws IOException
+     */
     @PostMapping(value = "/forgot-password")
-    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam("email") String userEmail,
+    public ModelAndView processForgotPasswordForm(ModelAndView modelAndView, @RequestParam String email,
                                                   HttpServletRequest request, RedirectAttributes redirectAttributes)
             throws ParseException, MessagingException, IOException {
 
         // Lookup user in database by e-mail
-        User user = userService.findByEmail(userEmail);
+        User user = userService.findByEmail(email);
 
         if (user == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "There is no account with that email address.");
-            //modelAndView.addObject("errorMessage", "We didn't find an account for that e-mail address.");
             modelAndView.setViewName("redirect:/forgot-password");
         } else {
 
@@ -87,7 +102,7 @@ public class ForgotPasswordController {
             emailService.sendEmail(mail);
 
             // Add success message to view
-            redirectAttributes.addFlashAttribute("message", "A password reset link has been sent to " + userEmail);
+            redirectAttributes.addFlashAttribute("message", "A password reset link has been sent to " + email);
         }
 
         modelAndView.setViewName("redirect:/forgot-password");
@@ -96,9 +111,19 @@ public class ForgotPasswordController {
     }
 
     // Display form to reset password
+
+    /**
+     * Displays the reset password view for the users to fill out their new password.
+     * @param modelAndView To add objects/attributes and views
+     * @param token Gets the token from the parameter.
+     * @return Returns a model view dependant on the checks. Either the login page if the token expired
+     * or the reset password view if the token is valid.
+     * @throws ParseException
+     */
     @GetMapping(value = "/reset")
-    public ModelAndView displayResetPasswordPage(ModelAndView modelAndView, @RequestParam("token") String token)
+    public ModelAndView displayResetPasswordPage(ModelAndView modelAndView, @RequestParam String token)
             throws ParseException {
+
         if (passwordResetTokenService.findByToken(token) == null) {
             return new ModelAndView("redirect:/login");
         } else {
@@ -128,22 +153,31 @@ public class ForgotPasswordController {
     }
 
     // Process reset password form
+
+    /**
+     * The user is found by the token and if it is found the process begins and the password is encoded using Bcrypt
+     * followed redirecting the user to the login page with the message of success.
+     * @param user The user information from the form from the view
+     * @param modelAndView To set views and objects/attributes
+     * @param requestParams
+     * @param redir To provide users with flash messages of success or errors
+     * @return Redirected to either the login page, if successful or the reset password page if not successful.
+     */
     @PostMapping(value = "/reset")
-    public ModelAndView setNewPassword(@ModelAttribute("user") User resetUser, ModelAndView modelAndView,
-                                       @RequestParam Map<String, String> requestParams, RedirectAttributes redir)
-            throws ParseException {
+    public ModelAndView setNewPassword(@ModelAttribute User user, ModelAndView modelAndView,
+                                       @RequestParam Map<String, String> requestParams, RedirectAttributes redir) {
 
         // Find the user associated with the reset token
-        User user = passwordResetTokenService.findByToken(requestParams.get("token")).getUser();
+        User userFound = passwordResetTokenService.findByToken(requestParams.get("token")).getUser();
 
         // This should always be non-null but we check just in case
-        if (user != null) {
+        if (userFound != null) {
 
             // Set new password
-            user.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
+            userFound.setPassword(bCryptPasswordEncoder.encode(requestParams.get("password")));
 
             // Save user
-            userService.saveUser(user);
+            userService.saveUser(userFound);
 
             passwordResetTokenService.deleteToken(passwordResetTokenService.findByToken(requestParams.get("token")));
 
@@ -160,10 +194,5 @@ public class ForgotPasswordController {
 
         return modelAndView;
     }
-
-    //@ExceptionHandler(MissingServletRequestParameterException.class)
-    //public ModelAndView handleMissingParams(MissingServletRequestParameterException ex) {
-    //    return new ModelAndView("redirect:/login");
-    //}
 
 }

@@ -35,10 +35,13 @@ public class LoginController {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Show login page
+    /**
+     * Displays the login page. Creates a ADMIN role if one does not exists and then checks if the user has already logged in
+     * if they have then they are redirected to the dashboard. If not, they will shown the login page.
+     * @return Dashboard or login pages.
+     */
     @GetMapping(value = "/login")
     public String index() {
-
         Role roleExists = roleRepository.findByName("ROLE_ADMIN");
         Role role = new Role("ROLE_ADMIN");
 
@@ -52,15 +55,25 @@ public class LoginController {
         } else return "login";
     }
 
+    /**
+     * Displays the admin view for the Super Admin user (Developers only) to view the number of active sessions
+     * to view the number of active users.
+     * @param model used to provide the number of active users.
+     * @return Logged users view is shown, for only Super Admin users.
+     */
     @GetMapping("/loggedUsers")
-    public String admin(Model model) {
+    public String adminView(Model model) {
         model.addAttribute("numberOfActiveUsers", sessionRegistry.getAllPrincipals().size()-1);
         return "loggedUsers";
     }
 
-    @GetMapping("/loggedUsers/total")
+    /**
+     * REST created to display the number of active users using AJAX from the view.
+     * @return JSON represented as a string.
+     */
     @ResponseBody
-    public String admin(Map<String, Object> model) {
+    @GetMapping("/loggedUsers/total")
+    public String adminTotalRecords() {
         JsonArray jsonActiveUsers = new JsonArray();
         JsonObject json = new JsonObject();
         jsonActiveUsers.add(sessionRegistry.getAllPrincipals().size()-1);

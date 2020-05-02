@@ -19,8 +19,14 @@ public class ClientFileDownloadController {
     @Autowired
     private ClientFileService clientFileService;
 
+    /**
+     * Handles the downloading of files associated to the client.
+     * @param name The name of the client passed as a parameter.
+     * @param clientFileId the client file ID passed as a parameter
+     * @return Response entity as a resource with link to download file.
+     */
     @GetMapping("/clients/{name}/downloads/{clientFileId:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String name, @PathVariable String clientFileId, HttpServletRequest httpServletRequest){
+    public ResponseEntity<Resource> downloadFile(@PathVariable String name, @PathVariable String clientFileId){
 
         ClientFile clientFile = clientFileService.getFile(clientFileId);
 

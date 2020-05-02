@@ -16,6 +16,12 @@ public class TimesheetsController {
     private UserRepository userRepository;
 
     // Show timesheet page
+
+    /**
+     * Displays the timesheets page if the user is authenticated.
+     * @param model
+     * @return Timesheets view page.
+     */
     @GetMapping("/timesheets")
     public String index(ModelMap model) {
 

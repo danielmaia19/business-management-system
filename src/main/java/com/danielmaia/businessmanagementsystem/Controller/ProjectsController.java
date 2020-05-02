@@ -55,7 +55,13 @@ public class ProjectsController {
     @Autowired
     private HoursWorkedService hoursWorkedService;
 
-    //Show all users projects
+    /**
+     * Displays all the users projects
+     * @param model To add all the projects and the users full name.
+     * @param project To enable the form to be filled by the yser.
+     * @param authentication to get the current logged in user.
+     * @return The project view
+     */
     @GetMapping("/projects")
     public String index(ModelMap model, Project project, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -72,30 +78,35 @@ public class ProjectsController {
         return "projects";
     }
 
-    // Show view to add projects
+    /**
+     * Displays the view to add project
+     * @param model To add the clients to then show and the project
+     * @param project All the project information filled by the user.
+     * @param authentication To get the current logged in user.
+     * @return The view for creating a project.
+     */
     @GetMapping("/projects/add")
     public String addProjectView(ModelMap model, Project project, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-
         List<Client> clients = clientService.findAllByUser(currentUser);
 
         model.addAttribute("clients", clients);
         model.addAttribute("project", project);
-
         return "project/add";
     }
 
-    // Add new projects
+    /**
+     * Processes the addition of a new project
+     * @param client The client selected for the project from the form.
+     * @param project The project information to be created.
+     * @param bindingResult
+     * @return Redirected to the main projects view.
+     */
     @PostMapping(path = "/projects")
-    public String createClient(@RequestParam("client") String client, @ModelAttribute("project") @Valid Project project, BindingResult bindingResult, Authentication authentication) {
+    public String createProject(@RequestParam String client, @ModelAttribute @Valid Project project, BindingResult bindingResult) {
         Client selectedClient = clientService.findByName(client);
-
-        //project.setUser(currentUser);
-
-        if(project.getQuotePrice() == null) {
-            project.setQuotePrice(new BigDecimal(0));
-        }
+        if(project.getQuotePrice() == null) project.setQuotePrice(new BigDecimal(0));
 
         project.setClient(selectedClient);
         project.setCreatedOn(new DateTime().toDate());
@@ -109,9 +120,15 @@ public class ProjectsController {
         return "redirect:/projects";
     }
 
-    // Individual project view
+    /**
+     * Displays individual project view
+     * @param name To get the project name
+     * @param note
+     * @param model Used to add multiple attributes for the view.
+     * @return displays the individual project view from template of projects/view
+     */
     @GetMapping(path = "/projects/{name}")
-    public String viewProject(@PathVariable("name") String name, @ModelAttribute("note") ProjectNote projectNote, Model model) {
+    public String viewProject(@PathVariable String name, @ModelAttribute("note") ProjectNote note, Model model) {
         Project project = projectService.findByName(name);
 
         int count = 0;
@@ -145,6 +162,13 @@ public class ProjectsController {
         return "project/view";
     }
 
+    /**
+     * Displays the project edit view form.
+     * @param name To get the projects name.
+     * @param model To add multiple attributes for the view.
+     * @param authentication To get the current authenticated user.
+     * @return Displays the form for edit project.
+     */
     @GetMapping("/projects/{name}/edit")
     public String projectEditView(@PathVariable String name, Model model, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -158,9 +182,14 @@ public class ProjectsController {
         return "project/edit";
     }
 
+    /**
+     * Processes the project edit form.
+     * @param name To get the project name
+     * @param project The project information to be updated.
+     * @return Redirected to the projects/{name} page
+     */
     @PostMapping("/projects/{name}/edit")
-    public String projectEdit(@PathVariable String name, @ModelAttribute("project") Project project, Model model, Authentication authentication) {
-
+    public String projectEdit(@PathVariable String name, @ModelAttribute Project project) {
         Project foundProject = projectService.findByName(name);
 
         foundProject.setName(project.getName());
@@ -192,8 +221,14 @@ public class ProjectsController {
         return "redirect:/projects/"+name;
     }
 
+    /**
+     * Processes the deletion of a project
+     * @param name To get the project name
+     * @param redirectAttributes Used to add flash messages.
+     * @return Displays the projects page
+     */
     @PostMapping("/projects/{name}/delete")
-    public String projectDelete(@PathVariable String name, Model model, RedirectAttributes redirectAttributes) {
+    public String projectDelete(@PathVariable String name, RedirectAttributes redirectAttributes) {
         try {
             hoursWorkedService.deleteAllHoursWorked(projectService.findByName(name));
             projectService.deleteProjectByName(name);
@@ -205,47 +240,54 @@ public class ProjectsController {
         return "redirect:/projects";
     }
 
-    // Notes for Project
-
-    // Add note
+    /**
+     * Processes creating the note
+     * @param model To add attributes to the view.
+     * @param note Note data to be processed
+     * @param result To pass any error messages to the view.
+     * @param name To get the projects name
+     * @return Displays the projects/{name} page
+     */
     @PostMapping(path = "/projects/{name}/add")
-    public String postNote(Model model, @ModelAttribute("note") @Valid ProjectNote projectNote, BindingResult result, @PathVariable("name") String name) {
+    public String postNote(Model model, @ModelAttribute @Valid ProjectNote note, BindingResult result, @PathVariable String name) {
 
-        if (result.hasErrors()) {
-            return "redirect:/projects/{name}?error=Field cannot be empty";
-        }
+        if (result.hasErrors()) return "redirect:/projects/{name}?error=Field cannot be empty";
 
         java.time.LocalDate today = java.time.LocalDate.now();
 
         Project project = projectService.findByName(name);
-        projectNote.setProject(project);
-        projectNote.setSubmittedDate(today);
-        projectNoteService.saveNote(projectNote);
+        note.setProject(project);
+        note.setSubmittedDate(today);
+        projectNoteService.saveNote(note);
 
         model.addAttribute("client", project);
-        model.addAttribute("note", projectNote);
+        model.addAttribute("note", note);
 
         return "redirect:/projects/{name}";
     }
 
-    // Delete note
+    /**
+     * Processes the deletion of the note
+     * @param projectNote
+     * @param id used to find the note by ID to delete
+     * @return Redirected to the projects/{name} page
+     */
     @PostMapping(path = "/projects/{name}/note/{id}/delete")
-    public String deleteNote(Model model, @ModelAttribute("note") ProjectNote projectNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
+    public String deleteNote(@ModelAttribute("note") ProjectNote projectNote, @PathVariable Long id) {
         projectNoteService.deleteNote(projectNoteService.findNoteById(id));
-
         return "redirect:/projects/{name}";
     }
 
-    // Edit note
-    //TODO: Allow users to edit their notes
-    //@PostMapping(path = "/clients/{name}/note/{id}/edit")
-    //public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
-    //    return "redirect:/clients/{name}";
-    //}
-
-    // Files
+    /**
+     * Processes for uploading files
+     * @param name To get the project name.
+     * @param file Gets the file to be processed.
+     * @param redirectAttributes Used to send flash messages to the view.
+     * @return Redirected to the projects{name} page.
+     * @throws IOException
+     */
     @PostMapping("/projects/{name}/upload")
-    public String testingUpload(@PathVariable("name") String name, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
+    public String testingUpload(@PathVariable String name, @RequestParam MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         Project project = projectService.findByName(name);
         ProjectFile projectFileName = projectFileService.saveFile(project, file);
 
@@ -259,20 +301,27 @@ public class ProjectsController {
         return "redirect:/projects/" + name;
     }
 
+    /**
+     * Process for deleting a file.
+     * @param projectFileId To get the project file id to find and delete.
+     * @param redirectAttributes To send flash messages to the view.
+     * @return Redirected to the projects/{name} page
+     */
     @PostMapping("/projects/{name}/downloads/{projectFileId:.+}/delete")
-    public String deleteFile(@PathVariable String name, @PathVariable String projectFileId, RedirectAttributes redirectAttributes) {
-
+    public String deleteFile(@PathVariable String projectFileId, RedirectAttributes redirectAttributes) {
         projectFileService.deleteFile(projectFileId);
-
         redirectAttributes.addFlashAttribute("deleted", "File was successfully deleted");
-
-        return "redirect:/projects/" + name;
+        return "redirect:/projects/{name}";
     }
 
-
-    @GetMapping("/projects/{name}/chart")
+    /**
+     * REST for showing the number of hours worked for the project.
+     * @param name used to find the project by name
+     * @return JSON string representation of the number of hours and months.
+     */
     @ResponseBody
-    public String lineChart(@PathVariable("name") String name) {
+    @GetMapping("/projects/{name}/chart")
+    public String lineChart(@PathVariable String name) {
         Project project = projectService.findByName(name);
         List<HoursWorked> hoursWorked = hoursWorkedService.findAllByProject(project);
         LinkedHashMap<String, Integer> prevTwelveMonths = new LinkedHashMap<>();

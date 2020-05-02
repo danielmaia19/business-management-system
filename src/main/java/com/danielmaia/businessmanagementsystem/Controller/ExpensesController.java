@@ -16,7 +16,11 @@ public class ExpensesController {
     @Autowired
     private UserService userService;
 
-    // Show the expenses page
+    /**
+     * Checks the user is authenticated first, if so the expenses page is shown.
+     * @param model to pass the data from the method to the view
+     * @return The expenses view.
+     */
     @GetMapping("/expenses")
     public String index(ModelMap model) {
 

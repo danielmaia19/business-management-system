@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class IndexController {
 
-    // Checks if the user is logged in already
-    // If so, they are redirected to the dashboard, otherwise they are redirected to the login page.
+    /**
+     * Checks if the user is logged in already
+     * If so, they are redirected to the dashboard, otherwise they are redirected to the login page.
+     * @return welcome view
+     */
     @RequestMapping(path = "/")
     public String index() {
         return "welcome";

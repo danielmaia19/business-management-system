@@ -17,6 +17,12 @@ public class CalendarController {
     private UserService userService;
 
     // Show the calendar page
+
+    /**
+     * The index displays the main page for the calendar
+     * @param model to pass the data from the method to the view
+     * @return The calendar view
+     */
     @GetMapping("/calendar")
     public String index(ModelMap model) {
 

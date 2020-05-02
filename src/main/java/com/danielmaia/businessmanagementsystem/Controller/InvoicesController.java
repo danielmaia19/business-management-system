@@ -16,10 +16,13 @@ public class InvoicesController {
     @Autowired
     private UserService userService;
 
-    //Show invoices page
+    /**
+     * Displays the invoices view
+     * @param model used to add users name attribute
+     * @return
+     */
     @GetMapping("/invoices")
     public String index(ModelMap model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();
