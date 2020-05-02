@@ -49,10 +49,6 @@ public class ClientService {
         clientRepository.delete(client);
     }
 
-    public boolean existsByName(String name) {
-        return clientRepository.existsByName(name);
-    }
-
     public void saveImage(String username, String clientName, MultipartFile imageFile) throws Exception {
 
         Files.createDirectories(Paths.get("src/main/resources/static/logos/" + username + "/" + clientName));

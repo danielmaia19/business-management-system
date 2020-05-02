@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,7 +177,6 @@ public class ClientsController {
         model.addAttribute("clientFiles", clientFiles);
         model.addAttribute("client", client);
         model.addAttribute("username", currentUser.getUsername());
-        System.out.println(currentUser.getUsername());
         model.addAttribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client));
 
         return "client/view";
