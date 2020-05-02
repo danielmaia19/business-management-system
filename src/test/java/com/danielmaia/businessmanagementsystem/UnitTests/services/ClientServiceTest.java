@@ -5,6 +5,7 @@ import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Repository.ClientRepository;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Client Service - Unit Test")
 public class ClientServiceTest {
 
     @Mock
@@ -44,6 +46,7 @@ public class ClientServiceTest {
     }
 
     @Test
+    @DisplayName("Find by Name Test")
     public void testFindByName() {
         when(repository.findByName("Client")).thenReturn(client);
 
@@ -56,12 +59,14 @@ public class ClientServiceTest {
     }
 
     @Test
+    @DisplayName("Save Client Test")
     public void testSaveClient() {
         service.saveClient(client);
         verify(repository).save(any(Client.class));
     }
 
     @Test
+    @DisplayName("Find Clients by User Test")
     public void testFindClientsByUser() {
 
         when(repository.findAllByUser(user)).thenReturn(clients);
@@ -74,14 +79,15 @@ public class ClientServiceTest {
         verify(repository).findAllByUser(any(User.class));
     }
 
-
     @Test
+    @DisplayName("Save All Clients Test")
     public void testSaveAllClients() {
         service.saveAllClients(clients);
         verify(repository).saveAll(anyList());
     }
 
     @Test
+    @DisplayName("Delete Client Test")
     public void testDeleteClient() {
         //TODO: Do this!
         service.deleteClient(client);
