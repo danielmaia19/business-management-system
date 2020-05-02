@@ -10,6 +10,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -133,17 +135,12 @@ public class ClientsController {
         BigDecimal totalQuoted = new BigDecimal(0);
         BigDecimal remainingBalance = new BigDecimal(0);
 
-        if(client.getTotalAmountPaid() != null) {
-
-            for (Project project : projects) {
-                totalQuoted = totalQuoted.add(project.getQuotePrice());
-            }
-
-            remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
-        }
-
         for (Project project : projects) {
             totalQuoted = totalQuoted.add(project.getQuotePrice());
+        }
+
+        if(client.getTotalAmountPaid() != null) {
+            remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
         }
 
         boolean fileExists = false;
@@ -389,26 +386,18 @@ public class ClientsController {
      * @return Redirected to the same page of clients/{name}
      */
     @PostMapping("/clients/{name}/downloads/{clientFileId:.+}/delete")
+    @Transactional
     public String deleteFile(@PathVariable String name, @PathVariable String clientFileId,
                              RedirectAttributes redirectAttributes) {
 
         clientFileService.deleteFile(clientFileId);
-
         redirectAttributes.addFlashAttribute("deleted", "File was successfully uploaded");
-
         return "redirect:/clients/"+name;
     }
 
     //@PostMapping("/multipleFiles")
     //public List<File> uploadingMultipleFiles(@RequestParam("files") MultipartFile[] files) {
     //    return Arrays.asList(files).stream().map(file -> testingUpload("test", file)).collect(Collectors.toList());
-    //}
-
-    // Edit note
-    //TODO: Allow users to edit their notes
-    //@PostMapping(path = "/clients/{name}/note/{id}/edit")
-    //public String editNote(Model model, @ModelAttribute("note") ClientNote clientNote, @PathVariable("name") String name, @PathVariable("id") Long id) {
-    //    return "redirect:/clients/{name}";
     //}
 
 }

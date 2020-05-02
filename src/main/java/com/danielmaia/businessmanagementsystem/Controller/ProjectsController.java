@@ -110,13 +110,18 @@ public class ProjectsController {
 
         project.setClient(selectedClient);
         project.setCreatedOn(new DateTime().toDate());
-        projectService.saveProject(project);
 
         HoursWorked hoursWorked = new HoursWorked();
         hoursWorked.setHours(project.getTimeSpent());
         hoursWorked.setProject(project);
         hoursWorked.setTimestamp(new DateTime().toDate());
 
+        List<HoursWorked> addHoursWorked = new ArrayList<>();
+        addHoursWorked.add(hoursWorked);
+
+        project.setHoursWorked(addHoursWorked);
+
+        projectService.saveProject(project);
         return "redirect:/projects";
     }
 
@@ -156,6 +161,9 @@ public class ProjectsController {
 
         model.addAttribute("project", project);
         model.addAttribute("timeSpent", timeSpentString);
+
+        model.addAttribute("count", timeSpentString);
+
         model.addAttribute("quotedPrice", project.getQuotePrice());
         model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));

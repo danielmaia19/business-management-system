@@ -67,8 +67,8 @@
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
-                                            <span class="value text-success" th:text="${timeSpent}"></span>
-                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>
+                                            <span class="value text-success" th:text="${count == ''}?0:${count}">0</span>
+<!--                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>-->
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Expected Completion Date </span>
