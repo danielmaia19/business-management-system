@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -78,7 +81,7 @@ class ClientsControllerIT {
         Map<Client, Boolean> clientsAndLogo = new HashMap<>();
 
         for(Client client : clientService.findAllByUser(userService.findByUsername("admin"))) {
-            Path path = Paths.get("src/main/resources/static/logos/" + client.getName());
+            Path path = Paths.get("src/main/resources/static/logos/admin/" + client.getName());
 
             // Checks if the directory exists
             clientsAndLogo.put(client, Files.exists(path));
@@ -113,15 +116,10 @@ class ClientsControllerIT {
     @DisplayName("User Can View Client Page")
     public void testViewClientAndNotes() throws Exception {
         clientService.saveClient(client);
-        String viewClient = controller.viewClientsAndNotes(client.getName(), new ClientNote("Some Note", client), model);
-
         mvc.perform(MockMvcRequestBuilders.get("/clients/{name}", client.getName()).with(user(userService.loadUserByUsername("admin"))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("client", client))
                 .andExpect(MockMvcResultMatchers.model().attribute("notes", clientNoteService.findAllByClientOrderBySubmittedDateDesc(client)));
-
-        assertThat(viewClient).isNotNull();
-        assertThat("client/view").isEqualToIgnoringCase(viewClient);
     }
 
 }
