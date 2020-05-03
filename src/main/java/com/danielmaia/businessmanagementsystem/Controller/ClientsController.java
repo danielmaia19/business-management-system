@@ -105,6 +105,7 @@ public class ClientsController {
                                @RequestParam("imageFile") MultipartFile imageFile,
                                RedirectAttributes redirectAttributes,
                                Authentication authentication) throws Exception {
+
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
@@ -118,7 +119,6 @@ public class ClientsController {
 
         if (clientForUserExists) {
             redirectAttributes.addFlashAttribute("error", "client already exists");
-            return "redirect:/clients";
         } else {
             client.setUser(currentUser);
             client.setTotalAmountPaid(new BigDecimal(0));
@@ -130,12 +130,11 @@ public class ClientsController {
                     // Not a image file
                     System.out.println("There was an error");
                 }
-
             }
 
             clientService.saveClient(client);
-            return "redirect:/clients";
         }
+        return "redirect:/clients";
     }
 
     /**

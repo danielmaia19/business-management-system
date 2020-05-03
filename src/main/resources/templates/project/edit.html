@@ -52,7 +52,7 @@
                                             <select th:field="*{client}" id="project" class="form-control">
                                                 <option hidden selected value="">-- Assign Client --</option>
                                                 <option th:each="client : ${clients}" th:text="${client.getName()}"
-                                                        th:value="${client.getClient_id()}"
+                                                        th:value="${client.getClientId()}"
                                                         th:selected="${client.getName()}"></option>
                                             </select>
                                         </div>
