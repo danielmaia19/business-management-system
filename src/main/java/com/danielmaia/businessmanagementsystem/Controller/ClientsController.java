@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,8 @@ public class ClientsController {
 
     /**
      * Displays the main clients page by showing the lists all the clients
-     * @param model to pass the data from the method to the view
+     *
+     * @param model          to pass the data from the method to the view
      * @param client
      * @param authentication To get the current logged in user.
      * @return
@@ -69,7 +71,7 @@ public class ClientsController {
         List<Project> projects = new ArrayList<>();
         Map<Client, Boolean> clientsAndLogos = new HashMap<>();
 
-        for(Client userClient : clients) {
+        for (Client userClient : clients) {
             projects.addAll(userClient.getProjects());
 
             Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + userClient.getName());
@@ -89,29 +91,29 @@ public class ClientsController {
 
     /**
      * Creates the client created by the user.
-     * @param model to pass the data from the method to the view
-     * @param client The client information recieved from the view to save the client when created.
-     * @param imageFile The image file uploaded by the user.
+     *
+     * @param model              to pass the data from the method to the view
+     * @param client             The client information recieved from the view to save the client when created.
+     * @param imageFile          The image file uploaded by the user.
      * @param redirectAttributes To display any errors.
-     * @param authentication To get the current logged in user.
+     * @param authentication     To get the current logged in user.
      * @return To the clients main page by showing the /clients view.
      * @throws Exception
      */
     @PostMapping(path = "/clients")
-    public String createClient(Model model, @ModelAttribute("client") Client client, @RequestParam("imageFile") MultipartFile imageFile, RedirectAttributes redirectAttributes, Authentication authentication) throws Exception {
-            User user = (User) authentication.getPrincipal();
-            User currentUser = userService.findByUsername(user.getUsername());
+    public String createClient(Model model, @ModelAttribute("client") Client client,
+                               @RequestParam("imageFile") MultipartFile imageFile,
+                               RedirectAttributes redirectAttributes,
+                               Authentication authentication) throws Exception {
+        User user = (User) authentication.getPrincipal();
+        User currentUser = userService.findByUsername(user.getUsername());
 
         List<Client> clients = clientService.findAllByUser(currentUser);
 
         boolean clientForUserExists = false;
 
-        for(Client client1 : clients) {
-            if(client1.getName().equals(client.getName())) {
-                clientForUserExists = true;
-            } else {
-                clientForUserExists = false;
-            }
+        for (Client client1 : clients) {
+            clientForUserExists = client1.getName().equals(client.getName());
         }
 
         if (clientForUserExists) {
@@ -121,13 +123,13 @@ public class ClientsController {
             client.setUser(currentUser);
 
             if (!imageFile.isEmpty()) {
-                if(imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
+                if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file
                     System.out.println("There was an error");
                 }
-                
+
             }
 
             clientService.saveClient(client);
@@ -137,13 +139,15 @@ public class ClientsController {
 
     /**
      * Displays each individual clients view along with all the notes and so on.
-     * @param name The client name
+     *
+     * @param name       The client name
      * @param clientNote to be used in the forms as a model attribute to then be handled by another method.
-     * @param model to pass the data from the method to view.
+     * @param model      to pass the data from the method to view.
      * @return To the specific clients view.
      */
     @GetMapping(path = "/clients/{name}")
-    public String viewClientsAndNotes(@PathVariable("name") String name, @ModelAttribute("note") ClientNote clientNote, Model model) {
+    public String viewClientsAndNotes(@PathVariable("name") String name,
+                                      @ModelAttribute("note") ClientNote clientNote, Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
@@ -151,7 +155,7 @@ public class ClientsController {
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
         List<Project> projects = projectService.findAllByClient(client);
-        
+
         BigDecimal totalQuoted = new BigDecimal(0);
         BigDecimal remainingBalance = new BigDecimal(0);
 
@@ -159,7 +163,7 @@ public class ClientsController {
             totalQuoted = totalQuoted.add(project.getQuotePrice());
         }
 
-        if(client.getTotalAmountPaid() != null) {
+        if (client.getTotalAmountPaid() != null) {
             remainingBalance = totalQuoted.subtract(client.getTotalAmountPaid());
         }
 
@@ -167,7 +171,7 @@ public class ClientsController {
         Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name);
 
         // Checks if the directory exists
-        if(Files.exists(path)) {
+        if (Files.exists(path)) {
             fileExists = true;
         }
 
@@ -184,6 +188,7 @@ public class ClientsController {
 
     /**
      * REST method to provide the JavaScript the data from this method to the Highchart library.
+     *
      * @param name The name of the client passed as a parameter.
      * @return JSON objects as strings
      */
@@ -212,16 +217,16 @@ public class ClientsController {
             }
         });
 
-        for(Project project : projects) {
+        for (Project project : projects) {
             Date projectDate = project.getCreatedOn();
             LocalDate date = new LocalDate(projectDate);
             String month = date.monthOfYear().getAsText();
 
-            if(prevTwelveMonths.size() < 12) {
-                if(!prevTwelveMonths.containsKey(month)) {
-                    prevTwelveMonths.put(month,1);
+            if (prevTwelveMonths.size() < 12) {
+                if (!prevTwelveMonths.containsKey(month)) {
+                    prevTwelveMonths.put(month, 1);
                 } else {
-                    prevTwelveMonths.replace(month, prevTwelveMonths.get(month)+1);
+                    prevTwelveMonths.replace(month, prevTwelveMonths.get(month) + 1);
                 }
             } else {
                 // Removes the first month when the 12 month has been reached
@@ -242,38 +247,31 @@ public class ClientsController {
     /**
      * Updates the client with new information.
      * First the new client name is checked to make sure it does not already exists, if it does not then the the client is found and updated.
-     * @param name The name of the client passed as a parameter.
-     * @param client The client information recieved from the view to update and save the new client information.
-     * @param imageFile Uploaded client logo upload if one is uploaded.
+     *
+     * @param name               The name of the client passed as a parameter.
+     * @param client             The client information recieved from the view to update and save the new client information.
+     * @param imageFile          Uploaded client logo upload if one is uploaded.
      * @param redirectAttributes If any errors occur then it is passed to the view.
-     * @param authentication Gets the current logged in user.
+     * @param authentication     Gets the current logged in user.
      * @return Redirected to the client view.
      * @throws Exception
      */
     @PostMapping(value = "/clients/{name}/edit")
     public String updateClient(@PathVariable String name, @ModelAttribute("editClient") @Valid Client client,
                                @RequestParam MultipartFile imageFile,
-                               RedirectAttributes redirectAttributes, Authentication authentication) throws Exception {
+                               RedirectAttributes redirectAttributes, Authentication authentication,
+                               @RequestParam Map<String, String> requestParams) throws Exception {
 
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
 
-        List<Client> clients = clientService.findAllByUser(currentUser);
+        Client newClient = clientService.findByName(client.getName());
 
-        boolean clientForUserExists = false;
+        Client prevClient = clientService.findClientByClientId(Long.parseLong(requestParams.get("id")));
 
-        for(Client client1 : clients) {
-            if(client1.getName().equals(client.getName())) {
-                clientForUserExists = true;
-            } else {
-                clientForUserExists = false;
-            }
-        }
-
-
-        if (clientForUserExists) {
+        if (!newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
             redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
-            return "redirect:/clients/" + name;
+            return "redirect:/clients/" + prevClient.getName();
         } else {
 
             Client updatedClient = clientService.findByName(name);
@@ -294,27 +292,29 @@ public class ClientsController {
                     FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
-                    // Not a image file, it was somehting else .txt etc...
+                    // Not a image file, it was something else .txt etc...
                     System.out.println("There was an error");
                 }
 
             }
 
             clientService.saveClient(updatedClient);
-
             return "redirect:/clients/" + updatedClient.getName();
         }
     }
 
     /**
      * Deletes the client and any files uploaded by the client
-     * @param name The name of the client passed as parameter
+     *
+     * @param name   The name of the client passed as parameter
      * @param client The client information passed from the from the view
      * @return Redirects the user to the clients page
      * @throws IOException
      */
     @RequestMapping(value = "/clients/{name}/delete")
-    public String deleteClient(@PathVariable String name, @ModelAttribute("editClient") @Valid Client client, Authentication authentication) throws IOException {
+    public String deleteClient(@PathVariable String name,
+                               @ModelAttribute("editClient") @Valid Client client,
+                               Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
         FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
@@ -324,7 +324,8 @@ public class ClientsController {
 
     /**
      * The input value of an amount placed by the user representing the amount the client has paid
-     * @param name The name of the client passed as parameter
+     *
+     * @param name   The name of the client passed as parameter
      * @param client Information passed from the form
      * @return Redirect the user to the path of the client.
      */
@@ -349,17 +350,18 @@ public class ClientsController {
 
     /**
      * Posts the note created by the user for the client
-     * @param model to pass the data from the method to view.
-     * @param note The note passed from the form to be handled
+     *
+     * @param model  to pass the data from the method to view.
+     * @param note   The note passed from the form to be handled
      * @param result To pass any errors to the view
-     * @param name Passed as a path variable to get the client by name.
+     * @param name   Passed as a path variable to get the client by name.
      * @return
      */
     @PostMapping(path = "/clients/{name}/add")
     public String postNote(Model model, @ModelAttribute @Valid ClientNote note, BindingResult result,
                            @PathVariable String name) {
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "redirect:/clients/{name}?error=Field cannot be empty";
         }
 
@@ -377,8 +379,9 @@ public class ClientsController {
 
     /**
      * Deletes note by finding it by ID and then deletes it.
+     *
      * @param note The client note passed from the view template
-     * @param id The id passed as part of the path variable from the form.
+     * @param id   The id passed as part of the path variable from the form.
      * @return Redirect the user to the same page of clients/{name}
      */
     @PostMapping(path = "/clients/{name}/note/{id}/delete")
@@ -390,8 +393,9 @@ public class ClientsController {
     /**
      * The client is first found by using the path variable of name and then saving the file upload
      * for the client, accepts any type of file.
-     * @param name The name of the client passed as a parameter.
-     * @param file The file uploaded by the user.
+     *
+     * @param name               The name of the client passed as a parameter.
+     * @param file               The file uploaded by the user.
      * @param redirectAttributes To show flash message in the view
      * @return Redirect to the clients page with the path of clients/{name}
      * @throws IOException
@@ -409,13 +413,14 @@ public class ClientsController {
 
         redirectAttributes.addFlashAttribute("uploaded", "File was successfully uploaded");
 
-        return "redirect:/clients/"+name;
+        return "redirect:/clients/" + name;
     }
 
     /**
      * Deletes the file and providing a success method if successful
-     * @param name The name of the client passed as a parameter.
-     * @param clientFileId The client file ID to be used to delete the file.
+     *
+     * @param name               The name of the client passed as a parameter.
+     * @param clientFileId       The client file ID to be used to delete the file.
      * @param redirectAttributes To send a success flash message on success.
      * @return Redirected to the same page of clients/{name}
      */
@@ -426,7 +431,7 @@ public class ClientsController {
 
         clientFileService.deleteFile(clientFileId);
         redirectAttributes.addFlashAttribute("deleted", "File was successfully uploaded");
-        return "redirect:/clients/"+name;
+        return "redirect:/clients/" + name;
     }
 
     //@PostMapping("/multipleFiles")

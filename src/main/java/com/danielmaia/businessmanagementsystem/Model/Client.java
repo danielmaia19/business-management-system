@@ -19,7 +19,7 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
-    private Long client_id;
+    private Long clientId;
 
     @Column
     @NotEmpty(message = "Please enter a Client name")

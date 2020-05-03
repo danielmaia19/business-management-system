@@ -13,4 +13,6 @@ public interface ClientRepository extends CrudRepository<Client, Long> {
     Client findByName(String clientName);
     List<Client> findAllByUser(User user);
     int countAllByUser(User user);
+    List<Client> findClientsByName(String name);
+    Client findClientByClientId(long id);
 }

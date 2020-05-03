@@ -62,4 +62,12 @@ public class ClientService {
         Files.write(paths, bytes);
 
     }
+
+    public List<Client> findClientsByName(String name) {
+        return clientRepository.findClientsByName(name);
+    }
+
+    public Client findClientByClientId(long id) {
+        return clientRepository.findClientByClientId(id);
+    }
 }
