@@ -121,6 +121,7 @@ public class ClientsController {
             return "redirect:/clients";
         } else {
             client.setUser(currentUser);
+            client.setTotalAmountPaid(new BigDecimal(0));
 
             if (!imageFile.isEmpty()) {
                 if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
