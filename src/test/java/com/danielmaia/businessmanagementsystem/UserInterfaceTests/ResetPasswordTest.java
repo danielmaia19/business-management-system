@@ -27,18 +27,18 @@ public class ResetPasswordTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Test
-    @Disabled
-    @DisplayName("Password Reset Redirect and Show Fields Test")
-    public void testTokenRequestParamRedirects() throws Exception {
-
-        LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
-        requestParams.add("token", "150");
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/reset").params(requestParams)).andExpect(status().is3xxRedirection());
-
-        assertThat(mock.getElemAndAttri(port, path, "password", "name")).contains("password");
-        assertThat(mock.getElemById(port, path,"password")).isEqualTo("input");
-    }
+    //@Test
+    //@Disabled
+    //@DisplayName("Password Reset Redirect and Show Fields Test")
+    //public void testTokenRequestParamRedirects() throws Exception {
+    //
+    //    LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+    //    requestParams.add("token", "150");
+    //
+    //    mockMvc.perform(MockMvcRequestBuilders.get("/reset").params(requestParams)).andExpect(status().is3xxRedirection());
+    //
+    //    assertThat(mock.getElemAndAttri(port, path, "password", "name")).contains("password");
+    //    assertThat(mock.getElemById(port, path,"password")).isEqualTo("input");
+    //}
 
 }
