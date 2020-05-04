@@ -92,7 +92,7 @@ public class ForgotPasswordController {
 
             String url = request.getScheme() + "://" + request.getServerName() + ":/reset?token=" + token;
             Mail mail = new Mail();
-            mail.setFrom("support@bms.com");
+            mail.setFrom("postmaster@sandbox5576856eddf542d2b1b09b9b2963c73b.mailgun.org");
             mail.setTo(user.getEmail());
             mail.setSubject("BMS Password Reset");
             Map<String, Object> model = new HashMap<String, Object>();
