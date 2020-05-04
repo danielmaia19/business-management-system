@@ -27,7 +27,7 @@ public class ClientNote {
     private LocalDate submittedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="client_id", referencedColumnName = "client_id")
+    @JoinColumn(name="clientId", referencedColumnName = "clientId")
     private Client client;
 
     public ClientNote() {

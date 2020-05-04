@@ -285,6 +285,8 @@
                               th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}"
                               method="POST" modelAttribute="client" enctype="multipart/form-data">
 
+                            <input type="hidden" name="id" th:value="${client.getClientId()}">
+
                             <div class="form-group row ">
                                 <div class="col-md-12 col-sm-12 ">
                                     <input th:field="*{name}" id="name" name="name" type="text"

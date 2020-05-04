@@ -42,7 +42,7 @@ public class Project {
     private int timeSpent;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="client_id", referencedColumnName = "client_id")
+    @JoinColumn(name="clientId", referencedColumnName = "clientId")
     private Client client;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

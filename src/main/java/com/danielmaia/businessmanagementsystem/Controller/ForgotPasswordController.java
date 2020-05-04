@@ -42,6 +42,7 @@ public class ForgotPasswordController {
 
     /**
      * Displays the the forgot password page
+     *
      * @return Displays the forgot-password view
      */
     @GetMapping(value = "/forgot-password")
@@ -49,14 +50,13 @@ public class ForgotPasswordController {
         return new ModelAndView("forgot-password");
     }
 
-    // Process form submission from forgotPassword page
-
     /**
      * Proces the form submission by receiving the email from the user and then checking the user exists. If they it does
      * a reset link is sent to the that email address.
-     * @param modelAndView Passes the views
-     * @param email The email address supplied by the user
-     * @param request Used to get the get the scheme and server name to generate the URL to be sent to the users.
+     *
+     * @param modelAndView       Passes the views
+     * @param email              The email address supplied by the user
+     * @param request            Used to get the get the scheme and server name to generate the URL to be sent to the users.
      * @param redirectAttributes To pass success or error messages to the view
      * @return Redirects the users to the same page of forgot page view.
      * @throws ParseException
@@ -110,12 +110,11 @@ public class ForgotPasswordController {
 
     }
 
-    // Display form to reset password
-
     /**
      * Displays the reset password view for the users to fill out their new password.
+     *
      * @param modelAndView To add objects/attributes and views
-     * @param token Gets the token from the parameter.
+     * @param token        Gets the token from the parameter.
      * @return Returns a model view dependant on the checks. Either the login page if the token expired
      * or the reset password view if the token is valid.
      * @throws ParseException
@@ -152,15 +151,14 @@ public class ForgotPasswordController {
         }
     }
 
-    // Process reset password form
-
     /**
      * The user is found by the token and if it is found the process begins and the password is encoded using Bcrypt
      * followed redirecting the user to the login page with the message of success.
-     * @param user The user information from the form from the view
-     * @param modelAndView To set views and objects/attributes
+     *
+     * @param user          The user information from the form from the view
+     * @param modelAndView  To set views and objects/attributes
      * @param requestParams
-     * @param redir To provide users with flash messages of success or errors
+     * @param redir         To provide users with flash messages of success or errors
      * @return Redirected to either the login page, if successful or the reset password page if not successful.
      */
     @PostMapping(value = "/reset")
