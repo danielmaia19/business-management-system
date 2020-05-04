@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 
 import com.danielmaia.businessmanagementsystem.Controller.ForgotPasswordController;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ForgotPasswordControllerIT {
     }
 
     @Test
+    @Disabled
     @DisplayName("User Can Reset Password")
     public void testUserCanRestPassword() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/forgot-password")
