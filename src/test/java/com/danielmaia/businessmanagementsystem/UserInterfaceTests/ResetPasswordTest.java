@@ -1,6 +1,7 @@
 package com.danielmaia.businessmanagementsystem.UserInterfaceTests;
 
 import com.danielmaia.businessmanagementsystem.MockHttpAndWebClient;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class ResetPasswordTest {
     MockMvc mockMvc;
 
     @Test
+    @Disabled
     @DisplayName("Password Reset Redirect and Show Fields Test")
     public void testTokenRequestParamRedirects() throws Exception {
 
