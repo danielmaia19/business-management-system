@@ -16,6 +16,10 @@ public class MailConfig {
     @Autowired
     private Environment env;
 
+    /**
+     * Gets all the required SMTP settings to send emails
+     * @return
+     */
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
