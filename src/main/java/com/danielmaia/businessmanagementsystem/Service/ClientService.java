@@ -51,9 +51,11 @@ public class ClientService {
 
     public void saveImage(String username, String clientName, MultipartFile imageFile) throws Exception {
 
-        Files.createDirectories(Paths.get("src/main/resources/static/logos/" + username + "/" + clientName));
+        String path = "uploads/logos/";
 
-        String folder = "src/main/resources/static/logos/" + username + "/" + clientName + "/";
+        Files.createDirectories(Paths.get(path + username + "/" + clientName));
+
+        String folder = path + username + "/" + clientName + "/";
         byte[] bytes = imageFile.getBytes();
         String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
         String filename = "logo."+extension;

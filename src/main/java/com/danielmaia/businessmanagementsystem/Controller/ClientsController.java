@@ -54,6 +54,8 @@ public class ClientsController {
     @Autowired
     private ClientNoteService clientNoteService;
 
+    public String logoPath = "uploads/logos/";
+
     /**
      * Displays the main clients page by showing the lists all the clients
      *
@@ -74,7 +76,7 @@ public class ClientsController {
         for (Client userClient : clients) {
             projects.addAll(userClient.getProjects());
 
-            Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + userClient.getName());
+            Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + userClient.getName());
 
             // Checks if the directory exists
             clientsAndLogos.put(userClient, Files.exists(path));
@@ -168,7 +170,7 @@ public class ClientsController {
         }
 
         boolean fileExists = false;
-        Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name);
+        Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
 
         // Checks if the directory exists
         if (Files.exists(path)) {
@@ -289,7 +291,7 @@ public class ClientsController {
 
             if (!imageFile.isEmpty()) {
                 if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
-                    FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
+                    FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file, it was something else .txt etc...
@@ -317,7 +319,7 @@ public class ClientsController {
                                Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
+        FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
         clientService.deleteClient(clientService.findByName(client.getName()));
         return "redirect:/clients";
     }
