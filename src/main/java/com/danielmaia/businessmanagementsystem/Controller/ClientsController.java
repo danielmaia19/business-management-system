@@ -139,7 +139,8 @@ public class ClientsController {
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file
-                    System.out.println("There was an error");
+                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
+                    return "redirect:/clients";
                 }
             }
 
@@ -311,7 +312,8 @@ public class ClientsController {
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file, it was something else .txt etc...
-                    System.out.println("There was an error");
+                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
+                    return "redirect:/clients/" + prevClient.getName();
                 }
 
             }

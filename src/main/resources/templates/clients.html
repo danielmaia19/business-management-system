@@ -25,6 +25,11 @@
                 Client Already Exists
             </div>
 
+            <div style="float:right; width:100%; text-align: center" th:if="${nonImageFile}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                Please upload a image file.
+            </div>
+
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
@@ -95,7 +100,7 @@
                     <div class="modal-body">
 
                         <form class="form-horizontal" name="newClient" id="newClient" th:action="@{/clients}" th:object="${client}"
-                              method="POST" modelAttribute="client" enctype="multipart/form-data">
+                              method="POST" modelAttribute="client" enctype="multipart/form-data" onsubmit="return Validate(this);">
 
                             <!--                            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert alert-danger"></div>-->
 
@@ -203,6 +208,8 @@
                                             <label class="custom-file-label" id="filename" for="my_file">Upload Client logo</label>
                                         </div>
                                     </div>
+                                    <span style="float:left; color: red; text-align: left; display: none"
+                                          id="error-upload" name="error-upload">Please enter a valid image file</span>
                                 </div>
                             </div>
 
@@ -306,6 +313,36 @@
     setTimeout(function () {
         $('#mydiv').fadeOut('slow');
     }, 3000); // <-- time in milliseconds
+
+    var _validFileExtensions = [".jpg", ".jpeg", ".png"];
+    function Validate(oForm) {
+        var arrInputs = oForm.getElementsByTagName("input");
+        for (var i = 0; i < arrInputs.length; i++) {
+            var oInput = arrInputs[i];
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            $('#error-upload').hide();
+                            blnValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!blnValid) {
+                        // alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+                        $('#error-upload').show();
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 
 </script>
 
