@@ -71,15 +71,24 @@ public class ClientsController {
 
         List<Client> clients = clientService.findAllByUser(currentUser);
         List<Project> projects = new ArrayList<>();
-        Map<Client, Boolean> clientsAndLogos = new HashMap<>();
+        Map<Client, String> clientsAndLogos = new HashMap<>();
+
 
         for (Client userClient : clients) {
             projects.addAll(userClient.getProjects());
 
-            Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + userClient.getName());
+            File[] files = new File(logoPath + currentUser.getUsername() + "/" + userClient.getName()).listFiles();
 
-            // Checks if the directory exists
-            clientsAndLogos.put(userClient, Files.exists(path));
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        clientsAndLogos.put(userClient, file.getName());
+                    }
+                }
+            } else {
+                clientsAndLogos.put(userClient, null);
+            }
+
         }
 
         model.addAttribute("projects", projects);
@@ -154,9 +163,16 @@ public class ClientsController {
         User user = (User) auth.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
         Client client = clientService.findByName(name);
+        String fileName = null;
+        Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
         List<Project> projects = projectService.findAllByClient(client);
+
+        // Gets the first file, which is the logo file.
+        // Used to get the extension.
+        File[] files = new File(logoPath + currentUser.getUsername() + "/" + client.getName()).listFiles();
+        if(files != null) fileName = files[0].getName();
 
         BigDecimal totalQuoted = new BigDecimal(0);
         BigDecimal remainingBalance = new BigDecimal(0);
@@ -170,7 +186,6 @@ public class ClientsController {
         }
 
         boolean fileExists = false;
-        Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
 
         // Checks if the directory exists
         if (Files.exists(path)) {
@@ -178,6 +193,7 @@ public class ClientsController {
         }
 
         model.addAttribute("fileExists", fileExists);
+        model.addAttribute("filename", fileName);
         model.addAttribute("remainingBalance", remainingBalance);
         model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
