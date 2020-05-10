@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/", "/forgot-password", "/reset-password", "/reset").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/loggedUsers/**").hasRole("SUPER_ADMIN")
-                .antMatchers("/profile/**", "/dashboard").fullyAuthenticated()
+                .antMatchers("/dashboard").fullyAuthenticated()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
