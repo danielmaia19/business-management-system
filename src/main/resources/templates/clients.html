@@ -110,6 +110,8 @@
                                             placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="name-exists">Client already exists</span>
+                                    <span style="float:left; color: red; text-align: left; display: none"
+                                          id="error-nameExists" name="error-upload">Client Name already exists</span>
                                 </div>
                             </div>
 
@@ -233,7 +235,7 @@
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 
-<script type="text/javascript">
+<script th:inline="javascript">
 
     $("input[id='my_file']").change(function (e) {
         var $this = $(this);
@@ -315,6 +317,20 @@
     }, 3000); // <-- time in milliseconds
 
     var _validFileExtensions = [".jpg", ".jpeg", ".png"];
+    var list = /*[[${clientsNameList}]]*/ [];
+
+    $('form').submit(function () {
+
+        // Get the Name value and trim it
+        var name = $.trim($('#name').val());
+
+        // Check if empty of not
+        if (list.includes(name)) {
+            $('#error-nameExists').show();
+            return false;
+        }
+    })
+
     function Validate(oForm) {
         var arrInputs = oForm.getElementsByTagName("input");
         for (var i = 0; i < arrInputs.length; i++) {

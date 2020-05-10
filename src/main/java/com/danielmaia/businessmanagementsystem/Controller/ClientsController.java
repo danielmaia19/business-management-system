@@ -72,10 +72,11 @@ public class ClientsController {
         List<Client> clients = clientService.findAllByUser(currentUser);
         List<Project> projects = new ArrayList<>();
         Map<Client, String> clientsAndLogos = new HashMap<>();
-
+        List<String> clientsNameLists = new ArrayList<>();
 
         for (Client userClient : clients) {
             projects.addAll(userClient.getProjects());
+            clientsNameLists.add(userClient.getName());
 
             File[] files = new File(logoPath + currentUser.getUsername() + "/" + userClient.getName()).listFiles();
 
@@ -93,6 +94,7 @@ public class ClientsController {
 
         model.addAttribute("projects", projects);
         model.addAttribute("clients", clientsAndLogos);
+        model.addAttribute("clientsNameList", clientsNameLists);
         model.addAttribute("clientsList", clients);
         model.addAttribute("name", currentUser.getFullName());
         model.addAttribute("username", currentUser.getUsername());
@@ -163,11 +165,14 @@ public class ClientsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
+
         Client client = clientService.findByName(name);
         String fileName = null;
         Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
         List<Client> userClients = clientService.findAllByUser(currentUser);
         List<String> newClientList = new ArrayList<>();
+        List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
+        List<Project> projects = projectService.findAllByClient(client);
 
         for(Client userClient : userClients) {
             if(!userClient.getName().equals(name)) {
@@ -175,11 +180,6 @@ public class ClientsController {
                 newClientList.add(userClient.getName());
             }
         }
-
-        model.addAttribute("clientList", newClientList);
-
-        List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
-        List<Project> projects = projectService.findAllByClient(client);
 
         // Gets the first file, which is the logo file.
         // Used to get the extension.
@@ -202,6 +202,7 @@ public class ClientsController {
         // Checks if the directory exists
         if (Files.exists(path)) fileExists = true;
 
+        model.addAttribute("clientList", newClientList);
         model.addAttribute("projectsExists", projects.isEmpty());
         model.addAttribute("fileExists", fileExists);
         model.addAttribute("filename", fileName);
