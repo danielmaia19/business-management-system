@@ -512,8 +512,15 @@
 
     $("input[id='my_file']").change(function (e) {
         var $this = $(this);
+        $("#inputGroupFileAddon01").prop("disabled", false);
         $this.next().html($this.val().split('\\').pop());
     });
+
+    if( document.getElementById("my_file").files.length == 0 ){
+        $("#inputGroupFileAddon01").prop("disabled", true);
+    } else {
+        $("#inputGroupFileAddon01").prop("disabled", false);
+    }
 
     $("input[id='imageFile']").change(function (e) {
         var $this = $(this);
