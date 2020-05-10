@@ -54,7 +54,7 @@ public class DashboardController {
         }
 
         for(Project project : usersProjects) {
-            if(project.getStatus().equals("To Do") || project.getStatus().equals("In Progress")) {
+            if(project.getStatus().equals("To do") || project.getStatus().equals("In Progress")) {
                 projectsCount++;
             }
         }
