@@ -189,10 +189,9 @@ public class ClientsController {
         boolean fileExists = false;
 
         // Checks if the directory exists
-        if (Files.exists(path)) {
-            fileExists = true;
-        }
+        if (Files.exists(path)) fileExists = true;
 
+        model.addAttribute("projectsExists", projects.isEmpty());
         model.addAttribute("fileExists", fileExists);
         model.addAttribute("filename", fileName);
         model.addAttribute("remainingBalance", remainingBalance);
@@ -288,7 +287,35 @@ public class ClientsController {
 
         Client prevClient = clientService.findClientByClientId(Long.parseLong(requestParams.get("id")));
 
-        if (!newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
+        if(newClient == null) {
+            Client updatedClient = clientService.findByName(name);
+            updatedClient.setName(client.getName());
+            updatedClient.setCity(client.getCity());
+            updatedClient.setRegion(client.getRegion());
+            updatedClient.setPostCode(client.getPostCode());
+            updatedClient.setCountry(client.getCountry());
+            updatedClient.setDescription(client.getDescription());
+            updatedClient.setContactPerson(client.getContactPerson());
+            updatedClient.setAddressLineOne(client.getAddressLineOne());
+            updatedClient.setAddressLineTwo(client.getAddressLineTwo());
+            updatedClient.setContactPersonEmail(client.getContactPersonEmail());
+            updatedClient.setUser(currentUser);
+
+            if (!imageFile.isEmpty()) {
+                if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
+                    FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
+                    clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
+                } else {
+                    // Not a image file, it was something else .txt etc...
+                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
+                    return "redirect:/clients/" + prevClient.getName();
+                }
+
+            }
+
+            clientService.saveClient(updatedClient);
+            return "redirect:/clients/" + updatedClient.getName();
+        } else if (!newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
             redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
             return "redirect:/clients/" + prevClient.getName();
         } else {
