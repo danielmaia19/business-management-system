@@ -33,8 +33,9 @@
                         <div class="x_panel">
                             <div class="x_content">
 
-                                <form class="form-horizontal" name="newProject" id="newProject" th:action="@{/projects}"
+                                <form class="form-horizontal" name="newProject" id="newProject" th:action="@{/project/add}"
                                       th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label for="name">Project Name:</label>
@@ -51,8 +52,7 @@
 
                                         <div class="form-group col-md-4">
                                             <label for="project">Assign Client:</label>
-                                            <select th:field="*{client}" id="project" name="project"
-                                                    class="form-control">
+                                            <select th:field="*{client}" id="project" name="project" class="form-control">
                                                 <option th:each="client : ${clients}" th:text="${client.getName()}"
                                                         th:value="${client.getName()}"
                                                         th:selected="${client.getName()}"></option>
@@ -150,7 +150,6 @@
         $("#datepicker").datepicker();
     });
 
-
     $(document).ready(function () {
         $("#newProject").validate({
             rules: {
@@ -190,7 +189,6 @@
         });
     });
 
-
     function check(e, value) {
         //Check Charater
         var unicode = e.charCode ? e.charCode : e.keyCode;
@@ -221,26 +219,21 @@
 
 <script th:inline="javascript">
     var list = /*[[${clientAndProjects}]]*/ [];
-    console.log(list);
 
     $('form').submit(function () {
+        var client = $("#project option:selected" ).text();
+        var project = $.trim($('#name').val());
 
-        var e = document.getElementById("project");
-        var strUser = e.options[e.selectedIndex].value;
-        var name = $.trim($('#name').val());
-
-        if(list[strUser].includes(name)) {
+        if(list[client].includes(project)) {
             $('#error-nameExists').show();
             return false;
         } else {
-            alert('Safe to create project!');
+            $('#error-nameExists').hide();
             return true;
         }
-
     })
 
 </script>
-
 
 </body>
 </html>

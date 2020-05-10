@@ -24,7 +24,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
-    private int project_id;
+    private int projectId;
 
     @Column
     private String name;

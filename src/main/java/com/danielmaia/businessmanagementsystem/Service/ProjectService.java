@@ -66,4 +66,12 @@ public class ProjectService {
         return projectPage;
     }
 
+    public Project findProjectById(int id) {
+        return projectRepository.findByProjectId(id);
+    }
+
+    public void deleteProjectById(int id) {
+        projectRepository.deleteByProjectId(id);
+    }
+
 }
