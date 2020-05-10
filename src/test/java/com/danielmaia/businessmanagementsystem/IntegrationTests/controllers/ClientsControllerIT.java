@@ -3,6 +3,7 @@ package com.danielmaia.businessmanagementsystem.IntegrationTests.controllers;
 import com.danielmaia.businessmanagementsystem.Controller.ClientsController;
 import com.danielmaia.businessmanagementsystem.Model.Client;
 import com.danielmaia.businessmanagementsystem.Model.ClientNote;
+import com.danielmaia.businessmanagementsystem.Model.Project;
 import com.danielmaia.businessmanagementsystem.Model.User;
 import com.danielmaia.businessmanagementsystem.Service.ClientService;
 import com.danielmaia.businessmanagementsystem.Service.ClientNoteService;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -78,13 +80,28 @@ class ClientsControllerIT {
     @Test
     @DisplayName("Client Page View OK?")
     void index() throws Exception {
-        Map<Client, Boolean> clientsAndLogo = new HashMap<>();
+        Map<Client,String> clientsAndLogo = new HashMap<>();
+        List<Project> projects = new ArrayList<>();
+        List<String> clientsNameLists = new ArrayList<>();
 
-        for(Client client : clientService.findAllByUser(userService.findByUsername("admin"))) {
-            Path path = Paths.get("src/main/resources/static/logos/admin/" + client.getName());
+        String logoPath = "uploads/logos/";
 
-            // Checks if the directory exists
-            clientsAndLogo.put(client, Files.exists(path));
+        for (Client userClient : clientService.findAllByUser(userService.findByUsername("admin"))) {
+            projects.addAll(userClient.getProjects());
+            clientsNameLists.add(userClient.getName());
+
+            File[] files = new File(logoPath + "admin/" + userClient.getName()).listFiles();
+
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        clientsAndLogo.put(userClient, file.getName());
+                    }
+                }
+            } else {
+                clientsAndLogo.put(userClient, null);
+            }
+
         }
 
         mvc.perform(MockMvcRequestBuilders.get("/clients").with(user(userService.loadUserByUsername("admin"))))
