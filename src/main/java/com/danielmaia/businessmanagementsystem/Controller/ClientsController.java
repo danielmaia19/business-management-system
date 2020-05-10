@@ -166,6 +166,17 @@ public class ClientsController {
         Client client = clientService.findByName(name);
         String fileName = null;
         Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
+        List<Client> userClients = clientService.findAllByUser(currentUser);
+        List<String> newClientList = new ArrayList<>();
+
+        for(Client userClient : userClients) {
+            if(!userClient.getName().equals(name)) {
+                System.out.println(userClient.getName());
+                newClientList.add(userClient.getName());
+            }
+        }
+
+        model.addAttribute("clientList", newClientList);
 
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
         List<Project> projects = projectService.findAllByClient(client);
@@ -282,12 +293,10 @@ public class ClientsController {
 
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-
         Client newClient = clientService.findByName(client.getName());
-
         Client prevClient = clientService.findClientByClientId(Long.parseLong(requestParams.get("id")));
 
-        if(newClient == null) {
+        if (newClient == null || newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
             Client updatedClient = clientService.findByName(name);
             updatedClient.setName(client.getName());
             updatedClient.setCity(client.getCity());
@@ -300,6 +309,7 @@ public class ClientsController {
             updatedClient.setAddressLineTwo(client.getAddressLineTwo());
             updatedClient.setContactPersonEmail(client.getContactPersonEmail());
             updatedClient.setUser(currentUser);
+            clientService.saveClient(updatedClient);
 
             if (!imageFile.isEmpty()) {
                 if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
@@ -308,46 +318,16 @@ public class ClientsController {
                 } else {
                     // Not a image file, it was something else .txt etc...
                     redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
-                    return "redirect:/clients/" + prevClient.getName();
+                    return "redirect:/clients/" + updatedClient.getName();
                 }
-
             }
 
-            clientService.saveClient(updatedClient);
             return "redirect:/clients/" + updatedClient.getName();
-        } else if (!newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
+        } else {
             redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
             return "redirect:/clients/" + prevClient.getName();
-        } else {
-
-            Client updatedClient = clientService.findByName(name);
-            updatedClient.setName(client.getName());
-            updatedClient.setCity(client.getCity());
-            updatedClient.setRegion(client.getRegion());
-            updatedClient.setPostCode(client.getPostCode());
-            updatedClient.setCountry(client.getCountry());
-            updatedClient.setDescription(client.getDescription());
-            updatedClient.setContactPerson(client.getContactPerson());
-            updatedClient.setAddressLineOne(client.getAddressLineOne());
-            updatedClient.setAddressLineTwo(client.getAddressLineTwo());
-            updatedClient.setContactPersonEmail(client.getContactPersonEmail());
-            updatedClient.setUser(currentUser);
-
-            if (!imageFile.isEmpty()) {
-                if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
-                    FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
-                    clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
-                } else {
-                    // Not a image file, it was something else .txt etc...
-                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
-                    return "redirect:/clients/" + prevClient.getName();
-                }
-
-            }
-
-            clientService.saveClient(updatedClient);
-            return "redirect:/clients/" + updatedClient.getName();
         }
+        
     }
 
     /**

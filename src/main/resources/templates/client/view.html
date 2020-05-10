@@ -298,7 +298,10 @@
                                            class="form-control" placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validName">Cannot be empty</span>
+                                    <span style="float:left; color: red; text-align: left; display: none"
+                                          id="error-nameExists" name="error-upload">Client Name already exists</span>
                                 </div>
+
                             </div>
 
                             <div class="form-group row ">
@@ -501,7 +504,8 @@
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 
-<script>
+<script th:inline="javascript">
+
     setTimeout(function () {
         $('#mydiv').fadeOut('slow');
     }, 3000); // <-- time in milliseconds
@@ -595,8 +599,25 @@
     }
 
     var _validFileExtensions = [".jpg", ".jpeg", ".png"];
+    var list = /*[[${clientList}]]*/ [];
+
+    $('form').submit(function () {
+
+        // Get the Name value and trim it
+        var name = $.trim($('#name').val());
+
+        // Check if empty of not
+        if (list.includes(name)) {
+            alert('Text-field contains microsoft.');
+            $('#error-nameExists').show();
+            return false;
+        }
+    })
+
+    // Validate the file uploaded is a image file.
     function Validate(oForm) {
         var arrInputs = oForm.getElementsByTagName("input");
+
         for (var i = 0; i < arrInputs.length; i++) {
             var oInput = arrInputs[i];
             if (oInput.type == "file") {
@@ -617,6 +638,7 @@
                         $('#error-upload').show();
                         return false;
                     }
+
                 }
             }
         }
