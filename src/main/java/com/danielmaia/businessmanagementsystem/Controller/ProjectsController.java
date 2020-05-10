@@ -90,7 +90,21 @@ public class ProjectsController {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
         List<Client> clients = clientService.findAllByUser(currentUser);
+        List<Project> projects = new ArrayList<>();
+        Map<String, List<String>> clientAndProjects = new HashMap<>();
 
+        for (Client client : clients) {
+            projects.addAll(client.getProjects());
+            List<String> allProjects = new ArrayList<>();
+
+            for(Project userProject : client.getProjects()) {
+                allProjects.add(userProject.getName());
+            }
+
+            clientAndProjects.put(client.getName(), allProjects);
+        }
+
+        model.addAttribute("clientAndProjects", clientAndProjects);
         model.addAttribute("clients", clients);
         model.addAttribute("project", project);
         return "project/add";
@@ -138,9 +152,7 @@ public class ProjectsController {
 
         int count = 0;
 
-        for (HoursWorked hoursWorked : project.getHoursWorked()) {
-            count += hoursWorked.getHours();
-        }
+        for (HoursWorked hoursWorked : project.getHoursWorked()) count += hoursWorked.getHours();
 
         int minute = (int) TimeUnit.HOURS.toMinutes(count);
         StringBuilder timeSpentString=new StringBuilder();
@@ -150,20 +162,13 @@ public class ProjectsController {
         int hour=rem/60;
         int Minute=rem%60;
 
-        if(day>0)
-            timeSpentString.append(day+" day ");
-
-        if(hour>0)
-            timeSpentString.append(hour+" hour ");
-
-        if(Minute>0)
-            timeSpentString.append(Minute+" minute");
+        if(day>0) timeSpentString.append(day+" day ");
+        if(hour>0) timeSpentString.append(hour+" hour ");
+        if(Minute>0) timeSpentString.append(Minute+" minute");
 
         model.addAttribute("project", project);
         model.addAttribute("timeSpent", timeSpentString);
-
         model.addAttribute("count", timeSpentString);
-
         model.addAttribute("quotedPrice", project.getQuotePrice());
         model.addAttribute("projectsFiles", projectFileService.findAllByProject(project));
         model.addAttribute("notes", projectNoteService.findAllByProjectOrderBySubmittedDateDesc(project));
