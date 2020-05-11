@@ -176,7 +176,6 @@ public class ClientsController {
 
         for(Client userClient : userClients) {
             if(!userClient.getName().equals(name)) {
-                System.out.println(userClient.getName());
                 newClientList.add(userClient.getName());
             }
         }
