@@ -18,7 +18,7 @@ public class MailConfig {
 
     /**
      * Gets all the required SMTP settings to send emails
-     * @return
+     * @return JavaMailSenderImpl with all the java mail properties
      */
     @Bean
     public JavaMailSender getMailSender() {

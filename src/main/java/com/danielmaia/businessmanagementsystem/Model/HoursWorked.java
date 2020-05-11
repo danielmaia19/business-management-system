@@ -24,7 +24,7 @@ public class HoursWorked {
     private Date timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
-    @JoinColumn(name="project_id", referencedColumnName = "project_id")
+    @JoinColumn(name="projectId", referencedColumnName = "projectId")
     private Project project;
 
 }

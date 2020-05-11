@@ -33,13 +33,16 @@
                         <div class="x_panel">
                             <div class="x_content">
 
-                                <form class="form-horizontal" name="newProject" id="newProject" th:action="@{/projects}"
+                                <form class="form-horizontal" name="newProject" id="newProject" th:action="@{/project/add}"
                                       th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
                                             <label for="name">Project Name:</label>
                                             <input th:field="*{name}" type="text" class="form-control" id="name"
                                                    name="name" placeholder="Project Name">
+                                            <span style="float:left; color: red; text-align: left; display: none"
+                                                  id="error-nameExists" name="error-upload">Project name for this client already exists</span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="manager">Project Manager Name:</label>
@@ -49,8 +52,7 @@
 
                                         <div class="form-group col-md-4">
                                             <label for="project">Assign Client:</label>
-                                            <select th:field="*{client}" id="project" name="project"
-                                                    class="form-control">
+                                            <select th:field="*{client}" id="project" name="project" class="form-control">
                                                 <option th:each="client : ${clients}" th:text="${client.getName()}"
                                                         th:value="${client.getName()}"
                                                         th:selected="${client.getName()}"></option>
@@ -141,12 +143,12 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="/js/custom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 <script>
 
     $(function () {
         $("#datepicker").datepicker();
     });
-
 
     $(document).ready(function () {
         $("#newProject").validate({
@@ -187,7 +189,6 @@
         });
     });
 
-
     function check(e, value) {
         //Check Charater
         var unicode = e.charCode ? e.charCode : e.keyCode;
@@ -214,6 +215,24 @@
             e.which == 8 || // delete key
             /[0-9]/.test(String.fromCharCode(e.which)); // numbers
     })
+</script>
+
+<script th:inline="javascript">
+    var list = /*[[${clientAndProjects}]]*/ [];
+
+    $('form').submit(function () {
+        var client = $("#project option:selected" ).text();
+        var project = $.trim($('#name').val());
+
+        if(list[client].includes(project)) {
+            $('#error-nameExists').show();
+            return false;
+        } else {
+            $('#error-nameExists').hide();
+            return true;
+        }
+    })
+
 </script>
 
 </body>

@@ -16,8 +16,6 @@ public class ProfileController {
     @Autowired
     private UserService userService;
 
-    // Show profile page
-
     /**
      * Displays the profile page if the user is authenticated.
      * @param model to add an attribute containing the users full name
@@ -25,7 +23,6 @@ public class ProfileController {
      */
     @GetMapping("/profile")
     public String index(ModelMap model) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         String username = user.getUsername();

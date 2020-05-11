@@ -33,13 +33,16 @@
                             <div class="x_content">
 
                                 <form class="form-horizontal" name="editProject" id="editProject"
-                                      th:action="@{/projects/{name}/edit (name = ${project.getName()})}"
+                                      th:action="@{/project/{id}/{name}/edit (id = ${project.projectId}, name = ${project.getName()})}"
                                       th:object="${project}" method="POST" modelAttribute="project" enctype="UTF8">
+
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
-                                            <label for="project-name">Project Name:</label>
-                                            <input th:field="*{name}" type="text" class="form-control" id="project-name"
+                                            <label for="name">Project Name:</label>
+                                            <input th:field="*{name}" type="text" class="form-control" id="name" name="name"
                                                    placeholder="Project Name">
+                                            <span style="float:left; color: red; text-align: left; display: none"
+                                                  id="error-nameExists" name="error-upload">Project name for this client already exists</span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="project-manager">Project Manager:</label>
@@ -48,9 +51,9 @@
                                         </div>
 
                                         <div class="form-group col-md-4">
-                                            <label for="project-manager">Assign Client:</label>
-                                            <select th:field="*{client}" id="project" class="form-control">
-                                                <option hidden selected value="">-- Assign Client --</option>
+                                            <label for="project">Assign Client:</label>
+                                            <select th:field="*{client}" id="project" name="project" class="form-control">
+<!--                                                <option hidden selected value="">&#45;&#45; Assign Client &#45;&#45;</option>-->
                                                 <option th:each="client : ${clients}" th:text="${client.getName()}"
                                                         th:value="${client.getClientId()}"
                                                         th:selected="${client.getName()}"></option>
@@ -60,7 +63,7 @@
 
                                     <div class="form-row">
                                         <div class="form-group col-md-2">
-                                            <label for="project-name">Contact Person Full Name:</label>
+                                            <label for="contactPerson">Contact Person Full Name:</label>
                                             <input th:field="*{contactPerson}" type="text" class="form-control"
                                                    id="contactPerson" placeholder="Project Name">
                                         </div>
@@ -211,6 +214,25 @@
             e.which == 8 || // delete key
             /[0-9]/.test(String.fromCharCode(e.which)); // numbers
     })
+</script>
+
+<script th:inline="javascript">
+    var list = /*[[${clientAndProjects}]]*/ [];
+
+    $('form').submit(function () {
+        var client = $("#project option:selected" ).text();
+        var project = $.trim($('#name').val());
+
+        if(list[client].includes(project)) {
+            $('#error-nameExists').show();
+            return false;
+        } else {
+            $('#error-nameExists').hide();
+            return true;
+        }
+
+    })
+
 </script>
 
 </body>

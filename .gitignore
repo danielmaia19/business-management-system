@@ -3,3 +3,5 @@
 target/*
 src/main/resources/application-local.properties
 src/main/resources/static/logos/*
+uploads/*
+uploads

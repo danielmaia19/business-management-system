@@ -42,7 +42,7 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <ul class="nav navbar-right panel_toolbox">
-                                    <button type="button" onclick="location.href='/projects/add'"
+                                    <button type="button" onclick="location.href='/project/add'"
                                             class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                         Create Project
                                     </button>
@@ -73,10 +73,10 @@
 
                                             <tbody>
                                             <tr th:each="project : ${projects}">
-                                                <td th:text="${project.project_id}"></td>
+                                                <td id="projectId" th:text="${project.projectId}"></td>
                                                 <td>
                                                     <a data="name" id="project-name"
-                                                       th:href="@{/projects/{name}(name = ${project.name})}"
+                                                       th:href="@{/project/{id}/{name}(id = ${project.getProjectId()}, name = ${project.name})}"
                                                        th:text="${project.name}"></a>
                                                     <br/>
                                                     <small th:text="${'Created on: ' + project.createdOn.toLocaleString()}"></small>
@@ -105,7 +105,7 @@
                                                     <h7 th:text="${project.status}"></h7>
                                                 </td>
                                                 <td>
-                                                    <a th:href="@{/projects/{name}/edit (name=${project.name}) }"
+                                                    <a th:href="@{/project/{id}/{name}/edit (id=${project.projectId}, name=${project.name}) }"
                                                        class="btn btn-link btn-sm"><i class="fa fa-pencil"></i> Edit
                                                     </a>
                                                     <a onMouseOver="this.style.textDecoration='underline'; this.style.cursor='pointer'"
@@ -116,6 +116,38 @@
 
                                                     <input type="hidden" id="projectName" th:value="${project.name}"/>
                                                 </td>
+                                                <!--  Modal Delete Confirmation  -->
+                                                <div class="modal fade bd-example-modal-sm" id="deleteProject" tabindex="-1" role="dialog"
+                                                     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                        <div class="modal-content">
+
+                                                            <form class="form-horizontal" th:action="@{/project/{id}/{name}/delete (id=${project.getProjectId()}, name=${project.name}) }"
+                                                                  method="POST" enctype="UTF8">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="modal-body">
+                                                                    <p class="text-danger">Are you sure you want to delete: <span style="font-weight: bold" class="project"></span>
+                                                                    </p>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
+
+                                                                    <input type="hidden" name="projectName" id="projectName">
+<!--                                                                    <input type="hidden" name="projectId" id="projectId" th:value="${project.getProjectId()}">-->
+                                                                </div>
+                                                            </form>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -132,35 +164,37 @@
         <!-- /page content -->
 
         <!--  Modal Delete Confirmation  -->
-        <div class="modal fade bd-example-modal-sm" id="deleteProject" tabindex="-1" role="dialog"
-             aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
+<!--        <div class="modal fade bd-example-modal-sm" id="deleteProject" tabindex="-1" role="dialog"-->
+<!--             aria-labelledby="mySmallModalLabel" aria-hidden="true">-->
+<!--            <div class="modal-dialog modal-sm modal-dialog-centered">-->
+<!--                <div class="modal-content">-->
 
-                    <form class="form-horizontal" th:action="@{/projects/{name}/delete(name=${project.name})}"
-                          method="POST" enctype="UTF8">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+<!--                    <form class="form-horizontal" th:action="@{/projects/{id}/{name}/delete (id=${project.getProjectId()}, name=${project.name}) }"-->
+<!--                          method="POST" enctype="UTF8">-->
+<!--                        <div class="modal-header">-->
+<!--                            <h5 class="modal-title text-danger" id="exampleModalLabel">Are you sure?</h5>-->
+<!--                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                                <span aria-hidden="true">&times;</span>-->
+<!--                            </button>-->
+<!--                        </div>-->
 
-                        <div class="modal-body">
-                            <p class="text-danger">Are you sure you want to delete: <span style="font-weight: bold" class="project"></span>
-                            </p>
-                        </div>
+<!--                        <div class="modal-body">-->
+<!--                            <p class="text-danger">Are you sure you want to delete: <span style="font-weight: bold" class="project"></span>-->
+<!--                            </p>-->
+<!--                        </div>-->
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
-                            <input type="hidden" name="projectName" id="projectName">
-                        </div>
-                    </form>
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>-->
+<!--                            <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>-->
 
-                </div>
-            </div>
-        </div>
+<!--                            <input type="hidden" name="projectName" id="projectName">-->
+<!--                            <input type="hidden" name="projectId" id="projectId" th:value="${project.getProjectId()}">-->
+<!--                        </div>-->
+<!--                    </form>-->
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
     </div>
 
@@ -185,13 +219,13 @@
     $(document).ready(function () {
         $('table .delete').on('click', function () {
             var name = $(this).parent().find('#projectName').val();
-            // alert(name + ' value');
+
             $('#deleteProject #projectName').val(name);
             $(".project").replaceWith("<span style=\"font-weight: bold\" class=\"project\">" + name + " </span>");
 
-            $('form').attr('action', function (i, value) {
-                return "/projects/" + name + "/delete";
-            });
+            // $('form').attr('action', function (i, value) {
+            //     return "/project/" + id + '/' + name + "/delete";
+            // });
         });
     });
 

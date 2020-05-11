@@ -28,6 +28,11 @@
                 A client already exists with that name.
             </div>
 
+            <div style="float:right; width:100%; text-align: center" th:if="${nonImageFile}" id="mydiv"
+                 class="alert alert-danger alert-dismissible fade show">
+                Please upload a image file.
+            </div>
+
             <div style="float:right; width:100%; text-align: center" th:if="${deleted}" id="mydiv"
                  class="alert alert-info alert-dismissible fade show">
                 Your file was deleted successfully
@@ -94,7 +99,7 @@
                                     </ul>
                                     <br/>
 
-                                    <div id="container" style="width: 100%; height:400px;"></div>
+                                    <div th:if="${projectsExists == false}" id="container" style="width: 100%; height:400px;"></div>
 
                                     <br/>
 
@@ -176,7 +181,7 @@
                                         <div class="panel-body">
                                             <div th:if="${fileExists}">
 <!--                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{name}/logo.png (name = ${client.name})}">-->
-                                                <img style="width: 100%; height: 100%" th:src="@{/logos/{username}/{name}/logo.png (username = ${username}, name = ${client.getName()})}">
+                                                <img style="width: 100%; height: 100%" th:src="@{'/uploads/logos/' + ${username} + '/' + ${client.getName()} + '/' + ${filename}}">
                                                 <br/>
                                                 <br/>
                                             </div>
@@ -283,7 +288,7 @@
 
                         <form class="form-horizontal" name="editClient" id="editClient"
                               th:action="@{/clients/{name}/edit(name = ${client.getName()})}" th:object="${client}"
-                              method="POST" modelAttribute="client" enctype="multipart/form-data">
+                              method="POST" modelAttribute="client" enctype="multipart/form-data" onsubmit="return Validate(this);">
 
                             <input type="hidden" name="id" th:value="${client.getClientId()}">
 
@@ -293,7 +298,10 @@
                                            class="form-control" placeholder="Client Name">
                                     <span style="float:left; color: red; text-align: left; display: none"
                                           id="error-validName">Cannot be empty</span>
+                                    <span style="float:left; color: red; text-align: left; display: none"
+                                          id="error-nameExists" name="error-upload">Client Name already exists</span>
                                 </div>
+
                             </div>
 
                             <div class="form-group row ">
@@ -388,6 +396,8 @@
                                             <label class="custom-file-label" id="filename" for="my_file">Upload Client logo</label>
                                         </div>
                                     </div>
+                                    <span style="float:left; color: red; text-align: left; display: none"
+                                          id="error-upload" name="error-upload">Please enter a valid image file</span>
                                 </div>
                             </div>
 
@@ -494,15 +504,23 @@
 <script src="/webjars/jQuery-Autocomplete/1.4.10/jquery.autocomplete.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
 
-<script>
+<script th:inline="javascript">
+
     setTimeout(function () {
         $('#mydiv').fadeOut('slow');
     }, 3000); // <-- time in milliseconds
 
     $("input[id='my_file']").change(function (e) {
         var $this = $(this);
+        $("#inputGroupFileAddon01").prop("disabled", false);
         $this.next().html($this.val().split('\\').pop());
     });
+
+    if( document.getElementById("my_file").files.length == 0 ){
+        $("#inputGroupFileAddon01").prop("disabled", true);
+    } else {
+        $("#inputGroupFileAddon01").prop("disabled", false);
+    }
 
     $("input[id='imageFile']").change(function (e) {
         var $this = $(this);
@@ -573,7 +591,7 @@
         });
     });
 
-    var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua &amp; Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia &amp; Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cruise Ship", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyz Republic", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre &amp; Miquelon", "Samoa", "San Marino", "Satellite", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "St Kitts &amp; Nevis", "St Lucia", "St Vincent", "St. Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad &amp; Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks &amp; Caicos", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
+    var countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla", "Antigua &amp; Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia &amp; Herzegovina", "Botswana", "Brazil", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Cayman Islands", "Chad", "Chile", "China", "Colombia", "Congo", "Cook Islands", "Costa Rica", "Cote D Ivoire", "Croatia", "Cruise Ship", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Estonia", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Polynesia", "French West Indies", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Kyrgyz Republic", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Namibia", "Nepal", "Netherlands", "Netherlands Antilles", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Reunion", "Romania", "Russia", "Rwanda", "Saint Pierre &amp; Miquelon", "Samoa", "San Marino", "Satellite", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea", "Spain", "Sri Lanka", "St Kitts &amp; Nevis", "St Lucia", "St Vincent", "St. Lucia", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor L'Este", "Togo", "Tonga", "Trinidad &amp; Tobago", "Tunisia", "Turkey", "Turkmenistan", "Turks &amp; Caicos", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Venezuela", "Vietnam", "Virgin Islands (US)", "Yemen", "Zambia", "Zimbabwe"];
 
     $('#country').autocomplete({
         lookup: countries,
@@ -585,6 +603,53 @@
     } else {
         $('span.addressLineTwo').show();
         $('#addressLineTwoBR').show();
+    }
+
+    var _validFileExtensions = [".jpg", ".jpeg", ".png"];
+    var list = /*[[${clientList}]]*/ [];
+
+    $('form').submit(function () {
+
+        // Get the Name value and trim it
+        var name = $.trim($('#name').val());
+
+        // Check if empty of not
+        if (list.includes(name)) {
+            alert('Text-field contains microsoft.');
+            $('#error-nameExists').show();
+            return false;
+        }
+    })
+
+    // Validate the file uploaded is a image file.
+    function Validate(oForm) {
+        var arrInputs = oForm.getElementsByTagName("input");
+
+        for (var i = 0; i < arrInputs.length; i++) {
+            var oInput = arrInputs[i];
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            $('#error-upload').hide();
+                            blnValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!blnValid) {
+                        // alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+                        $('#error-upload').show();
+                        return false;
+                    }
+
+                }
+            }
+        }
+        return true;
     }
 
 </script>
@@ -654,6 +719,7 @@
 
 </script>
 
+<!-- Validate Total Quoted -->
 <script th:inline="javascript">
 
     /*<![CDATA[*/

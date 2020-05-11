@@ -51,7 +51,8 @@
                                         data-target=".bd-example-modal-sm">Delete Project
                                 </button>
                                 <button style="float:right" type="button" class="btn btn-primary btn-sm">
-                                    <a th:href="@{/projects/{name}/edit (name= ${project.getName()})}" style="color: white">Edit Project</a>
+                                    <a th:href="@{/project/{id}/{name}/edit (id= ${project.projectId}, name= ${project.getName()})}"
+                                       style="color: white">Edit Project</a>
                                 </button>
                                 <div class="clearfix"></div>
                             </div>
@@ -63,17 +64,21 @@
                                     <ul class="stats-overview">
                                         <li>
                                             <span class="name"> Project Quote </span>
-                                            <span class="value text-success" th:text="${project.getQuotePrice() == null} ? '£0.00' : '£' + ${project.getQuotePrice()}"></span>
+                                            <span class="value text-success"
+                                                  th:text="${project.getQuotePrice() == null} ? '£0.00' : '£' + ${project.getQuotePrice()}"></span>
                                         </li>
                                         <li>
                                             <span class="name"> Time Spent </span>
-                                            <span class="value text-success" th:text="${count == ''}?0:${count}">0</span>
-<!--                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>-->
+                                            <span class="value text-success"
+                                                  th:text="${count == ''}?0:${count}">0</span>
+                                            <!--                                            <span class="value text-success" th:if="${timeSpent == ''}">N.A.</span>-->
                                         </li>
                                         <li class="hidden-phone">
                                             <span class="name"> Expected Completion Date </span>
-                                            <span class="value text-success" th:text="${project.expectedCompletionDate}"> </span>
-                                            <span class="value text-success" th:if="${project.expectedCompletionDate == ''}">N.A.</span>
+                                            <span class="value text-success"
+                                                  th:text="${project.expectedCompletionDate}"> </span>
+                                            <span class="value text-success"
+                                                  th:if="${project.expectedCompletionDate == ''}">N.A.</span>
                                         </li>
                                     </ul>
                                     <br/>
@@ -90,7 +95,7 @@
                                         </div>
 
                                         <form class="form-horizontal"
-                                              th:action="@{/projects/{name}/add(name = ${project.getName()})}"
+                                              th:action="@{/project/{id}/{name}/add (id = ${project.projectId}, name = ${project.getName()})}"
                                               th:object="${note}" method="POST" enctype="UTF8">
                                             <div class="form-group row">
                                                 <div style="padding-left:0px;" class="col-md-12">
@@ -102,7 +107,8 @@
 
                                             <div class="form-group row">
                                                 <div class="col-md-12" style="padding-left: 0px">
-                                                    <button type="submit" class="btn btn-primary btn-sm">Save Note</button>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Save Note
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -133,7 +139,7 @@
                                                                 th:text="${note.getProject_note()}"></blockquote>
                                                 </div>
                                                 <form class="form-horizontal"
-                                                      th:action="@{/projects/{name}/note/{id}/delete(name = ${project.getName()}, id=${note.getId()})}"
+                                                      th:action="@{/project/{projectId}/{name}/note/{id}/delete(projectId = ${project.projectId}, name = ${project.getName()}, id=${note.getId()})}"
                                                       th:object="${note}" method="POST" modelAttribute="note"
                                                       enctype="UTF8">
                                                     <button type="submit" style="color: red" class="btn btn-link btn-sm"
@@ -157,13 +163,12 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="panel-body">
-<!--                                            <h3 class="green"><i class="fa fa-paint-brush"></i> Gentelella</h3>-->
 
                                             <p th:text="${project.description}"></p>
                                             <br/>
 
                                             <div class="project_detail">
-                                                <p class="title">Contact Person</p>
+                                                <h5 class="title">Contact Person</h5>
                                                 <p th:text="${project.contactPerson}"></p>
                                             </div>
 
@@ -172,10 +177,13 @@
                                             <ul class="list-unstyled project_files">
                                                 <li th:each="file : ${projectsFiles}" style="margin-bottom: -13px;">
                                                     <form class="form-horizontal"
-                                                          th:action="@{/projects/{name}/downloads/{projectFileId}/delete (name = ${project.getName()}, projectFileId = ${file.getProjectFileId()} ) }"
+                                                          th:action="@{/project/{projectId}/{name}/downloads/{projectFileId}/delete
+                                                          (projectId = ${project.projectId}, name = ${project.getName()}, projectFileId = ${file.getProjectFileId()} ) }"
+
                                                           method="POST" modelAttribute="note" enctype="UTF8">
                                                         <i class="fa fa-file"></i>
-                                                        <a th:href="@{/projects/{name}/downloads/{projectFileId} (name = ${project.getName()}, clientFileId = ${file.getProjectFileId()} ) }"
+                                                        <a th:href="@{/project/{projectId}/{name}/downloads/{projectFileId} (projectId = ${project.projectId}, name = ${project.getName()}, projectFileId = ${file.getProjectFileId()} ) }"
+
                                                            th:text="${file.getFilename()}"></a>
                                                         <button style="color: red" type="submit"
                                                                 class="btn btn-link btn-sm"
@@ -187,7 +195,7 @@
 
                                             <br/>
 
-                                            <form th:action="@{/projects/{name}/upload(name = ${project.getName()})}"
+                                            <form th:action="@{/project/{projectId}/{name}/upload(projectId = ${project.projectId}, name = ${project.getName()})}"
                                                   enctype="multipart/form-data" th:method="post">
                                                 <div class="input-group">
                                                     <div class="custom-file">
@@ -240,11 +248,13 @@
                     <div class="modal-body">
 
                         <h6 class="text text-danger">Are you sure you want to delete: <span style="font-weight: bold"
-                                                                                            th:text=" ${project.getName()}"></span></h6>
+                                                                                            th:text=" ${project.getName()}"></span>
+                        </h6>
                     </div>
 
                     <div class="modal-footer">
-                        <form class="form-horizontal" th:action="@{/projects/{name}/delete(name = ${project.getName()})}"
+                        <form class="form-horizontal"
+                              th:action="@{/project/{id}/{name}/delete(id = ${project.projectId}, name = ${project.getName()})}"
                               th:object="${project}" method="POST" modelAttribute="client" enctype="UTF8">
                             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger btn-sm">Delete Client</button>
@@ -276,8 +286,20 @@
 
     $("input[id='my_file']").change(function (e) {
         var $this = $(this);
+
+        $("#inputGroupFileAddon01").prop("disabled", false);
+
         $this.next().html($this.val().split('\\').pop());
     });
+
+    if (document.getElementById("my_file").files.length == 0) {
+        $("#inputGroupFileAddon01").prop("disabled", true);
+    } else {
+        $("#inputGroupFileAddon01").prop("disabled", false);
+    }
+
+    //$("#inputGroupFileAddon01").prop("disabled", true);
+
 
 </script>
 
@@ -286,11 +308,12 @@
     /*<![CDATA[*/
 
     var project = /*[[${project.getName()}]]*/ 'project';
+    var projectId = /*[[${project.getProjectId()}]]*/ 'projectId';
 
     /*]]>*/
 
     $.ajax({
-        url: '/projects/' + project + '/chart',
+        url: '/project/' + projectId + '/' + project + '/chart',
         success: function (result) {
             var month = JSON.parse(result).month;
             var days = JSON.parse(result).days;
@@ -436,8 +459,8 @@
                 tickPixelInterval: 20
             },
             tooltip: {
-                formatter: function() {
-                    return this.y + ' ' +  this.series.name + ' worked in <b>' + this.x;
+                formatter: function () {
+                    return this.y + ' ' + this.series.name + ' worked in <b>' + this.x;
                 }
             },
             plotOptions: {
@@ -449,14 +472,14 @@
                 }
             },
             series: [
-            //     {
-            //     name: 'Day(s)',
-            //     data: days
-            // },
+                //     {
+                //     name: 'Day(s)',
+                //     data: days
+                // },
                 {
-                name: 'Hours',
-                data: hours
-            }]
+                    name: 'Hours',
+                    data: hours
+                }]
         });
 
     }

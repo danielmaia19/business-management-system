@@ -54,6 +54,8 @@ public class ClientsController {
     @Autowired
     private ClientNoteService clientNoteService;
 
+    public String logoPath = "uploads/logos/";
+
     /**
      * Displays the main clients page by showing the lists all the clients
      *
@@ -69,19 +71,30 @@ public class ClientsController {
 
         List<Client> clients = clientService.findAllByUser(currentUser);
         List<Project> projects = new ArrayList<>();
-        Map<Client, Boolean> clientsAndLogos = new HashMap<>();
+        Map<Client, String> clientsAndLogos = new HashMap<>();
+        List<String> clientsNameLists = new ArrayList<>();
 
         for (Client userClient : clients) {
             projects.addAll(userClient.getProjects());
+            clientsNameLists.add(userClient.getName());
 
-            Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + userClient.getName());
+            File[] files = new File(logoPath + currentUser.getUsername() + "/" + userClient.getName()).listFiles();
 
-            // Checks if the directory exists
-            clientsAndLogos.put(userClient, Files.exists(path));
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        clientsAndLogos.put(userClient, file.getName());
+                    }
+                }
+            } else {
+                clientsAndLogos.put(userClient, null);
+            }
+
         }
 
         model.addAttribute("projects", projects);
         model.addAttribute("clients", clientsAndLogos);
+        model.addAttribute("clientsNameList", clientsNameLists);
         model.addAttribute("clientsList", clients);
         model.addAttribute("name", currentUser.getFullName());
         model.addAttribute("username", currentUser.getUsername());
@@ -128,7 +141,8 @@ public class ClientsController {
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file
-                    System.out.println("There was an error");
+                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
+                    return "redirect:/clients";
                 }
             }
 
@@ -151,10 +165,26 @@ public class ClientsController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) auth.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        Client client = clientService.findByName(name);
 
+        Client client = clientService.findByName(name);
+        String fileName = null;
+        Path path = Paths.get(logoPath + currentUser.getUsername() + "/" + name);
+        List<Client> userClients = clientService.findAllByUser(currentUser);
+        List<String> newClientList = new ArrayList<>();
         List<ClientFile> clientFiles = clientFileService.findAllByClient(client);
         List<Project> projects = projectService.findAllByClient(client);
+
+        for(Client userClient : userClients) {
+            if(!userClient.getName().equals(name)) {
+                System.out.println(userClient.getName());
+                newClientList.add(userClient.getName());
+            }
+        }
+
+        // Gets the first file, which is the logo file.
+        // Used to get the extension.
+        File[] files = new File(logoPath + currentUser.getUsername() + "/" + client.getName()).listFiles();
+        if(files != null) fileName = files[0].getName();
 
         BigDecimal totalQuoted = new BigDecimal(0);
         BigDecimal remainingBalance = new BigDecimal(0);
@@ -168,14 +198,14 @@ public class ClientsController {
         }
 
         boolean fileExists = false;
-        Path path = Paths.get("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name);
 
         // Checks if the directory exists
-        if (Files.exists(path)) {
-            fileExists = true;
-        }
+        if (Files.exists(path)) fileExists = true;
 
+        model.addAttribute("clientList", newClientList);
+        model.addAttribute("projectsExists", projects.isEmpty());
         model.addAttribute("fileExists", fileExists);
+        model.addAttribute("filename", fileName);
         model.addAttribute("remainingBalance", remainingBalance);
         model.addAttribute("totalQuoted", totalQuoted);
         model.addAttribute("clientFiles", clientFiles);
@@ -264,16 +294,10 @@ public class ClientsController {
 
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-
         Client newClient = clientService.findByName(client.getName());
-
         Client prevClient = clientService.findClientByClientId(Long.parseLong(requestParams.get("id")));
 
-        if (!newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
-            redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
-            return "redirect:/clients/" + prevClient.getName();
-        } else {
-
+        if (newClient == null || newClient.getClientId().equals(Long.valueOf(requestParams.get("id")))) {
             Client updatedClient = clientService.findByName(name);
             updatedClient.setName(client.getName());
             updatedClient.setCity(client.getCity());
@@ -286,21 +310,25 @@ public class ClientsController {
             updatedClient.setAddressLineTwo(client.getAddressLineTwo());
             updatedClient.setContactPersonEmail(client.getContactPersonEmail());
             updatedClient.setUser(currentUser);
+            clientService.saveClient(updatedClient);
 
             if (!imageFile.isEmpty()) {
                 if (imageFile.getContentType().equals("image/jpeg") || imageFile.getContentType().equals("image/png")) {
-                    FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
+                    FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
                     clientService.saveImage(currentUser.getUsername(), client.getName(), imageFile);
                 } else {
                     // Not a image file, it was something else .txt etc...
-                    System.out.println("There was an error");
+                    redirectAttributes.addFlashAttribute("nonImageFile", "The file uploaded is not a image file");
+                    return "redirect:/clients/" + updatedClient.getName();
                 }
-
             }
 
-            clientService.saveClient(updatedClient);
             return "redirect:/clients/" + updatedClient.getName();
+        } else {
+            redirectAttributes.addFlashAttribute("duplicateClient", "The client already exists");
+            return "redirect:/clients/" + prevClient.getName();
         }
+        
     }
 
     /**
@@ -317,7 +345,7 @@ public class ClientsController {
                                Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        FileUtils.deleteDirectory(new File("src/main/resources/static/logos/" + currentUser.getUsername() + "/" + name));
+        FileUtils.deleteDirectory(new File(logoPath + currentUser.getUsername() + "/" + name));
         clientService.deleteClient(clientService.findByName(client.getName()));
         return "redirect:/clients";
     }
