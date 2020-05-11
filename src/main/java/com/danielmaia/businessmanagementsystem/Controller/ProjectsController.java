@@ -134,14 +134,17 @@ public class ProjectsController {
         project.setCreatedOn(new DateTime().toDate());
 
         HoursWorked hoursWorked = new HoursWorked();
-        hoursWorked.setHours(project.getTimeSpent());
-        hoursWorked.setProject(project);
-        hoursWorked.setTimestamp(new DateTime().toDate());
 
-        List<HoursWorked> addHoursWorked = new ArrayList<>();
-        addHoursWorked.add(hoursWorked);
+        if(project.getTimeSpent() != 0) {
+            hoursWorked.setHours(project.getTimeSpent());
+            hoursWorked.setProject(project);
+            hoursWorked.setTimestamp(new DateTime().toDate());
 
-        project.setHoursWorked(addHoursWorked);
+            List<HoursWorked> addHoursWorked = new ArrayList<>();
+            addHoursWorked.add(hoursWorked);
+
+            project.setHoursWorked(addHoursWorked);
+        }
 
         projectService.saveProject(project);
         return "redirect:/projects";
@@ -214,7 +217,6 @@ public class ProjectsController {
             clientAndProjects.put(client.getName(), allProjects);
         }
 
-
         model.addAttribute("clientAndProjects", clientAndProjects);
         model.addAttribute("project", project);
         model.addAttribute("projectClient", project.getClient());
@@ -233,7 +235,6 @@ public class ProjectsController {
     @PostMapping("/project/{id}/{name}/edit")
     public String projectEdit(@PathVariable int id, @PathVariable String name, @ModelAttribute Project project) {
         Project foundProject = projectService.findProjectById(id);
-
         foundProject.setName(project.getName());
         foundProject.setStatus(project.getStatus());
         foundProject.setProgress(project.getProgress());
